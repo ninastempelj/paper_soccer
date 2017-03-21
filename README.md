@@ -1,4 +1,6 @@
-# paper_soccer
+# Papirnati nogomet
+
 Igrica pri predmetu Programiranje 2
-Zakaj to ne dela?
-poskus 3
+
+Cilj igre je, kot pri vsakem nogometu, spraviti žogo v gol.
+[Natančnejša navodila](https://en.wikipedia.org/wiki/Paper_soccer)
