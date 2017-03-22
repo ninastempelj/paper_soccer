@@ -11,3 +11,4 @@ Cilj igre je, kot pri vsakem nogometu, spraviti žogo v gol.
 - do 5.4. : človeški igralec, logika igre
 - do 12.4. : računalnik igralec, razveljavi.
 - do 19. 4. : popravljanje in urejanje kode
+
