@@ -1,11 +1,11 @@
 import tkinter as tk
-grey = '#f0f'
 
 
-class GUI:
+
+class GUI():
     def __init__(self, master):
-        (self.sirina, self.visina) = (9, 13)  # Štejemo število oglišč (obe nujno lihi!!!)
         self.sirina_kvadratka = 50
+        (self.sirina, self.visina) = (9, 13) # Štejemo število oglišč (obe nujno lihi!!!)
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
 
@@ -79,7 +79,7 @@ class GUI:
         self.napis_gumb1.set("Čarovnik")
         self.napis_gumb2 = tk.StringVar()
         self.napis_gumb2.set("Duh")
-        
+
             
     def narisi_zacetno(self, master):
         naslov = tk.Label(master, text = "Čarovniški nogomet")
@@ -113,13 +113,3 @@ class GUI:
         self.zadnji_polozaj = novo
 
 
-root = tk.Tk()
-
-root.title("Čarovniški nogomet")
-
-aplikacija = GUI(root)
-root.geometry("{0}x{1}".format(
-    (aplikacija.sirina + 1)*aplikacija.sirina_kvadratka,
-    (aplikacija.visina + 1)*aplikacija.sirina_kvadratka))
-# print(aplikacija.oglisca)
-root.mainloop()
