@@ -16,7 +16,7 @@ class Zacetno:
         self.napis_gumb2.set("Duh")
         
         naslov = tk.Label(master, text = "Čarovniški nogomet")
-        naslov.grid(row=0, column=3)
+        naslov.grid(row=0, column=0, columnspan=7)
         
         gumb1 = tk.Button(master, text = self.napis_gumb1.get(),
                           command= lambda: self.spremeni_igralca1(master))
@@ -28,24 +28,24 @@ class Zacetno:
 
         gumb_igraj = tk.Button(master, text = 'Igraj',
                           command= self.zacni_igro)
-        gumb_igraj.grid(row = 5, column = 3)
+        gumb_igraj.grid(row = 20, column = 0, columnspan=7)
 
         #Gumbi za 1.igralca:
         barve1 = tk.Label(master, text = "Izberi dom:")
         barve1.grid(row=2, column=0)
-        G1 = tk.Button(master, text = "Gryfondom",
+        G1 = tk.Button(master, text = "Gryfondom", bg = 'red',
                        command = lambda: self.izberi_barvo1('red',G1))
         G1.grid(row=3, column=0)
 
-        P1 = tk.Button(master, text = "Pihpuff",
+        P1 = tk.Button(master, text = "Pihpuff", bg = 'yellow',
                        command = lambda: self.izberi_barvo1('yellow',P1))
         P1.grid(row=3, column=1)
 
-        D1 = tk.Button(master, text = "Drznvraan",
+        D1 = tk.Button(master, text = "Drznvraan", bg= 'blue',
                        command = lambda: self.izberi_barvo1('blue',D1))
         D1.grid(row=4, column=0)
 
-        S1 = tk.Button(master, text = "Spolzgad",
+        S1 = tk.Button(master, text = "Spolzgad", bg= 'green',
                        command = lambda: self.izberi_barvo1('green',S1))
         S1.grid(row=4, column=1)
 
@@ -54,19 +54,19 @@ class Zacetno:
     #Gumbi za 2.igralca:
         barve2 = tk.Label(master, text = "Izberi dom:")
         barve2.grid(row=2, column=5)
-        G2 = tk.Button(master, text = "Gryfondom",
+        G2 = tk.Button(master, text = "Gryfondom", bg = 'red',
                        command = lambda: self.izberi_barvo1('red', G2))
         G2.grid(row=3, column=5)
 
-        P2 = tk.Button(master, text = "Pihpuff",
+        P2 = tk.Button(master, text = "Pihpuff", bg = 'yellow',
                        command = lambda: self.izberi_barvo1('yellow',P2))
         P2.grid(row=3, column=6)
 
-        D2 = tk.Button(master, text = "Drznvraan",
+        D2 = tk.Button(master, text = "Drznvraan", bg= 'blue',
                        command = lambda: self.izberi_barvo1('blue',D2))
         D2.grid(row=4, column=5)
 
-        S2 = tk.Button(master, text = "Spolzgad",
+        S2 = tk.Button(master, text = "Spolzgad", bg= 'green',
                        command = lambda: self.izberi_barvo1('green',S2))
         S2.grid(row=4, column=6)
 
@@ -110,7 +110,7 @@ class Zacetno:
 root = tk.Tk()
 
 root.title("Čarovniški nogomet")
-root.geometry("200x200")
+root.geometry("280x200")
 
 zacetni_meni = Zacetno(root)
 
