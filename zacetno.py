@@ -1,30 +1,33 @@
 import tkinter as tk
 from GUI import * 
 
+clovek = "Čarovnik"
+racunalnik = "Duh"
+
 class Zacetno:
     def __init__(self, master):
-##        self.igralec1 = None
-##        self.igralec2 = None
+        self.igralec1 = clovek
+        self.igralec2 = racunalnik
 
         self.dovoljene_barve = ['yellow', 'blue']
         self.barva_igralec1 = 'red'
         self.barva_igralec2 = 'green'
         
-        self.napis_gumb1 = tk.StringVar()
-        self.napis_gumb1.set("Čarovnik")
-        self.napis_gumb2 = tk.StringVar()
-        self.napis_gumb2.set("Duh")
+##        self.napis_gumb1 = tk.StringVar()
+##        self.napis_gumb1.set(clovek)
+##        self.napis_gumb2 = tk.StringVar()
+##        self.napis_gumb2.set(racunalnik)
         
         naslov = tk.Label(master, text = "Čarovniški nogomet")
         naslov.grid(row=0, column=0, columnspan=7)
         
-        gumb1 = tk.Button(master, text = self.napis_gumb1.get(),
-                          command= lambda: self.spremeni_igralca1(master))
-        gumb1.grid(row=1, column=0)
+        self.gumb1 = tk.Button(master, text = self.igralec1,
+                          command= lambda: self.spremeni_igralca(self.gumb1))
+        self.gumb1.grid(row=1, column=0)
 
-        gumb2 = tk.Button(master, text = self.napis_gumb2.get(),
-                          command=self.spremeni_igralca2)
-        gumb2.grid(row=1, column=5)
+        self.gumb2 = tk.Button(master, text = self.igralec2,
+                          command= lambda: self.spremeni_igralca(self.gumb2))
+        self.gumb2.grid(row=1, column=5)
 
         gumb_igraj = tk.Button(master, text = 'Igraj',
                           command= self.zacni_igro)
@@ -73,9 +76,22 @@ class Zacetno:
         S2.grid(row=4, column=6)
         self.gumbi_igralca2 = [G2, P2, D2, S2]
 
-    def spremeni_igralca1(self, master):
-        if True: #Pove ali izbran čarovnik ali duh ampak še nimamo te spremenljivke
-            pass
+    def spremeni_igralca(self, gumb):
+        print(gumb, self.gumb1)
+        if gumb == self.gumb1:
+            if self.igralec1 == clovek:
+                self.igralec1 = racunalnik
+                self.gumb1.config(text=racunalnik)
+            elif self.igralec1 == racunalnik:
+                self.igralec1 = clovek
+                self.gumb1.config(text=clovek)                
+        if gumb == self.gumb2:
+            if self.igralec2 == clovek:
+                self.igralec2 = racunalnik
+                self.gumb2.config(text=racunalnik)
+            elif self.igralec2 == racunalnik:
+                self.igralec2 = clovek
+                self.gumb2.config(text=clovek) 
 
 
     def izberi_barvo(self, barva, gumb):
