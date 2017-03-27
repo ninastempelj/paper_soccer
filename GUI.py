@@ -9,8 +9,6 @@ class GUI:
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
 
-        self.polje = tk.Canvas(master)
-        self.polje.pack(fill='both', expand='yes')
 
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
@@ -21,6 +19,13 @@ class GUI:
         self.zadnji_polozaj = (self.oglisca[int((self.visina-1)/2)]
                                [int((self.sirina-1)/2)])
 
+        self.igralec1 = None
+        self.igralec2 = None
+
+        self.polje = tk.Canvas(master)
+        self.polje.pack(fill='both', expand='yes')
+        self.polje.bind('<Button-1>', self.narisi_korak)
+        
         # RISANJE PODLAGE POLJA:
         ## Sive črte znotraj igrišča
         ### Glavna mreža
@@ -68,7 +73,33 @@ class GUI:
                                    self.oglisca[i+1][int((self.sirina+1)/2)],
                                    width=self.debelina_zunanjih_crt)
 
-        self.polje.bind('<Button-1>', self.narisi_korak)
+        
+    #Spremenljivke na začetnem polju
+        self.napis_gumb1 = tk.StringVar()
+        self.napis_gumb1.set("Čarovnik")
+        self.napis_gumb2 = tk.StringVar()
+        self.napis_gumb2.set("Duh")
+        
+            
+    def narisi_zacetno(self, master):
+        naslov = tk.Label(master, text = "Čarovniški nogomet")
+        naslov.grid(row=0, column=0)
+        gumb1 = tk.Button(master, text = self.napis_gumb1.get(),
+                          command=self.spremeni_igralca1)
+        gumb1.grid(row=1, column=0)
+
+        gumb2 = tk.Button(master, text = self.napis_gumb2.get(),
+                          command=self.spremeni_igralca2)
+        gumb2.grid(row=1, column=2)
+
+    def spremeni_igralca1(self):
+        pass
+
+    def spremeni_igralca2(self):
+        self.narisi_igralno_polje()
+
+    
+        
                                
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
