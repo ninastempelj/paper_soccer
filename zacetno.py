@@ -122,12 +122,4 @@ root.geometry("280x200")
 zacetni_meni = Zacetno(root)
 
 
-
-
-
-
-# print(aplikacija.oglisca)
-
-
-
 root.mainloop()
