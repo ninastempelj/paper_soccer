@@ -12,6 +12,9 @@ class Zacetno:
         self.dovoljene_barve = ['yellow', 'blue']
         self.barva_igralec1 = 'red'
         self.barva_igralec2 = 'green'
+
+        self.tezavnost1 = 1
+        self.tezavnost2 = 1
         
 ##        self.napis_gumb1 = tk.StringVar()
 ##        self.napis_gumb1.set(clovek)
@@ -39,21 +42,21 @@ class Zacetno:
 
         G1 = tk.Button(master, text = "Gryfondom", bg = 'red', relief='sunken',
                        command = lambda: self.izberi_barvo('red',G1))
-        G1.grid(row=3, column=0)
-
+        
         P1 = tk.Button(master, text = "Pihpuff", bg = 'yellow',
                        command = lambda: self.izberi_barvo('yellow',P1))
-        P1.grid(row=3, column=1)
-
+        
         D1 = tk.Button(master, text = "Drznvraan", bg= 'blue',
                        command = lambda: self.izberi_barvo('blue',D1))
-        D1.grid(row=4, column=0)
-
+        
         S1 = tk.Button(master, text = "Spolzgad", bg= 'green',
                        command = lambda: self.izberi_barvo('green',S1))
-        S1.grid(row=4, column=1)
-
+         
         self.gumbi_igralca1 = [G1, P1, D1, S1]
+
+        for (i,gumb) in enumerate(self.gumbi_igralca1):
+            gumb.grid(row=i//2+3, column=i%2)
+            
 
     #Gumbi za 2.igralca:
         barve2 = tk.Label(master, text = "Izberi dom:")
@@ -61,37 +64,70 @@ class Zacetno:
 
         G2 = tk.Button(master, text = "Gryfondom", bg = 'red',
                        command = lambda: self.izberi_barvo('red', G2))
-        G2.grid(row=3, column=5)
 
         P2 = tk.Button(master, text = "Pihpuff", bg = 'yellow',
                        command = lambda: self.izberi_barvo('yellow',P2))
-        P2.grid(row=3, column=6)
 
         D2 = tk.Button(master, text = "Drznvraan", bg= 'blue',
                        command = lambda: self.izberi_barvo('blue',D2))
-        D2.grid(row=4, column=5)
 
         S2 = tk.Button(master, text = "Spolzgad", bg= 'green',  relief='sunken',
                        command = lambda: self.izberi_barvo('green',S2))
-        S2.grid(row=4, column=6)
-        self.gumbi_igralca2 = [G2, P2, D2, S2]
 
+        self.gumbi_igralca2 = [G2, P2, D2, S2]
+        
+        for (i,gumb) in enumerate(self.gumbi_igralca2):
+            gumb.grid(row=i//2+3, column=i%2 + 5)
+
+        #gumbi za težavnost prvega igralca
+        self.nastavi_tez1 = tk.Frame()
+        self.nastavi_tez1.grid(row=6, column=0, columnspan=3)
+
+        Level11 = tk.Button(self.nastavi_tez1, text = "Shamer",  relief='sunken',
+                       command = lambda: self.spremeni_tezavnost(Level11))
+        Level21 = tk.Button(self.nastavi_tez1, text = "Smottan",
+                       command = lambda: self.spremeni_tezavnost(Level21))
+        Level31 = tk.Button(self.nastavi_tez1, text = "Wulf",
+                       command = lambda: self.spremeni_tezavnost(Level31))
+        Level11.grid(column=0, row=0)
+        Level21.grid(column=1, row=0)
+        Level31.grid(column=2, row=0)
+
+        #gumbi za težavnost drugega igralca
+        self.nastavi_tez2 = tk.Frame()
+        self.nastavi_tez2.grid(row=6, column=4, columnspan=3)
+
+        Level12 = tk.Button(self.nastavi_tez2, text = "Shamer",  relief='sunken',
+                       command = lambda: self.spremeni_tezavnost(Level12))
+        Level22 = tk.Button(self.nastavi_tez2, text = "Smottan",
+                       command = lambda: self.spremeni_tezavnost(Level22))
+        Level32 = tk.Button(self.nastavi_tez2, text = "Wulf",
+                       command = lambda: self.spremeni_tezavnost(Level32))
+        Level12.grid(column=0, row=0)
+        Level22.grid(column=1, row=0)
+        Level32.grid(column=2, row=0)
+
+        
     def spremeni_igralca(self, gumb):
         print(gumb, self.gumb1)
         if gumb == self.gumb1:
             if self.igralec1 == clovek:
                 self.igralec1 = racunalnik
                 self.gumb1.config(text=racunalnik)
+                self.nastavi_tez1.grid()
             elif self.igralec1 == racunalnik:
                 self.igralec1 = clovek
-                self.gumb1.config(text=clovek)                
+                self.gumb1.config(text=clovek)
+                self.nastavi_tez1.grid_remove()
         if gumb == self.gumb2:
             if self.igralec2 == clovek:
                 self.igralec2 = racunalnik
                 self.gumb2.config(text=racunalnik)
+                self.nastavi_tez2.grid()
             elif self.igralec2 == racunalnik:
                 self.igralec2 = clovek
-                self.gumb2.config(text=clovek) 
+                self.gumb2.config(text=clovek)
+                self.nastavi_tez2.grid_remove()
 
 
     def izberi_barvo(self, barva, gumb):
@@ -111,14 +147,14 @@ class Zacetno:
             gumb.config(relief='sunken')
         else:
             pass
+            #v tem primeru je uporabnik izbral za oba nasprotnika enako barvo
 
 
         # print(self.barva_igralec1,self.barva_igralec2, gumb)
         
-        
-    
-    def spremeni_igralca2(self):
-        pass
+    def spremeni_tezavnost(self, gumb):
+        #to do - kaj vse se mora ZGODITI, ko uporabnik spremeni težavnost 
+        print("spreminjam težavnost")
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
