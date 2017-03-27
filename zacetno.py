@@ -1,4 +1,5 @@
 import tkinter as tk
+from GUI import * 
 
 class Zacetno:
     def __init__(self, master):
@@ -22,26 +23,12 @@ class Zacetno:
                           command=self.spremeni_igralca2)
         gumb2.grid(row=1, column=5)
 
+        gumb_igraj = tk.Button(master, text = 'Igraj',
+                          command= self.zacni_igro)
+        gumb_igraj.grid(row = 5, column = 3)
+
     def spremeni_igralca1(self, master):
-        if True:
-            barve1 = tk.Label(master, text = "Izberi dom:")
-            barve1.grid(row=2, column=0)
-            G1 = tk.Button(master, text = "Gryfondom",
-                           command = lambda: self.izberi_barvo1(G))
-            G1.grid(row=3, column=0)
-
-            P1 = tk.Button(master, text = "Pihpuff",
-                           command = lambda: self.izberi_barvo1(P))
-            P1.grid(row=3, column=1)
-
-            D1 = tk.Button(master, text = "Drznvraan",
-                           command = lambda: self.izberi_barvo1(D))
-            D1.grid(row=4, column=0)
-
-            S1 = tk.Button(master, text = "Spolzgad",
-                           command = lambda: self.izberi_barvo1(S))
-            S1.grid(row=4, column=1)
-            
+        pass       
 
     def izberi_barvo1(self):
         pass
@@ -49,6 +36,30 @@ class Zacetno:
     def spremeni_igralca2(self):
         pass
 
-root=tk.Tk()
-aplikacija=Zacetno(root)
+    def zacni_igro(self):
+        okno_igrisca = tk.Toplevel()
+        gui = GUI(okno_igrisca)
+        okno_igrisca.geometry("{0}x{1}".format(
+        (gui.sirina + 1)*gui.sirina_kvadratka,
+        (gui.visina + 1)*gui.sirina_kvadratka))
+        root.withdraw()
+
+    
+
+root = tk.Tk()
+
+root.title("Čarovniški nogomet")
+root.geometry("200x200")
+
+zacetni_meni = Zacetno(root)
+
+
+
+
+
+
+# print(aplikacija.oglisca)
+
+
+
 root.mainloop()
