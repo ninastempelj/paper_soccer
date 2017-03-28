@@ -84,29 +84,30 @@ class Zacetno:
         self.nastavi_tez1.grid(row=6, column=0, columnspan=3)
 
         Level11 = tk.Button(self.nastavi_tez1, text = "Shamer",  relief='sunken',
-                       command = lambda: self.spremeni_tezavnost(Level11))
+                       command = lambda: self.spremeni_tezavnost(1, Level11))
         Level21 = tk.Button(self.nastavi_tez1, text = "Smottan",
-                       command = lambda: self.spremeni_tezavnost(Level21))
+                       command = lambda: self.spremeni_tezavnost(2, Level21))
         Level31 = tk.Button(self.nastavi_tez1, text = "Wulf",
-                       command = lambda: self.spremeni_tezavnost(Level31))
+                       command = lambda: self.spremeni_tezavnost(3, Level31))
         Level11.grid(column=0, row=0)
         Level21.grid(column=1, row=0)
         Level31.grid(column=2, row=0)
+        self.gumbi_tezavnost_igralca1 = [Level11, Level21, Level31]
 
         #gumbi za težavnost drugega igralca
         self.nastavi_tez2 = tk.Frame()
         self.nastavi_tez2.grid(row=6, column=4, columnspan=3)
 
         Level12 = tk.Button(self.nastavi_tez2, text = "Shamer",  relief='sunken',
-                       command = lambda: self.spremeni_tezavnost(Level12))
+                       command = lambda: self.spremeni_tezavnost(1, Level12))
         Level22 = tk.Button(self.nastavi_tez2, text = "Smottan",
-                       command = lambda: self.spremeni_tezavnost(Level22))
+                       command = lambda: self.spremeni_tezavnost(2, Level22))
         Level32 = tk.Button(self.nastavi_tez2, text = "Wulf",
-                       command = lambda: self.spremeni_tezavnost(Level32))
+                       command = lambda: self.spremeni_tezavnost(3, Level32))
         Level12.grid(column=0, row=0)
         Level22.grid(column=1, row=0)
         Level32.grid(column=2, row=0)
-
+        self.gumbi_tezavnost_igralca2 = [Level12, Level22, Level32]
         
     def spremeni_igralca(self, gumb):
         print(gumb, self.gumb1)
@@ -152,9 +153,20 @@ class Zacetno:
 
         # print(self.barva_igralec1,self.barva_igralec2, gumb)
         
-    def spremeni_tezavnost(self, gumb):
-        #to do - kaj vse se mora ZGODITI, ko uporabnik spremeni težavnost 
-        print("spreminjam težavnost")
+    def spremeni_tezavnost(self, tezavnost, gumb):
+        #Nina, ali je smiselno da spremeni, tudi če je že prou?
+        #Nina, za razmislit je relief- groove ni slab :)
+        if gumb in self.gumbi_tezavnost_igralca1:
+            self.tezavnost1 = tezavnost
+            for gumbek in self.gumbi_tezavnost_igralca1:
+                gumbek.config(relief = 'raised')
+        if gumb in self.gumbi_tezavnost_igralca2:
+            self.tezavnost2 = tezavnost
+            for gumbek in self.gumbi_tezavnost_igralca2:
+                gumbek.config(relief = 'raised')
+        gumb.config(relief='sunken')
+        #print(self.tezavnost1, self.tezavnost2)
+                
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
