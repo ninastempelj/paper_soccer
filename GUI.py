@@ -2,9 +2,11 @@ import tkinter as tk
 from zakljucno_okno import *
 from igra import *
 
+clovek = "Čarovnik"     #ZAČASNO
+racunalnik = "Duh"      #ZAČASNO
 
 class GUI():
-    def __init__(self, master, root):
+    def __init__(self, master):  # z začetnim  oknom:, root):
         self.master = master
         self.sirina_kvadratka = 50
         self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
@@ -14,10 +16,12 @@ class GUI():
         master.geometry("{0}x{1}".format(
             (self.sirina + 1)*self.sirina_kvadratka,
             (self.visina + 1)*self.sirina_kvadratka))
-        self.tezavnost1 = 0
-        self.tezavnost2 = 0
-        # self.barva_igralec1, self.barva_igralec2  NASTAVLJENO V ZAČETNI!!!
-        # self.igralec1, self.igralec2
+        self.tezavnost1 = 1             #ZAČASNO
+        self.tezavnost2 = 1             #ZAČASNO
+        self.barva_igralec1 = 'red'     #ZAČASNO
+        self.barva_igralec2 = 'green'   #ZAČASNO
+        self.igralec1 = clovek          #ZAČASNO
+        self.igralec2 = clovek          #ZAČASNO
 
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
@@ -130,21 +134,39 @@ class GUI():
                                    self.oglisca[v_nov][s_nov])
             self.igra.naredi_korak(self.zadnji_polozaj, novo)
             self.zadnji_polozaj = novo
-            print(self.tezavnost2)
         else:
             pass
-        if novo == (1,1):
-            self.koncaj_igro()
-
+        self.stanje_igre() # ta bo ali poklicala igralca, ali končala igro
+       
+    def stanje_igre(self):
+        # vpraša igro, ali je konec
+        # če je: pokliče funkcijo self.končaj_igro()
+        # če ni, more od igre izvedet kdo je na potezi
+        # in spremenit po potrebi igralca
+        #
+        # poklicat more funkcijo self.igra.stanje_igre()
+        # vrne: (KOnec/NE_konec, igralec__na_vrsti)
 
     def koncaj_igro(self):
-        koncno_okno = tk.Toplevel()
-        konec = Zakljucek(koncno_okno)
-        konec.zacetni = self.zacetni
-        konec.zacetni_master = self.zacetni_master
-        konec.gui = self
-        konec.gui_master = self.master
-
+        pass
     
+#   Za zagon koncnega okna
+##        koncno_okno = tk.Toplevel()
+##        konec = Zakljucek(koncno_okno)
+##        konec.zacetni = self.zacetni
+##        konec.zacetni_master = self.zacetni_master
+##        konec.gui = self
+##        konec.gui_master = self.master
+
+
+# začasno dela brez začetnega okna
+root = tk.Tk()
+
+root.title("Čarovniški nogomet")
+
+zacetni_meni = GUI(root)
+
+
+root.mainloop()
 
 

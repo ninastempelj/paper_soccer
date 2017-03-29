@@ -43,22 +43,24 @@ class Igra():
     def naredi_korak(self, staro, novo):
         self.plosca[staro[0]][staro[1]].add(self.smer_koraka(staro,novo))
         self.plosca[novo[0]][novo[1]].add(-(self.smer_koraka(staro,novo)))
+        print(self.smer_koraka(staro,novo))
 
     def smer_koraka(self, staro, novo):
-        x_razlika = staro[0] - novo[0]
-        y_razlika = staro[1] - novo[1]
+        x_razlika = staro[1] - novo[1]
+        y_razlika = staro[0] - novo[0]
         if abs(x_razlika)>1 or abs(y_razlika)>1 or (x_razlika==0 and y_razlika==0):
             return None
         elif x_razlika == 0:
-            smer = (-2)*y_razlika
+            smer = (-4)*y_razlika
         elif y_razlika ==0:
-            smer=(-4)*x_razlika
+            smer=(-2)*x_razlika
         elif x_razlika == y_razlika:
             smer =(-3)*x_razlika
         elif x_razlika != y_razlika:
             smer = (-1)*x_razlika
         else:
             print("Funkcija smer je v težavah")
+        print(x_razlika, y_razlika, smer)
         return smer
         
         
