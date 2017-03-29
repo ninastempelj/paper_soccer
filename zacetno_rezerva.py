@@ -15,10 +15,11 @@ class Zacetno:
 
         self.tezavnost1 = 1
         self.tezavnost2 = 1
-
-        self.slika_ozadje = tk.PhotoImage(file='slike/hogwarts.png')#Slika za ozadje
-        ozadje_label = tk.Label(master, image = self.slika_ozadje)
-        ozadje_label.place(x=0, y=0, relwidth=1, relheight=1)
+        
+##        self.napis_gumb1 = tk.StringVar()
+##        self.napis_gumb1.set(clovek)
+##        self.napis_gumb2 = tk.StringVar()
+##        self.napis_gumb2.set(racunalnik)
         
         naslov = tk.Label(master, text = "Čarovniški nogomet")
         naslov.grid(row=0, column=0, columnspan=7)
@@ -38,29 +39,17 @@ class Zacetno:
         #Gumbi za 1.igralca:
         barve1 = tk.Label(master, text = "Izberi dom:")
         barve1.grid(row=2, column=0)
-        self.slika_gryffindor = tk.PhotoImage(file='slike/gryffindor.png')
-        self.slika_hufflepuff = tk.PhotoImage(file='slike/hufflepuff.png')
-        self.slika_ravenclaw = tk.PhotoImage(file='slike/ravenclaw.png')
-        self.slika_slytherin = tk.PhotoImage(file='slike/slytherin.png')
 
-        G1 = tk.Button(master, #text = "Gryfondom", #bg = 'red',
-                       image= self.slika_gryffindor,anchor='n',
-                       height=50, width=50, relief='sunken',
+        G1 = tk.Button(master, text = "Gryfondom", bg = 'red', relief='sunken',
                        command = lambda: self.izberi_barvo('red',G1))
         
-        P1 = tk.Button(master, #text = "Pihpuff", bg = 'yellow',
-                       image= self.slika_hufflepuff,anchor='n',
-                       height=50, width=50,
+        P1 = tk.Button(master, text = "Pihpuff", bg = 'yellow',
                        command = lambda: self.izberi_barvo('yellow',P1))
         
-        D1 = tk.Button(master, #text = "Drznvraan", bg= 'blue',
-                       image= self.slika_ravenclaw,anchor='n',
-                       height=50, width=50,
+        D1 = tk.Button(master, text = "Drznvraan", bg= 'blue',
                        command = lambda: self.izberi_barvo('blue',D1))
         
-        S1 = tk.Button(master, #text = "Spolzgad", bg= 'green',
-                       image= self.slika_slytherin,anchor='n',
-                       height=50, width=50,
+        S1 = tk.Button(master, text = "Spolzgad", bg= 'green',
                        command = lambda: self.izberi_barvo('green',S1))
          
         self.gumbi_igralca1 = [G1, P1, D1, S1]
@@ -73,24 +62,16 @@ class Zacetno:
         barve2 = tk.Label(master, text = "Izberi dom:")
         barve2.grid(row=2, column=5)
 
-        G2 = tk.Button(master, #text = "Gryfondom", bg = 'red',
-                       image= self.slika_gryffindor,anchor='n',
-                       height=50, width=50,
+        G2 = tk.Button(master, text = "Gryfondom", bg = 'red',
                        command = lambda: self.izberi_barvo('red', G2))
 
-        P2 = tk.Button(master, #text = "Pihpuff", bg = 'yellow',
-                       image= self.slika_hufflepuff,anchor='n',
-                       height=50, width=50,
+        P2 = tk.Button(master, text = "Pihpuff", bg = 'yellow',
                        command = lambda: self.izberi_barvo('yellow',P2))
 
-        D2 = tk.Button(master, #text = "Drznvraan", bg= 'blue',
-                       image= self.slika_ravenclaw,anchor='n',
-                       height=50, width=50,
+        D2 = tk.Button(master, text = "Drznvraan", bg= 'blue',
                        command = lambda: self.izberi_barvo('blue',D2))
 
-        S2 = tk.Button(master, #text = "Spolzgad", bg= 'green',
-                       image= self.slika_slytherin,anchor='n',
-                       height=50, width=50, relief='sunken',
+        S2 = tk.Button(master, text = "Spolzgad", bg= 'green',  relief='sunken',
                        command = lambda: self.izberi_barvo('green',S2))
 
         self.gumbi_igralca2 = [G2, P2, D2, S2]
@@ -102,41 +83,34 @@ class Zacetno:
         self.nastavi_tez1 = tk.Frame()
         self.nastavi_tez1.grid(row=6, column=0, columnspan=3)
 
-        tez1 = tk.Label(self.nastavi_tez1, text = "Izberi tezavnost:")
-        tez1.grid(column=1, row=0)
-
-        Level11 = tk.Button(self.nastavi_tez1, text = "Shamer",  relief='groove',
+        Level11 = tk.Button(self.nastavi_tez1, text = "Shamer",  relief='sunken',
                        command = lambda: self.spremeni_tezavnost(1, Level11))
         Level21 = tk.Button(self.nastavi_tez1, text = "Smottan",
                        command = lambda: self.spremeni_tezavnost(2, Level21))
         Level31 = tk.Button(self.nastavi_tez1, text = "Wulf",
                        command = lambda: self.spremeni_tezavnost(3, Level31))
-        Level11.grid(column=0, row=1)
-        Level21.grid(column=1, row=1)
-        Level31.grid(column=2, row=1)
+        Level11.grid(column=0, row=0)
+        Level21.grid(column=1, row=0)
+        Level31.grid(column=2, row=0)
         self.gumbi_tezavnost_igralca1 = [Level11, Level21, Level31]
-        self.nastavi_tez1.grid_remove() #Ker default igralec 1 človek
 
         #gumbi za težavnost drugega igralca
         self.nastavi_tez2 = tk.Frame()
         self.nastavi_tez2.grid(row=6, column=4, columnspan=3)
 
-        tez2 = tk.Label(self.nastavi_tez2, text = "Izberi tezavnost:")
-        tez2.grid(column=1, row=0)
-
-        Level12 = tk.Button(self.nastavi_tez2, text = "Shamer",  relief='groove',
+        Level12 = tk.Button(self.nastavi_tez2, text = "Shamer",  relief='sunken',
                        command = lambda: self.spremeni_tezavnost(1, Level12))
         Level22 = tk.Button(self.nastavi_tez2, text = "Smottan",
                        command = lambda: self.spremeni_tezavnost(2, Level22))
         Level32 = tk.Button(self.nastavi_tez2, text = "Wulf",
                        command = lambda: self.spremeni_tezavnost(3, Level32))
-        Level12.grid(column=0, row=1)
-        Level22.grid(column=1, row=1)
-        Level32.grid(column=2, row=1)
+        Level12.grid(column=0, row=0)
+        Level22.grid(column=1, row=0)
+        Level32.grid(column=2, row=0)
         self.gumbi_tezavnost_igralca2 = [Level12, Level22, Level32]
         
     def spremeni_igralca(self, gumb):
-        #print(gumb, self.gumb1)
+        print(gumb, self.gumb1)
         if gumb == self.gumb1:
             if self.igralec1 == clovek:
                 self.igralec1 = racunalnik
@@ -181,6 +155,7 @@ class Zacetno:
         
     def spremeni_tezavnost(self, tezavnost, gumb):
         #Nina, ali je smiselno da spremeni, tudi če je že prou?
+        #Nina, za razmislit je relief- groove ni slab :)
         if gumb in self.gumbi_tezavnost_igralca1:
             self.tezavnost1 = tezavnost
             for gumbek in self.gumbi_tezavnost_igralca1:
@@ -189,7 +164,7 @@ class Zacetno:
             self.tezavnost2 = tezavnost
             for gumbek in self.gumbi_tezavnost_igralca2:
                 gumbek.config(relief = 'raised')
-        gumb.config(relief='groove')
+        gumb.config(relief='sunken')
         #print(self.tezavnost1, self.tezavnost2)
                 
 
@@ -200,14 +175,13 @@ class Zacetno:
         (gui.sirina + 1)*gui.sirina_kvadratka,
         (gui.visina + 1)*gui.sirina_kvadratka))
         root.withdraw()
-        gui.tezavnost1 = self.tezavnost1
-        gui.barva_igralec1, gui.barva_igralec2self.barva_igralec1, self.barva_igralec2
+
     
 
 root = tk.Tk()
 
 root.title("Čarovniški nogomet")
-root.geometry("370x260")
+root.geometry("280x200")
 
 zacetni_meni = Zacetno(root)
 
