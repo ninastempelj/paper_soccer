@@ -1,14 +1,22 @@
 import tkinter as tk
-
+from zakljucno_okno import *
+#import igra
 
 
 class GUI():
-    def __init__(self, master):
+    def __init__(self, master, root):
+        self.master = master
         self.sirina_kvadratka = 50
-        (self.sirina, self.visina) = (9, 13) # Štejemo število oglišč (obe nujno lihi!!!)
+        self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
-
+        self.zacetni = root
+        master.geometry("{0}x{1}".format(
+            (self.sirina + 1)*self.sirina_kvadratka,
+            (self.visina + 1)*self.sirina_kvadratka))
+        # self.tezavnost1, self.tezavnost2,
+        # self.barva_igralec1, self.barva_igralec2  NASTAVLJENO V ZAČETNI!!!
+        # self.igralec1, self.igralec2
 
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
@@ -80,8 +88,13 @@ class GUI():
         self.napis_gumb2 = tk.StringVar()
         self.napis_gumb2.set("Duh")
 
+
+    
+
             
     def narisi_zacetno(self, master):
+        self.polje.delete(tk.ALL)
+        
         naslov = tk.Label(master, text = "Čarovniški nogomet")
         naslov.grid(row=0, column=0)
         gumb1 = tk.Button(master, text = self.napis_gumb1.get(),
@@ -104,12 +117,24 @@ class GUI():
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         vrstica = (y + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
-
+        
         return self.oglisca[int(vrstica)][int(stolpec)]
 
     def narisi_korak(self, event):
         novo = self.najblizje_oglisce(event.x, event.y)
         self.polje.create_line(self.zadnji_polozaj, novo)
         self.zadnji_polozaj = novo
+        if novo == (100,100):
+            self.koncaj_igro()
+
+
+    def koncaj_igro(self):
+        koncno_okno = tk.Toplevel()
+        konec = Zakljucek(koncno_okno)
+        konec.zacetni = self.zacetni
+        konec.gui = self
+        konec.gui_master = self.master
+
+    
 
 

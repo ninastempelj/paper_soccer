@@ -195,14 +195,14 @@ class Zacetno:
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
-        gui = GUI(okno_igrisca)
-        okno_igrisca.geometry("{0}x{1}".format(
-        (gui.sirina + 1)*gui.sirina_kvadratka,
-        (gui.visina + 1)*gui.sirina_kvadratka))
+        gui = GUI(okno_igrisca, root)
+ 
         root.withdraw()
-        gui.tezavnost1 = self.tezavnost1
-        gui.barva_igralec1, gui.barva_igralec2self.barva_igralec1, self.barva_igralec2
-    
+
+        # Guiju sporoči nastavitve. 
+        gui.tezavnost1, gui.tezavnost2 = self.tezavnost1, self.tezavnost2
+        gui.barva_igralec1, gui.barva_igralec2 = self.barva_igralec1, self.barva_igralec2
+        gui.igralec1, gui.igralec2 = self.igralec1, self.igralec2
 
 root = tk.Tk()
 
