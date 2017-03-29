@@ -19,20 +19,23 @@ class Igra():
         #Gol zgoraj
         self.plosca[0][int((self.sirina-1)/2)] |={4,-1,-2,-3,-4,1,2}
         self.plosca[0][int((self.sirina-1)/2+1)] |={-2,-3,-4,1,2}
-        self.plosca[0][int((self.sirina-1)/2)+2] |={-2,-3,-4,1,2,3,4}
+        self.plosca[0][int((self.sirina-1)/2+2)] |={-2,-3,-4,1,2,3,4}
         self.plosca[1][int((self.sirina-1)/2)] |={-2,-3,-4}
         self.plosca[1][int((self.sirina-1)/2+2)] |={-4,1,2}
         
         #Gol spodaj
         self.plosca[-1][int((self.sirina-1)/2)] |={2,3,4,-1,-2,-3,-4}
         self.plosca[-1][int((self.sirina-1)/2+1)] |={-2,2,3,4,-1}
-        self.plosca[-1][int((self.sirina-1)/2)+2] |={-4,1,2,3,4,-1,-2}
+        self.plosca[-1][int((self.sirina-1)/2+2)] |={-4,1,2,3,4,-1,-2}
         self.plosca[-2][int((self.sirina-1)/2)] |={4,-1,-2}
         self.plosca[-2][int((self.sirina-1)/2+2)] |={2,3,4}
-        print(self.plosca)
-        
+        #print(self.plosca)
+    
+    def dovoljen_korak(self, x, y):
+        return True
 
-            
+    def naredi_korak(self, x, y):
+        pass
         
         
         

@@ -195,12 +195,11 @@ class Zacetno:
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
-        gui = GUI(okno_igrisca, root)
- 
+        gui = GUI(okno_igrisca, root)#, self)
         root.withdraw()
-
+        gui.zacetni = self
         # Guiju sporoči nastavitve. 
-        gui.tezavnost1, gui.tezavnost2 = self.tezavnost1, self.tezavnost2
+        (gui.tezavnost1, gui.tezavnost2) = (self.tezavnost1, self.tezavnost2)
         gui.barva_igralec1, gui.barva_igralec2 = self.barva_igralec1, self.barva_igralec2
         gui.igralec1, gui.igralec2 = self.igralec1, self.igralec2
 
