@@ -66,7 +66,8 @@ class Igra():
             smer = (-1)*x_razlika
         else:
             print("Funkcija smer je v težavah")
-        #print(x_razlika, y_razlika, smer) ##NINA!!! Zakaj se nama ob vsakem koraku to sprinta 5krat?!
+        #print(x_razlika, y_razlika, smer)
+        ##NINA!!! Zakaj se nama ob vsakem koraku to sprinta 5krat?!
         return smer
 
     def nasprotnik(self, oseba):
@@ -96,9 +97,10 @@ class Igra():
         else:
             assert('Dobimo nemogoče trenutno stanje')
 
-    def premakni_zogo(self,staro, novo, sirina):
-        x=staro[1]-novo[1]
-        y=staro[0]-novo[0]
-        print(x*sirina, y*sirina)
-        return(int(x*sirina), int(y*sirina))
-        
+##TE FUNKCIJE VERJETNO NE RABIVA, pa itak noče delat
+##            def premakni_zogo(self, staro, novo, sirina):
+##        x=staro[1]-novo[1]
+##        y=staro[0]-novo[0]
+##        print(x*sirina, y*sirina)
+##        return(int(x*sirina), int(y*sirina))
+##        
