@@ -88,12 +88,25 @@ class GUI():
                                    self.oglisca[i+1][int((self.sirina+1)/2)],
                                    width=self.debelina_zunanjih_crt)
         self.igra = Igra()
+
+        # Žoga
+        self.zoga = tk.PhotoImage(file='slike/zoga.gif')
+        print(self.zadnji_polozaj)
+        self.id_zoga=self.polje.create_image(self.oglisca
+                                             [self.zadnji_polozaj[0]]
+                                             [self.zadnji_polozaj[1]],
+                                             image = self.zoga,
+                                             )
+    
         
-    #Spremenljivke na začetnem polju
-        self.napis_gumb1 = tk.StringVar()
-        self.napis_gumb1.set("Čarovnik")
-        self.napis_gumb2 = tk.StringVar()
-        self.napis_gumb2.set("Duh")
+##    ##NINA, tega pomoje nikjer ne rabva, ker gui sploh nima gumbov   
+##    #Spremenljivke na začetnem polju
+##        self.napis_gumb1 = tk.StringVar()
+##        self.napis_gumb1.set("Čarovnik")
+##        self.napis_gumb2 = tk.StringVar()
+##        self.napis_gumb2.set("Duh")
+
+    
         
         
     
@@ -127,8 +140,15 @@ class GUI():
             (v_nov, s_nov) = novo
             self.polje.create_line(self.oglisca[v_star][s_star],
                                    self.oglisca[v_nov][s_nov], fill = self.barva)
+            
             self.igra.naredi_korak(self.zadnji_polozaj, novo)
+            #Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
+            self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
+                            (novo[1] - self.zadnji_polozaj[1])*self.sirina_kvadratka,
+                            (novo[0] - self.zadnji_polozaj[0])*self.sirina_kvadratka)#TODO Žoga čez črto
+            
             self.zadnji_polozaj = novo
+            
         else:
             pass
         self.stanje_igre(self.zadnji_polozaj) # ta bo ali poklicala igralca, ali končala igro
@@ -151,15 +171,18 @@ class GUI():
         # vrne: (KOnec/NE_konec, igralec__na_vrsti)
 
     def koncaj_igro(self, zmagovalec):
+        domovi = {'red':'Gryfondom',
+                'yellow':'Pihpuff', 'blue':'Drznvraan', 'green':'Spolzgad'}
+        
         if zmagovalec == None:
             self.polje.create_text(100, 20, text = "Izenačenje")
         elif zmagovalec == self.igralec1:
-            self.polje.create_text(100, 20, text = "Zmagal je igralec 1")
+            self.polje.create_text(100, 20, text = "Zmagal je {0}".format(domovi.get(self.barva_igralec1)))
         elif zmagovalec == self.igralec2:
-            self.polje.create_text(100, 20, text = "Zmagal je igralec 2")
+            self.polje.create_text(100, 20, text = "Zmagal je {0}".format(domovi.get(self.barva_igralec2)))
             
         print("zmagovalec je {0}".format(zmagovalec))
-        #TODO dokončaj funkcijo- pazi na remi, zapri okno, naredi napis
+        #TODO dokončaj funkcijo- zapri igro, novo okno
     
 #   Za zagon koncnega okna
 ##        koncno_okno = tk.Toplevel()

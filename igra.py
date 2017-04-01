@@ -39,7 +39,7 @@ class Igra():
     def dovoljen_korak(self, staro, novo):
         if self.smer_koraka(staro,novo) == None:
             return False
-        if self.smer_koraka(staro,novo) in self.plosca[staro[0]][staro[1]]:
+        elif self.smer_koraka(staro,novo) in self.plosca[staro[0]][staro[1]]:
             return False
         else:
             return True
@@ -66,7 +66,7 @@ class Igra():
             smer = (-1)*x_razlika
         else:
             print("Funkcija smer je v težavah")
-        print(x_razlika, y_razlika, smer)
+        #print(x_razlika, y_razlika, smer) ##NINA!!! Zakaj se nama ob vsakem koraku to sprinta 5krat?!
         return smer
 
     def nasprotnik(self, oseba):
@@ -95,5 +95,10 @@ class Igra():
             return ("ni konec", self.na_vrsti)
         else:
             assert('Dobimo nemogoče trenutno stanje')
-            
-              
+
+    def premakni_zogo(self,staro, novo, sirina):
+        x=staro[1]-novo[1]
+        y=staro[0]-novo[0]
+        print(x*sirina, y*sirina)
+        return(int(x*sirina), int(y*sirina))
+        
