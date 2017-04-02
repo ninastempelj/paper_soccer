@@ -136,7 +136,7 @@ class GUI():
             self.zadnji_polozaj = novo
         else:
             pass
-        self.stanje_igre() # ta bo ali poklicala igralca, ali končala igro
+        #self.stanje_igre() # ta bo ali poklicala igralca, ali končala igro
        
     def stanje_igre(self):
         # vpraša igro, ali je konec
@@ -146,7 +146,7 @@ class GUI():
         #
         # poklicat more funkcijo self.igra.stanje_igre()
         # vrne: (KOnec/NE_konec, igralec__na_vrsti)
-
+        pass
     def koncaj_igro(self):
         pass
     
