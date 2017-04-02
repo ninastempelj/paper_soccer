@@ -2,11 +2,9 @@ import tkinter as tk
 from zakljucno_okno import *
 from igra import *
 
-clovek = "Čarovnik"     #ZAČASNO
-racunalnik = "Duh"      #ZAČASNO
 
 class GUI():
-    def __init__(self, master):  # z začetnim  oknom:, root):
+    def __init__(self, master, root):
         self.master = master
         self.sirina_kvadratka = 50
         self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
@@ -16,15 +14,8 @@ class GUI():
         master.geometry("{0}x{1}".format(
             (self.sirina + 1)*self.sirina_kvadratka,
             (self.visina + 1)*self.sirina_kvadratka))
-        self.tezavnost1 = 1             #ZAČASNO
-        self.tezavnost2 = 1             #ZAČASNO
-        self.barva_igralec1 = 'red'     #ZAČASNO
-        self.barva_igralec2 = 'green'   #ZAČASNO
-        self.igralec1 = clovek          #ZAČASNO
-        self.igralec2 = clovek          #ZAČASNO
 
-
-        self.barva = self.barva_igralec1 #Barva s katero riše črte, po defaultu začne igralec1
+        #self.barva = None #Barva s katero riše črte, po defaultu začne igralec1 - tudi določeno v začetku
         
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
@@ -34,8 +25,8 @@ class GUI():
 
         self.zadnji_polozaj = (int((self.visina-1)/2), int((self.sirina-1)/2))
 
-        self.igralec1 = clovek
-        self.igralec2 = racunalnik
+#        self.igralec1 = clovek
+ #       self.igralec2 = racunalnik
 
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
@@ -98,35 +89,8 @@ class GUI():
                                              image = self.zoga,
                                              )
     
-        
-##    ##NINA, tega pomoje nikjer ne rabva, ker gui sploh nima gumbov   
-##    #Spremenljivke na začetnem polju
-##        self.napis_gumb1 = tk.StringVar()
-##        self.napis_gumb1.set("Čarovnik")
-##        self.napis_gumb2 = tk.StringVar()
-##        self.napis_gumb2.set("Duh")
 
-    
-        
-        
-    
 
-            
-##    def narisi_zacetno(self, master):
-##        self.polje.delete(tk.ALL)
-##        
-##        naslov = tk.Label(master, text = "Čarovniški nogomet")
-##        naslov.grid(row=0, column=0)
-##        gumb1 = tk.Button(master, text = self.napis_gumb1.get(),
-##                          command=self.spremeni_igralca1)
-##        gumb1.grid(row=1, column=0)
-##
-##        gumb2 = tk.Button(master, text = self.napis_gumb2.get(),
-##                          command=self.spremeni_igralca2)
-##        gumb2.grid(row=1, column=2)
-##        
-
-                               
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         vrstica = (y + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
@@ -172,10 +136,10 @@ class GUI():
         # vrne: (KOnec/NE_konec, igralec__na_vrsti)
 
     def koncaj_igro(self, zmagovalec):
-        domovi = {'red':'Gryfondom',
-                'yellow':'Pihpuff', 'blue':'Drznvraan', 'green':'Spolzgad'}
+        domovi = {'red': 'Gryfondom',
+                'yellow': 'Pihpuff', 'blue': 'Drznvraan', 'green': 'Spolzgad'}
         
-        if zmagovalec == None:
+        if zmagovalec is None:
             self.polje.create_text(100, 20, text = "Izenačenje")
         elif zmagovalec == self.igralec1:
             self.polje.create_text(100, 20, text = "Zmagal je {0}".format(domovi.get(self.barva_igralec1)))
@@ -183,25 +147,15 @@ class GUI():
             self.polje.create_text(100, 20, text = "Zmagal je {0}".format(domovi.get(self.barva_igralec2)))
             
         print("zmagovalec je {0}".format(zmagovalec))
-        #TODO dokončaj funkcijo- zapri igro, novo okno
-    
-#   Za zagon koncnega okna
-##        koncno_okno = tk.Toplevel()
-##        konec = Zakljucek(koncno_okno)
-##        konec.zacetni = self.zacetni
-##        konec.zacetni_master = self.zacetni_master
-##        konec.gui = self
-##        konec.gui_master = self.master
+        #   Za zagon koncnega okna
+        koncno_okno = tk.Toplevel()
+        konec = Zakljucek(koncno_okno)
+        konec.zacetni = self.zacetni
+        konec.zacetni_master = self.zacetni_master
+        konec.gui = self
+        konec.gui_master = self.master
 
 
-# začasno dela brez začetnega okna
-root = tk.Tk()
 
-root.title("Čarovniški nogomet")
-
-zacetni_meni = GUI(root)
-
-
-root.mainloop()
 
 
