@@ -86,7 +86,7 @@ class GUI():
         self.id_zoga=self.polje.create_image(self.oglisca
                                              [self.zadnji_polozaj[0]]
                                              [self.zadnji_polozaj[1]],
-                                             image = self.zoga,
+                                             image = self.zoga
                                              )
     
 

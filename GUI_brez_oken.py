@@ -95,7 +95,7 @@ class GUI():
         self.id_zoga = self.polje.create_image(self.oglisca
                                                [self.zadnji_polozaj[0]]
                                                [self.zadnji_polozaj[1]],
-                                               image=self.zoga,
+                                               image=self.zoga
                                                )
 
 
@@ -160,12 +160,12 @@ class GUI():
         print("zmagovalec je {0}".format(zmagovalec))
         # TODO dokončaj funkcijo- zapri igro, novo okno . to je narjen lih tlele spodi: sam zakomentirano je:
         # Za zagon koncnega okna
-        koncno_okno = tk.Toplevel()
-        konec = Zakljucek(koncno_okno)
-        konec.zacetni = self.zacetni
-        konec.zacetni_master = self.zacetni_master
-        konec.gui = self
-        konec.gui_master = self.master
+        # koncno_okno = tk.Toplevel()
+        # konec = Zakljucek(koncno_okno)
+        # konec.zacetni = self.zacetni
+        # konec.zacetni_master = self.zacetni_master
+        # konec.gui = self
+        # konec.gui_master = self.master
 
 
 # začasno dela brez začetnega okna
