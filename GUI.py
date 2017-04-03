@@ -116,7 +116,7 @@ class GUI():
         else:
             pass
 			
-        #self.stanje_igre() # ta bo ali poklicala igralca, ali končala igro
+        self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
        
     def stanje_igre(self, trenutno_polje):
         stanje = self.igra.trenutno_stanje(trenutno_polje)

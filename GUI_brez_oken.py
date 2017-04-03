@@ -130,6 +130,7 @@ class GUI():
 
     def stanje_igre(self, trenutno_polje):
         stanje = self.igra.trenutno_stanje(trenutno_polje)
+        print(stanje)
         if stanje[0] == "konec":
             self.koncaj_igro(stanje[1])
         if stanje[0] == "ni konec":
