@@ -17,7 +17,7 @@ class Zacetno:
         self.tezavnost1 = 1
         self.tezavnost2 = 1
 
-        self.slika_ozadje = tk.PhotoImage(file='slike/hogwarts.png')#Slika za ozadje
+        self.slika_ozadje = tk.PhotoImage(file='slike/hogwarts.gif')#Slika za ozadje
         ozadje_label = tk.Label(master, image=self.slika_ozadje)
         ozadje_label.place(x=0, y=0, relwidth=1, relheight=1)
         
@@ -39,10 +39,10 @@ class Zacetno:
         #Gumbi za 1.igralca:
         barve1 = tk.Label(master, text="Izberi dom:")
         barve1.grid(row=2, column=0)
-        self.slika_gryffindor = tk.PhotoImage(file='slike/gryffindor.png')
-        self.slika_hufflepuff = tk.PhotoImage(file='slike/hufflepuff.png')
-        self.slika_ravenclaw = tk.PhotoImage(file='slike/ravenclaw.png')
-        self.slika_slytherin = tk.PhotoImage(file='slike/slytherin.png')
+        self.slika_gryffindor = tk.PhotoImage(file='slike/gryffindor.gif')
+        self.slika_hufflepuff = tk.PhotoImage(file='slike/hufflepuff.gif')
+        self.slika_ravenclaw = tk.PhotoImage(file='slike/ravenclaw.gif')
+        self.slika_slytherin = tk.PhotoImage(file='slike/slytherin.gif')
 
         G1 = tk.Button(master, #text = "Gryfondom", #bg = 'red',
                        image=self.slika_gryffindor, anchor='n',

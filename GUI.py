@@ -112,7 +112,7 @@ class GUI():
                             (novo[0] - self.zadnji_polozaj[0])*self.sirina_kvadratka)#TODO Žoga čez črto
             
             self.zadnji_polozaj = novo
-			self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
+            self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
             
         else:
             pass
