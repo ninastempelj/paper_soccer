@@ -24,7 +24,7 @@ class GUI():
         self.igralec1 = clovek  # ZAČASNO
         self.igralec2 = clovek  # ZAČASNO
 
-        self.barva = self.barva_igralec1  # Barva s katero riše črte, po defaultu začne igralec1
+        self.trenutna_barva = self.barva_igralec1  # Barva s katero riše črte, po defaultu začne igralec1
 
         self.oglisca = [[(
                              self.od_roba + j * self.sirina_kvadratka,
@@ -112,7 +112,7 @@ class GUI():
             (v_star, s_star) = self.zadnji_polozaj
             (v_nov, s_nov) = novo
             self.polje.create_line(self.oglisca[v_star][s_star],
-                                   self.oglisca[v_nov][s_nov], fill=self.barva)
+                                   self.oglisca[v_nov][s_nov], fill=self.trenutna_barva)
 
             self.igra.naredi_korak(self.zadnji_polozaj, novo)
             # Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
@@ -126,7 +126,7 @@ class GUI():
         else:
             pass
 
-            # self.stanje_igre() # ta bo ali poklicala igralca, ali končala igro
+        self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
 
     def stanje_igre(self, trenutno_polje):
         stanje = self.igra.trenutno_stanje(trenutno_polje)
@@ -134,9 +134,9 @@ class GUI():
             self.koncaj_igro(stanje[1])
         if stanje[0] == "ni konec":
             if stanje[1] == self.igralec1:
-                self.barva = self.barva_igralec1
+                self.trenutna_barva = self.barva_igralec1
             if stanje[1] == self.igralec2:
-                self.barva = self.barva_igralec2
+                self.trenutna_barva = self.barva_igralec2
                 # vpraša igro, ali je konec0
                 # če je: pokliče funkcijo self.končaj_igro()
                 # če ni, more od igre izvedet kdo je na potezi
@@ -159,12 +159,12 @@ class GUI():
         print("zmagovalec je {0}".format(zmagovalec))
         # TODO dokončaj funkcijo- zapri igro, novo okno . to je narjen lih tlele spodi: sam zakomentirano je:
         # Za zagon koncnega okna
-        # koncno_okno = tk.Toplevel()
-        # konec = Zakljucek(koncno_okno)
-        # konec.zacetni = self.zacetni
-        # konec.zacetni_master = self.zacetni_master
-        # konec.gui = self
-        # konec.gui_master = self.master
+        koncno_okno = tk.Toplevel()
+        konec = Zakljucek(koncno_okno)
+        konec.zacetni = self.zacetni
+        konec.zacetni_master = self.zacetni_master
+        konec.gui = self
+        konec.gui_master = self.master
 
 
 # začasno dela brez začetnega okna
