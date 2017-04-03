@@ -1,8 +1,8 @@
 class Igra():
     def __init__(self):
-        self.igralec1= "Čarovnik"#TODO uvozi iz GUi
-        self.igralec2 = "Duh"#TODO uvozi iz gui
-        self.na_vrsti = self.igralec1
+        #self.igralec1= "Čarovnik"#TODO uvozi iz GUi
+        #self.igralec2 = "Duh"#TODO uvozi iz gui
+        #self.na_vrsti = self.igralec1
 
         self.sirina=9 #TODO kako dobiš te podatke iz gui-ja
         self.visina=13
@@ -44,11 +44,11 @@ class Igra():
         else:
             return True
 
-    def naredi_korak(self, staro, novo): #ta funkcija bi imela bolj smiseln ime
-        #dodaj korak na seznam al kej tazga...
-        self.plosca[staro[0]][staro[1]].add(self.smer_koraka(staro,novo))
-        self.plosca[novo[0]][novo[1]].add(-(self.smer_koraka(staro,novo)))
-        print(self.smer_koraka(staro,novo))
+    def zapomni_korak(self, staro, novo):
+        smer = self.smer_koraka(staro,novo)
+        self.plosca[staro[0]][staro[1]].add(smer)
+        self.plosca[novo[0]][novo[1]].add(-smer)
+        print(smer)
 
     def smer_koraka(self, staro, novo):
         x_razlika = staro[1] - novo[1]
@@ -66,8 +66,9 @@ class Igra():
             smer = (-1)*x_razlika
         else:
             print("Funkcija smer je v težavah")
-        #print(x_razlika, y_razlika, smer)
+        print(x_razlika, y_razlika, smer)
         ##NINA!!! Zakaj se nama ob vsakem koraku to sprinta 5krat?!
+        # - ker očitno 5x v vsakem koraku pokličeva to funkcijo (samo še 3x)
         return smer
 
     def nasprotnik(self, oseba):
@@ -78,18 +79,20 @@ class Igra():
         else:
             assert('Funkcija nasprotnik je dobila nekaj čudnega')
 
-    def trenutno_stanje(self, novo): #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
+    def trenutno_stanje(self, novo):
+        #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         if novo in {(0,int((self.sirina-1)/2)),
                     (0,int((self.sirina-1)/2+1)),
-                    (0,int((self.sirina-1)/2+2))}:#seznam zgornjega gola
+                    (0,int((self.sirina-1)/2+2))}: # seznam zgornjega gola
             return ("konec", self.igralec1) 
         elif novo in {(self.visina-1,int((self.sirina-1)/2)),
                     (self.visina-1,int((self.sirina-1)/2+1)),
                     (self.visina-1,int((self.sirina-1)/2+2))}:
             return ("konec", self.igralec2)
-        elif len(self.plosca[novo[0]][novo[1]]) == 8: #Nina, ali se sproži ta funkcija preden dodava novo smer na seznam ali ne?
+        elif len(self.plosca[novo[0]][novo[1]]) == 8:
             return ("konec", None) #None pomeni remi
-        elif len(self.plosca[novo[0]][novo[1]]) != 1:#Ker že prej dodava na seznam
+        # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
+        elif len(self.plosca[novo[0]][novo[1]]) != 1:
             return ("ni konec", self.na_vrsti)
         elif len(self.plosca[novo[0]][novo[1]]) == 1:
             self.na_vrsti =  self.nasprotnik(self.na_vrsti)
@@ -97,10 +100,3 @@ class Igra():
         else:
             assert('Dobimo nemogoče trenutno stanje')
 
-##TE FUNKCIJE VERJETNO NE RABIVA, pa itak noče delat
-##            def premakni_zogo(self, staro, novo, sirina):
-##        x=staro[1]-novo[1]
-##        y=staro[0]-novo[0]
-##        print(x*sirina, y*sirina)
-##        return(int(x*sirina), int(y*sirina))
-##        
