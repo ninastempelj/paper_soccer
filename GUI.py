@@ -143,7 +143,7 @@ class GUI():
         elif zmagovalec == self.igralec2:
             izpisi = "Zmagal je {0}.".format(domovi.get(self.barva_igralec2))
 
-        print("Zmagovalec je {0}.".format(zmagovalec))
+        #print("Zmagovalec je {0}.".format(zmagovalec))
         #   Za zagon koncnega okna
         koncno_okno = tk.Toplevel()
         konec = Zakljucek(koncno_okno, izpisi)
