@@ -3,11 +3,19 @@ igralec2 = 'drugi igralec'
 konec_igre = 'konec igre'
 konec_poteze = 'konec poteze'
 ni_konec_poteze = 'ni konec poteze'
+
+def nasprotnik(oseba):
+    if oseba == igralec1:
+        return igralec2
+    elif oseba == igralec2:
+        return igralec1
+    else:
+        assert False, 'Funkcija nasprotnik je dobila nekaj čudnega.'
+		
 class Igra():
     def __init__(self):
-        self.igralec1= igralec1#TODO uvozi iz GUi
-        self.igralec2 = igralec2#TODO uvozi iz gui
-        self.na_vrsti = self.igralec1
+	
+        self.na_vrsti = igralec1
 
         self.sirina=9 #TODO kako dobiš te podatke iz gui-ja
         self.visina=13
@@ -74,32 +82,32 @@ class Igra():
             assert("Funkcija smer je v težavah.") #TODO error
         #print(x_razlika, y_razlika, smer)
         return smer
-
-    def nasprotnik(self, oseba):
-        if oseba == self.igralec1:
-            return self.igralec2
-        elif oseba == self.igralec2:
-            return self.igralec1
-        else:
-            assert('Funkcija nasprotnik je dobila nekaj čudnega.') #TODO error
-
+	
+	def povleci_korak(self, staro, novo):
+		self.zapomni_korak(staro, novo)
+				
+	
+	def preveri_konec_poteze():
+		# vrne ali je konec poteze ali ne (True, False)
+		# to vključuje konec igre!!!
+	
     def trenutno_stanje(self, novo):
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         if novo in {(0,int((self.sirina-1)/2)),
                     (0,int((self.sirina-1)/2+1)),
                     (0,int((self.sirina-1)/2+2))}: # seznam zgornjega gola
-            return (konec_igre, self.igralec1) 
+            return (konec_igre, igralec1) 
         elif novo in {(self.visina-1,int((self.sirina-1)/2)),
                     (self.visina-1,int((self.sirina-1)/2+1)),
                     (self.visina-1,int((self.sirina-1)/2+2))}:
-            return (konec_igre, self.igralec2)
+            return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
             return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
         elif len(self.plosca[novo[0]][novo[1]]) != 1:
             return (ni_konec_poteze, self.na_vrsti)
         elif len(self.plosca[novo[0]][novo[1]]) == 1:
-            self.na_vrsti =  self.nasprotnik(self.na_vrsti)
+            self.na_vrsti =  nasprotnik(self.na_vrsti)
             return (konec_poteze, self.na_vrsti)
         else:
             assert('Dobimo nemogoče trenutno stanje.') #TODO error

@@ -11,13 +11,10 @@ class GUI():
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
         self.zacetni_master = root
-
-        self.igralec1 = igralec1
-        self.igralec2 = igralec2
         
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
-        self.polje.bind('<Button-1>', self.narisi_korak)
+        self.polje.bind('<Button-1>', self.klik_na_plosci)
 
 
     def zacni_igro(self):
@@ -90,54 +87,69 @@ class GUI():
         self.id_zoga = self.polje.create_image(self.oglisca[self.zadnji_polozaj[0]]
                                            [self.zadnji_polozaj[1]], image=self.zoga)
         self.igra = Igra()
-
+		
+		# TODO
         #objekt_igralec1 = odvisen od self.tip_igralec1
         #objekt_igralec2 =
-        
+    
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         vrstica = (y + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         
         return (int(vrstica), int(stolpec))
 
-    def narisi_korak(self, event):
-        novo = self.najblizje_oglisce(event.x, event.y)
-        if self.igra.dovoljen_korak(self.zadnji_polozaj, novo):
-            (v_star, s_star) = self.zadnji_polozaj
-            (v_nov, s_nov) = novo
-            self.polje.create_line(self.oglisca[v_star][s_star],
-                                   self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
-            
-            self.igra.zapomni_korak(self.zadnji_polozaj, novo)
-            #Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
-            self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
-                            # - nope, tm nima to kej delat, sm kr zbrisala
-                            (novo[1] - self.zadnji_polozaj[1])*self.sirina_kvadratka,
-                            (novo[0] - self.zadnji_polozaj[0])*self.sirina_kvadratka)#TODO Žoga čez črto
-            
-            self.zadnji_polozaj = novo
-            self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
-            
-        else:
-            pass
+	def klik_na_plosci(self, event):
+		novo = self.najblizje_oglisce(event.x, event.y)
+		if self.igra.na_vrsti == igralec1:
+			self.objekt_igralec1.klik(staro, novo)
+		elif self.igra.na_vrsti == igralec2:
+			self.objekt_igralec2.klik(staro, novo)
+	
+    def narisi_korak(self, novo):
+		(v_star, s_star) = self.zadnji_polozaj
+		(v_nov, s_nov) = novo
+		self.polje.create_line(self.oglisca[v_star][s_star],
+							   self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
+	
+	def povleci_korak(self, staro, novo):
+		if self.igra.dovoljen_korak(staro, novo):
+			pass
+		else:
+			igra.povleci_korak(staro, novo)
+	
+	def preveri_korak(self, novo):
+		staro = self.zadnji_polozaj
+		if self.igra.dovoljen_korak(staro, novo):
+			self.igra.zapomni_korak(staro, novo)
+			#Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
+			self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
+							# - nope, tm nima to kej delat, sm kr zbrisala
+							(novo[1] - staro[1])*self.sirina_kvadratka,
+							(novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
+			
+			self.zadnji_polozaj = novo
+			self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
+		
+		else:
+			pass
 
     def stanje_igre(self, trenutno_polje):
         stanje = self.igra.trenutno_stanje(trenutno_polje)
         if stanje[0] == konec_igre:
             self.koncaj_igro(stanje[1])
         elif stanje[0] == konec_poteze:
-            if stanje[1] == self.igralec1:
+            if stanje[1] == igralec1:
                 self.trenutna_barva = self.barva_igralec1
                 #pokliče igralca 1 za novo potezo
-            if stanje[1] == self.igralec2:
+            if stanje[1] == igralec2:
                 self.trenutna_barva = self.barva_igralec2
                 #pokliče igralca 2 za novo potezo
         #v končni verziji tega ne bi smelo bit, ker korake podelata igralca ssama:
         elif  stanje[0] == ni_konec_poteze:
-            if stanje[1] == self.igralec1:
+            if stanje[1] == igralec1:
                 #pokliče igralca 1 za nov korak
                 pass
-            if stanje[1] == self.igralec2:
+            if stanje[1] == igralec2:
                 #pokliče igralca 2 za nov korak
                 pass
         else:
@@ -149,9 +161,9 @@ class GUI():
 
         if zmagovalec is None:
             izpisi =  "Izenačenje."
-        elif zmagovalec == self.igralec1:
+        elif zmagovalec == igralec1:
             izpisi = "Zmagal je {0}.".format(domovi.get(self.barva_igralec1))
-        elif zmagovalec == self.igralec2:
+        elif zmagovalec == igralec2:
             izpisi = "Zmagal je {0}.".format(domovi.get(self.barva_igralec2))
 
         #print("Zmagovalec je {0}.".format(zmagovalec))
