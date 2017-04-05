@@ -7,8 +7,8 @@ racunalnik = "Duh"
 
 class Zacetno:
     def __init__(self, master):
-        self.igralec1 = clovek
-        self.igralec2 = racunalnik
+        self.tip_igralec1 = clovek
+        self.tip_igralec2 = racunalnik
 
         self.dovoljene_barve = ['yellow', 'blue']
         self.barva_igralec1 = 'red'
@@ -27,13 +27,13 @@ class Zacetno:
         naslov = tk.Label(master, text = "Čarovniški nogomet")
         naslov.grid(row=0, column=0, columnspan=7)
         
-        self.gumb1igralec = tk.Button(master, text=self.igralec1,
-                                      command=lambda: self.spremeni_igralca(self.gumb1igralec))
-        self.gumb1igralec.grid(row=1, column=0)
+        self.gumb_tip_1igralec = tk.Button(master, text=self.tip_igralec1,
+                                      command=lambda: self.spremeni_tip_igralca(self.gumb_tip_1igralec))
+        self.gumb_tip_1igralec.grid(row=1, column=0)
 
-        self.gumb2igralec = tk.Button(master, text=self.igralec2,
-                               command=lambda: self.spremeni_igralca(self.gumb2igralec))
-        self.gumb2igralec.grid(row=1, column=5)
+        self.gumb_tip_2igralec = tk.Button(master, text=self.tip_igralec2,
+                               command=lambda: self.spremeni_tip_igralca(self.gumb_tip_2igralec))
+        self.gumb_tip_2igralec.grid(row=1, column=5)
 
         gumb_igraj = tk.Button(master, text='Igraj',
                                command=self.zacni_igro)
@@ -64,9 +64,9 @@ class Zacetno:
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('green', S1))
          
-        self.gumbi_igralca1 = [G1, P1, D1, S1]
+        self.gumbi_barve_igralca1 = [G1, P1, D1, S1]
 
-        for (i, gumb) in enumerate(self.gumbi_igralca1):
+        for (i, gumb) in enumerate(self.gumbi_barve_igralca1):
             gumb.grid(row=i//2+3, column=i % 2)
             
 
@@ -91,9 +91,9 @@ class Zacetno:
                        height=50, width=50, relief='sunken',
                        command=lambda: self.izberi_barvo('green', S2))
 
-        self.gumbi_igralca2 = [G2, P2, D2, S2]
+        self.gumbi_barve_igralca2 = [G2, P2, D2, S2]
         
-        for (i, gumb) in enumerate(self.gumbi_igralca2):
+        for (i, gumb) in enumerate(self.gumbi_barve_igralca2):
             gumb.grid(row=i//2+3, column=i % 2 + 5)
 
         #gumbi za težavnost prvega igralca
@@ -131,35 +131,40 @@ class Zacetno:
             gumb.grid(column=i % 3, row = 1)
         self.nastavi_tez1.grid_remove()  # Ker default igralec 1 človek
 
-    def spremeni_igralca(self, gumb):
+        #Gumb za velikost polja
+        #malo_polje = 
+
+    def spremeni_tip_igralca(self, gumb):
         # print(gumb, self.gumb1)
         if gumb == self.gumb1igralec:
-            if self.igralec1 == clovek:
-                self.igralec1 = racunalnik
+            tip = self.tip_igralec1
+            if tip == clovek:
+                self.tip_igralec1 = racunalnik
                 self.nastavi_tez1.grid()
-            elif self.igralec1 == racunalnik:
-                self.igralec1 = clovek
+            elif tip == racunalnik:
+                self.tip_igralec1 = clovek
                 self.nastavi_tez1.grid_remove()
-            self.gumb1igralec.config(text=self.igralec1)
+            self.gumb1igralec.config(text=self.tip_igralec1)
         if gumb == self.gumb2igralec:
-            if self.igralec2 == clovek:
-                self.igralec2 = racunalnik
+            tip = self.tip_igralec2
+            if tip == clovek:
+                self.tip_igralec2 = racunalnik
                 self.nastavi_tez2.grid()
-            elif self.igralec2 == racunalnik:
-                self.igralec2 = clovek
+            elif tip == racunalnik:
+                self.tip_igralec2 = clovek
                 self.nastavi_tez2.grid_remove()
-            self.gumb2igralec.config(text=self.igralec2)
+            self.gumb2igralec.config(text=self.tip_igralec2)
 
     def izberi_barvo(self, barva, gumb):
 
         if barva in self.dovoljene_barve:
             self.dovoljene_barve.remove(barva)
-            if gumb in self.gumbi_igralca1:
+            if gumb in self.gumbi_barve_igralca1:
                 self.dovoljene_barve.append(self.barva_igralec1)
                 self.barva_igralec1 = barva
                 for gumbek in self.gumbi_igralca1:
                     gumbek.config(relief='raised')
-            if gumb in self.gumbi_igralca2:
+            if gumb in self.gumbi_barve_igralca2:
                 self.dovoljene_barve.append(self.barva_igralec2)
                 self.barva_igralec2 = barva
                 for gumbek in self.gumbi_igralca2:
@@ -171,9 +176,6 @@ class Zacetno:
         # print(self.barva_igralec1,self.barva_igralec2, gumb)
 
     def spremeni_tezavnost(self, tezavnost, trenutni_gumb):
-        # Nina, ali je smiselno da spremeni, tudi če je že prou?
-        # - Ne ni, sam če se tega ne da lepo narest, sm probala skrajšat, sam koda je še daljša :(
-        #mesto_trenutnega_gumba = self.gumbi_tezavnost.index(trenutni_gumb)
         trenutni_igralec = self.gumbi_tezavnost.index(trenutni_gumb) // 3  # 0 pomeni 1. igralca, 1 pa drugega
         if trenutni_igralec == 0:
             if tezavnost == self.tezavnost1:
@@ -190,13 +192,7 @@ class Zacetno:
                 self.tezavnost2 = tezavnost
                 trenutni_gumb.config(relief='groove')
 
-        # elif gumb in self.gumbi_tezavnost_igralca2:
-        #     self.tezavnost2 = tezavnost
-        #     for gumbek in self.gumbi_tezavnost_igralca2:
-        #         gumbek.config(relief='raised')
-        #
-        #print(self.tezavnost1, self.tezavnost2)
-
+      
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
         gui = GUI(okno_igrisca, root)  # , self)
@@ -205,15 +201,15 @@ class Zacetno:
         # Guiju in igri sporoči nastavitve.
         (gui.tezavnost1, gui.tezavnost2) = (self.tezavnost1, self.tezavnost2)
         (gui.barva_igralec1, gui.barva_igralec2) = (self.barva_igralec1, self.barva_igralec2)
-        (gui.igralec1, gui.igralec2) = (self.igralec1, self.igralec2)
+        (gui.tip_igralec1, gui.tip_igralec2) = (self.tip_igralec1, self.tip_igralec2)
         gui.trenutna_barva = self.barva_igralec1
         gui.sirina, gui.visina = self.sirina, self.visina
-        (gui.igra.igralec1, gui.igra.igralec2) = (self.igralec1, self.igralec2)
-        gui.igra.na_vrsti = self.igralec1
+        #(gui.igra.igralec1, gui.igra.igralec2) = (self.igralec1, self.igralec2)
+        #gui.igra.na_vrsti = self.igralec1
         okno_igrisca.geometry("{0}x{1}".format(
             (self.sirina + 1) * gui.sirina_kvadratka,
             (self.visina + 1) * gui.sirina_kvadratka))
-        gui.narisi_polje()
+        gui.zacni_igro()
 
 root = tk.Tk()
 

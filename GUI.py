@@ -12,16 +12,16 @@ class GUI():
         self.debelina_zunanjih_crt = 2
         self.zacetni_master = root
 
+        self.igralec1 = igralec1
+        self.igralec2 = igralec2
+        
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.narisi_korak)
 
-        self.igra = Igra()
-        # Žoga
-        self.zoga = tk.PhotoImage(file='slike/zoga.gif')
-        #print(self.zadnji_polozaj)
 
-    def narisi_polje(self):
+    def zacni_igro(self):
+        #Naredi matriko oglišč
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
             self.od_roba + i * self.sirina_kvadratka)
@@ -85,9 +85,15 @@ class GUI():
         #                            width=self.debelina_zunanjih_crt)
 
         self.zadnji_polozaj = (int((self.visina - 1) / 2), int((self.sirina - 1) / 2))
+
+        self.zoga = tk.PhotoImage(file='slike/zoga.gif')
         self.id_zoga = self.polje.create_image(self.oglisca[self.zadnji_polozaj[0]]
                                            [self.zadnji_polozaj[1]], image=self.zoga)
+        self.igra = Igra()
 
+        #objekt_igralec1 = odvisen od self.tip_igralec1
+        #objekt_igralec2 =
+        
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         vrstica = (y + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
@@ -117,21 +123,26 @@ class GUI():
 
     def stanje_igre(self, trenutno_polje):
         stanje = self.igra.trenutno_stanje(trenutno_polje)
-        if stanje[0] == "konec":
+        if stanje[0] == konec_igre:
             self.koncaj_igro(stanje[1])
-        if stanje[0] == "ni konec":
-            if stanje[1]==self.igralec1:
+        elif stanje[0] == konec_poteze:
+            if stanje[1] == self.igralec1:
                 self.trenutna_barva = self.barva_igralec1
+                #pokliče igralca 1 za novo potezo
             if stanje[1] == self.igralec2:
                 self.trenutna_barva = self.barva_igralec2
-        # vpraša igro, ali je konec0
-        # če je: pokliče funkcijo self.končaj_igro()
-        # če ni, more od igre izvedet kdo je na potezi
-        # in spremenit po potrebi igralca
-        #
-        # poklicat more funkcijo self.igra.stanje_igre()
-        # vrne: (KOnec/NE_konec, igralec__na_vrsti)
-
+                #pokliče igralca 2 za novo potezo
+        #v končni verziji tega ne bi smelo bit, ker korake podelata igralca ssama:
+        elif  stanje[0] == ni_konec_poteze:
+            if stanje[1] == self.igralec1:
+                #pokliče igralca 1 za nov korak
+                pass
+            if stanje[1] == self.igralec2:
+                #pokliče igralca 2 za nov korak
+                pass
+        else:
+            assert False, 'Čudno stanje igre - GUI'
+                
     def koncaj_igro(self, zmagovalec):
         domovi = {'red': 'Gryfondom',
                 'yellow': 'Pihpuff', 'blue': 'Drznvraan', 'green': 'Spolzgad'}

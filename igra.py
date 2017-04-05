@@ -1,8 +1,13 @@
+igralec1 = 'prvi igralec'
+igralec2 = 'drugi igralec'
+konec_igre = 'konec igre'
+konec_poteze = 'konec poteze'
+ni_konec_poteze = 'ni konec poteze'
 class Igra():
     def __init__(self):
-        #self.igralec1= "Čarovnik"#TODO uvozi iz GUi
-        #self.igralec2 = "Duh"#TODO uvozi iz gui
-        #self.na_vrsti = self.igralec1
+        self.igralec1= igralec1#TODO uvozi iz GUi
+        self.igralec2 = igralec2#TODO uvozi iz gui
+        self.na_vrsti = self.igralec1
 
         self.sirina=9 #TODO kako dobiš te podatke iz gui-ja
         self.visina=13
@@ -83,19 +88,19 @@ class Igra():
         if novo in {(0,int((self.sirina-1)/2)),
                     (0,int((self.sirina-1)/2+1)),
                     (0,int((self.sirina-1)/2+2))}: # seznam zgornjega gola
-            return ("konec", self.igralec1) 
+            return (konec_igre, self.igralec1) 
         elif novo in {(self.visina-1,int((self.sirina-1)/2)),
                     (self.visina-1,int((self.sirina-1)/2+1)),
                     (self.visina-1,int((self.sirina-1)/2+2))}:
-            return ("konec", self.igralec2)
+            return (konec_igre, self.igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
-            return ("konec", None) #None pomeni remi
+            return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
         elif len(self.plosca[novo[0]][novo[1]]) != 1:
-            return ("ni konec", self.na_vrsti)
+            return (ni_konec_poteze, self.na_vrsti)
         elif len(self.plosca[novo[0]][novo[1]]) == 1:
             self.na_vrsti =  self.nasprotnik(self.na_vrsti)
-            return ("ni konec", self.na_vrsti)
+            return (konec_poteze, self.na_vrsti)
         else:
             assert('Dobimo nemogoče trenutno stanje.') #TODO error
 
