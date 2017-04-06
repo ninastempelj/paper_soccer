@@ -112,23 +112,24 @@ class GUI():
 							   self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
 	
 	def povleci_korak(self, staro, novo):
-		if self.igra.dovoljen_korak(staro, novo):
+		if not self.igra.dovoljen_korak(staro, novo):
 			pass
 		else:
 			igra.povleci_korak(staro, novo)
-	
-	def preveri_korak(self, novo):
-		staro = self.zadnji_polozaj
-		if self.igra.dovoljen_korak(staro, novo):
-			self.igra.zapomni_korak(staro, novo)
-			#Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
-			self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
-							# - nope, tm nima to kej delat, sm kr zbrisala
-							(novo[1] - staro[1])*self.sirina_kvadratka,
-							(novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
-			
 			self.zadnji_polozaj = novo
-			self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
+
+	# def preveri_korak(self, novo):
+		# staro = self.zadnji_polozaj
+		# if self.igra.dovoljen_korak(staro, novo):
+			# self.igra.zapomni_korak(staro, novo)
+			# #Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
+			# self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
+							# # - nope, tm nima to kej delat, sm kr zbrisala
+							# (novo[1] - staro[1])*self.sirina_kvadratka,
+							# (novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
+			
+
+			# self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
 		
 		else:
 			pass
