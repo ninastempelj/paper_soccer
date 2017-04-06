@@ -1,14 +1,11 @@
 import tkinter as tk
 from GUI import * 
 
-clovek = "Čarovnik"
-racunalnik = "Duh"
-
 
 class Zacetno:
     def __init__(self, master):
         self.tip_igralec1 = clovek
-        self.tip_igralec2 = racunalnik
+        self.tip_igralec2 = clovek
 
         self.dovoljene_barve = ['yellow', 'blue']
         self.barva_igralec1 = 'red'
@@ -130,13 +127,45 @@ class Zacetno:
         for (i, gumb) in enumerate(self.gumbi_tezavnost):
             gumb.grid(column=i % 3, row = 1)
         self.nastavi_tez1.grid_remove()  # Ker default igralec 1 človek
+        self.nastavi_tez2.grid_remove()  # Ker default igralec 2 človek
 
         #Gumb za velikost polja
-        #malo_polje = 
+        self.nastavi_velikost = tk.Frame()
+        self.nastavi_velikost.grid(row=7, column=3, columnspan=3)
+
+        velikost = tk.Label(self.nastavi_velikost, text="Izberi velikost igrišča:")
+        velikost.grid(column=1, row=0)
+
+        self.malo_igrisce = tk.Button(self.nastavi_velikost, text="Harry",
+                            command=lambda: self.spremeni_velikost(self.malo_igrisce))
+        self.srednje_igrisce = tk.Button(self.nastavi_velikost, text="Hagrid",  relief='groove',
+                            command=lambda: self.spremeni_velikost(self.srednje_igrisce))
+        self.veliko_igrisce = tk.Button(self.nastavi_velikost, text="Grup",
+                            command=lambda: self.spremeni_velikost(self.veliko_igrisce))
+        self.gumbi_velikost = [self.malo_igrisce, self.srednje_igrisce, self.veliko_igrisce]
+
+        # izrišemo vse gumbe za velikost:
+        for (i, gumb) in enumerate(self.gumbi_velikost):
+            gumb.grid(column=i % 3, row = 1)
+
+    def spremeni_velikost(self, gumb):
+        for gumbek in self.gumbi_velikost:
+            gumbek.config(relief='raised')
+        if gumb == self.malo_igrisce:
+            self.sirina = 7
+            self.visina = 11
+        elif gumb == self.srednje_igrisce:
+            self.sirina = 9
+            self.visina = 13
+        elif gumb == self.veliko_igrisce:
+            self.sirina = 11
+            self.visina = 15
+        gumb.config(relief='groove')
+        
 
     def spremeni_tip_igralca(self, gumb):
         # print(gumb, self.gumb1)
-        if gumb == self.gumb1igralec:
+        if gumb == self.gumb_tip_1igralec:
             tip = self.tip_igralec1
             if tip == clovek:
                 self.tip_igralec1 = racunalnik
@@ -144,8 +173,8 @@ class Zacetno:
             elif tip == racunalnik:
                 self.tip_igralec1 = clovek
                 self.nastavi_tez1.grid_remove()
-            self.gumb1igralec.config(text=self.tip_igralec1)
-        if gumb == self.gumb2igralec:
+            self.gumb_tip_1igralec.config(text=self.tip_igralec1)
+        if gumb == self.gumb_tip_2igralec:
             tip = self.tip_igralec2
             if tip == clovek:
                 self.tip_igralec2 = racunalnik
@@ -153,7 +182,7 @@ class Zacetno:
             elif tip == racunalnik:
                 self.tip_igralec2 = clovek
                 self.nastavi_tez2.grid_remove()
-            self.gumb2igralec.config(text=self.tip_igralec2)
+            self.gumb_tip_2igralec.config(text=self.tip_igralec2)
 
     def izberi_barvo(self, barva, gumb):
 
@@ -162,12 +191,12 @@ class Zacetno:
             if gumb in self.gumbi_barve_igralca1:
                 self.dovoljene_barve.append(self.barva_igralec1)
                 self.barva_igralec1 = barva
-                for gumbek in self.gumbi_igralca1:
+                for gumbek in self.gumbi_barve_igralca1:
                     gumbek.config(relief='raised')
             if gumb in self.gumbi_barve_igralca2:
                 self.dovoljene_barve.append(self.barva_igralec2)
                 self.barva_igralec2 = barva
-                for gumbek in self.gumbi_igralca2:
+                for gumbek in self.gumbi_barve_igralca2:
                     gumbek.config(relief='raised')
             gumb.config(relief='sunken')
         else:

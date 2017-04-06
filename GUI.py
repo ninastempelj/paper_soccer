@@ -1,6 +1,12 @@
 import tkinter as tk
 from zakljucno_okno import *
 from igra import *
+from clovek import *
+from racunalnik import *
+
+
+clovek = "Čarovnik"
+racunalnik = "Duh"
 
 
 class GUI():
@@ -11,13 +17,15 @@ class GUI():
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
         self.zacetni_master = root
-        
+
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
 
 
     def zacni_igro(self):
+        #Nastavi barvo ozadja
+        self.polje.config(bg=self.trenutna_barva)
         #Naredi matriko oglišč
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
@@ -26,6 +34,16 @@ class GUI():
                         for i in range(self.visina)]
 
         # RISANJE PODLAGE POLJA:
+        ## Črne črte za rob igrišča
+        crne_crte = [self.oglisca[1][0],self.oglisca[1][int((self.sirina-3)/2)],
+                     self.oglisca[0][int((self.sirina-3)/2)],self.oglisca[0][int((self.sirina+1)/2)],
+                     self.oglisca[1][int((self.sirina + 1) / 2)], self.oglisca[1][-1], self.oglisca[-2][-1],
+                     self.oglisca[-2][int((self.sirina+1)/2)],self.oglisca[-1][int((self.sirina + 1) / 2)],
+                     self.oglisca[-1][int((self.sirina - 3)/2)], self.oglisca[-2][int((self.sirina - 3) / 2)],
+                     self.oglisca[-2][0]]
+
+        self.polje.create_polygon(*crne_crte, width=self.debelina_zunanjih_crt, fill='white', outline='black')
+
         ## Sive črte znotraj igrišča
         ### Glavna mreža
         for i in range(1, self.sirina-1):  # Navpične črte
@@ -44,16 +62,7 @@ class GUI():
                                    self.oglisca[i+1][int((self.sirina-1)/2)],
                                    fill='grey80')
 
-        ## Črne črte za rob igrišča
-
-        crne_crte = [self.oglisca[1][0],self.oglisca[1][int((self.sirina-3)/2)],
-                     self.oglisca[0][int((self.sirina-3)/2)],self.oglisca[0][int((self.sirina+1)/2)],
-                     self.oglisca[1][int((self.sirina + 1) / 2)], self.oglisca[1][-1], self.oglisca[-2][-1],
-                     self.oglisca[-2][int((self.sirina+1)/2)],self.oglisca[-1][int((self.sirina + 1) / 2)],
-                     self.oglisca[-1][int((self.sirina - 3)/2)], self.oglisca[-2][int((self.sirina - 3) / 2)],
-                     self.oglisca[-2][0]]
-
-        self.polje.create_polygon(*crne_crte, width=self.debelina_zunanjih_crt, fill='', outline='black')
+ 
 
         # for i in [1, -2]:
         #     ### Črte od roba do gola
@@ -88,9 +97,15 @@ class GUI():
                                            [self.zadnji_polozaj[1]], image=self.zoga)
         self.igra = Igra()
 		
-		# TODO
-        #objekt_igralec1 = odvisen od self.tip_igralec1
-        #objekt_igralec2 =
+        if self.tip_igralec1 == clovek:
+            self.objekt_igralec1 = Clovek(self)
+        else:
+            self.objekt_igralec1 = Racunalnik(self)
+        if self.tip_igralec1 == clovek:
+            self.objekt_igralec2 = Clovek(self)
+        else:
+            self.objekt_igralec2 = Racunalnik(self)
+            
     
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
@@ -98,41 +113,68 @@ class GUI():
         
         return (int(vrstica), int(stolpec))
 
-	def klik_na_plosci(self, event):
-		novo = self.najblizje_oglisce(event.x, event.y)
-		if self.igra.na_vrsti == igralec1:
-			self.objekt_igralec1.klik(staro, novo)
-		elif self.igra.na_vrsti == igralec2:
-			self.objekt_igralec2.klik(staro, novo)
-	
+    def klik_na_plosci(self, event):
+        novo = self.najblizje_oglisce(event.x, event.y)
+        staro = self.zadnji_polozaj
+        if self.igra.na_vrsti == igralec1:
+            self.objekt_igralec1.klik(staro, novo)
+        elif self.igra.na_vrsti == igralec2:
+            self.objekt_igralec2.klik(staro, novo)
+    
     def narisi_korak(self, novo):
-		(v_star, s_star) = self.zadnji_polozaj
-		(v_nov, s_nov) = novo
-		self.polje.create_line(self.oglisca[v_star][s_star],
-							   self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
-	
-	def povleci_korak(self, staro, novo):
-		if not self.igra.dovoljen_korak(staro, novo):
-			pass
-		else:
-			igra.povleci_korak(staro, novo)
-			self.zadnji_polozaj = novo
+        (v_star, s_star) = self.zadnji_polozaj
+        (v_nov, s_nov) = novo
+        self.polje.create_line(self.oglisca[v_star][s_star],
+                               self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
+        self.polje.move(self.id_zoga,
+                        (s_nov - s_star)*self.sirina_kvadratka,
+                        (v_nov - v_star)*self.sirina_kvadratka)#TODO Žoga čez črto
 
-	# def preveri_korak(self, novo):
-		# staro = self.zadnji_polozaj
-		# if self.igra.dovoljen_korak(staro, novo):
-			# self.igra.zapomni_korak(staro, novo)
-			# #Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
-			# self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
-							# # - nope, tm nima to kej delat, sm kr zbrisala
-							# (novo[1] - staro[1])*self.sirina_kvadratka,
-							# (novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
-			
+    def povleci_korak(self, staro, novo):
+        if not self.igra.dovoljen_korak(staro, novo):
+            pass
+        else:
+            self.igra.povleci_korak(staro, novo) #ta ga doda na seznam
+            self.narisi_korak(novo)
+            self.zadnji_polozaj = novo
+            stanje = self.igra.trenutno_stanje(novo)
+            if stanje[0] == konec_igre:
+                self.koncaj_igro(stanje[1])
+            elif stanje[0] == konec_poteze:
+                if stanje[1] == igralec1:
+                    self.objekt_igralec1.povleci_potezo(self.zadnji_polozaj)
+                    self.trenutna_barva =self.barva_igralec1
+                    self.polje.config(bg=self.trenutna_barva)
+                if stanje[1] == igralec2:
+                    self.objekt_igralec2.povleci_potezo(self.zadnji_polozaj)
+                    self.trenutna_barva =self.barva_igralec2
+                    self.polje.config(bg=self.trenutna_barva)
+            elif stanje[0] == ni_konec_poteze:
+                if stanje[1] == igralec1:
+                    self.objekt_igralec1.povleci_korak()
+                if stanje[1] == igralec2:
+                    self.objekt_igralec2.povleci_korak()
+            else:
+                assert False, "Stanje igre je nekaj čudnega- gui.povleci_korak."
+        
 
-			# self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
-		
-		else:
-			pass
+            
+
+    # def preveri_korak(self, novo):
+            # staro = self.zadnji_polozaj
+            # if self.igra.dovoljen_korak(staro, novo):
+                    # self.igra.zapomni_korak(staro, novo)
+                    # #Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
+                    # self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
+                                                    # # - nope, tm nima to kej delat, sm kr zbrisala
+                                                    # (novo[1] - staro[1])*self.sirina_kvadratka,
+                                                    # (novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
+                    
+
+                    # self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
+##            
+##            else:
+##                    pass
 
     def stanje_igre(self, trenutno_polje):
         stanje = self.igra.trenutno_stanje(trenutno_polje)

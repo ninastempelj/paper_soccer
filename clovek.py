@@ -17,6 +17,6 @@ class Clovek():
         # Povlečemo potezo. Če ni veljavna, se ne bo zgodilo nič.
         self.gui.povleci_korak(staro, novo)
 
-     def povleci_korak(self):
-         pass
+    def povleci_korak(self):
+        pass
 

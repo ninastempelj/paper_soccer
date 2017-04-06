@@ -17,8 +17,8 @@ class Igra():
 	
         self.na_vrsti = igralec1
 
-        self.sirina=9 #TODO kako dobiš te podatke iz gui-ja
-        self.visina=13
+        self.sirina = 9 #TODO kako dobiš te podatke iz gui-ja
+        self.visina = 13
         self.plosca=[[set() for j in range(self.sirina)]
                      for i in range(self.visina)]
         self.smeri=list(range(-4,4))
@@ -83,13 +83,15 @@ class Igra():
         #print(x_razlika, y_razlika, smer)
         return smer
 	
-	def povleci_korak(self, staro, novo):
-		self.zapomni_korak(staro, novo)
-				
-	
-	def preveri_konec_poteze():
-		# vrne ali je konec poteze ali ne (True, False)
-		# to vključuje konec igre!!!
+    def povleci_korak(self, staro, novo):
+        #NINA ali rabiva funkcijo zapomni korak posebej?
+        self.zapomni_korak(staro, novo)
+                            
+    
+    def preveri_konec_poteze(self):
+        pass
+            # vrne ali je konec poteze ali ne (True, False)
+            # to vključuje konec igre!!!
 	
     def trenutno_stanje(self, novo):
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
