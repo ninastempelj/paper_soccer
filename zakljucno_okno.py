@@ -2,12 +2,12 @@ import tkinter as tk
 
 class Zakljucek():
 
-    def __init__(self, master):
+    def __init__(self, master, zmagovalec):
         self.master = master
         master.geometry('200x100')
 
-        zmagovalec = tk.Label(master, text='Tukaj napišemo zmagovalca')
-        zmagovalec.grid(row=0, column=0, columnspan = 5)
+        izpis_zmagovalca = tk.Label(master, text=zmagovalec)
+        izpis_zmagovalca.grid(row=0, column=0, columnspan = 5)
 
         vprasanje = tk.Label(master, text='Kaj želiš narediti sedaj?')
         vprasanje.grid(row=1, column=0, columnspan = 5)
@@ -23,8 +23,8 @@ class Zakljucek():
     def zacni_novo(self):
         print('gremo v začetni meni')
         self.zacetni_master.deiconify()
-        self.master.destroy()
         self.gui_master.destroy()
+        self.master.destroy()
 
     def ponovi_igro(self):
         print('Ponovno izrišemo isto platno')
