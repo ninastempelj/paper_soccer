@@ -95,7 +95,7 @@ class GUI():
         self.zoga = tk.PhotoImage(file='slike/zoga.gif')
         self.id_zoga = self.polje.create_image(self.oglisca[self.zadnji_polozaj[0]]
                                            [self.zadnji_polozaj[1]], image=self.zoga)
-        self.igra = Igra()
+        self.igra = Igra(self.sirina, self.visina)
 		
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)

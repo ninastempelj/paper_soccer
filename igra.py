@@ -13,12 +13,12 @@ def nasprotnik(oseba):
         assert False, 'Funkcija nasprotnik je dobila nekaj čudnega.'
 		
 class Igra():
-    def __init__(self):
+    def __init__(self, sirina, visina):
 	
         self.na_vrsti = igralec1
 
-        self.sirina = 9 #TODO kako dobiš te podatke iz gui-ja
-        self.visina = 13
+        self.sirina = sirina
+        self.visina = visina
         self.plosca=[[set() for j in range(self.sirina)]
                      for i in range(self.visina)]
         self.smeri=list(range(-4,4))
@@ -29,7 +29,7 @@ class Igra():
             self.plosca[0][i] |= {-4,-3,-2,-1,1,2,3,4}
             self.plosca[-1][i] |= {-4,-3,-2,-1,1,2,3,4}
             self.plosca[1][i] |= {-3,-4,1,-2,2}
-            self.plosca[-1][i] |= {-1,4,3,2,-2}
+            self.plosca[-2][i] |= {-1,4,3,2,-2}
         for i in range(1,self.visina):
             self.plosca[i][0] |= {-3,-2,-1,4,-4}
             self.plosca[i][-1] |= {1,2,3,-4,4}
