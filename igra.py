@@ -1,11 +1,24 @@
+igralec1 = 'prvi igralec'
+igralec2 = 'drugi igralec'
+konec_igre = 'konec igre'
+konec_poteze = 'konec poteze'
+ni_konec_poteze = 'ni konec poteze'
+
+def nasprotnik(oseba):
+    if oseba == igralec1:
+        return igralec2
+    elif oseba == igralec2:
+        return igralec1
+    else:
+        assert False, 'Funkcija nasprotnik je dobila nekaj čudnega.'
+		
 class Igra():
     def __init__(self):
-        #self.igralec1= "Čarovnik"#TODO uvozi iz GUi
-        #self.igralec2 = "Duh"#TODO uvozi iz gui
-        #self.na_vrsti = self.igralec1
+	
+        self.na_vrsti = igralec1
 
-        self.sirina=9 #TODO kako dobiš te podatke iz gui-ja
-        self.visina=13
+        self.sirina = 9 #TODO kako dobiš te podatke iz gui-ja
+        self.visina = 13
         self.plosca=[[set() for j in range(self.sirina)]
                      for i in range(self.visina)]
         self.smeri=list(range(-4,4))
@@ -34,12 +47,13 @@ class Igra():
         self.plosca[-2][int((self.sirina-1)/2-1)] |={4,-1,-2}
         self.plosca[-2][int((self.sirina-1)/2+1)] |={2,3,4}
 
-        print(self.plosca)
+        #print(self.plosca)
 
     def dovoljen_korak(self, staro, novo):
-        if self.smer_koraka(staro,novo) == None:
+        smer = self.smer_koraka(staro,novo)
+        if smer == None:
             return False
-        elif self.smer_koraka(staro,novo) in self.plosca[staro[0]][staro[1]]:
+        elif smer in self.plosca[staro[0]][staro[1]]:
             return False
         else:
             return True
@@ -48,7 +62,7 @@ class Igra():
         smer = self.smer_koraka(staro,novo)
         self.plosca[staro[0]][staro[1]].add(smer)
         self.plosca[novo[0]][novo[1]].add(-smer)
-        print(smer)
+        #print(smer)
 
     def smer_koraka(self, staro, novo):
         x_razlika = staro[1] - novo[1]
@@ -65,38 +79,38 @@ class Igra():
         elif x_razlika != y_razlika:
             smer = (-1)*x_razlika
         else:
-            print("Funkcija smer je v težavah")
-        print(x_razlika, y_razlika, smer)
-        ##NINA!!! Zakaj se nama ob vsakem koraku to sprinta 5krat?!
-        # - ker očitno 5x v vsakem koraku pokličeva to funkcijo (samo še 3x)
+            assert("Funkcija smer je v težavah.") #TODO error
+        #print(x_razlika, y_razlika, smer)
         return smer
-
-    def nasprotnik(self, oseba):
-        if oseba == self.igralec1:
-            return self.igralec2
-        elif oseba == self.igralec2:
-            return self.igralec1
-        else:
-            assert('Funkcija nasprotnik je dobila nekaj čudnega')
-
+	
+    def povleci_korak(self, staro, novo):
+        #NINA ali rabiva funkcijo zapomni korak posebej?
+        self.zapomni_korak(staro, novo)
+                            
+    
+    def preveri_konec_poteze(self):
+        pass
+            # vrne ali je konec poteze ali ne (True, False)
+            # to vključuje konec igre!!!
+	
     def trenutno_stanje(self, novo):
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         if novo in {(0,int((self.sirina-1)/2)),
                     (0,int((self.sirina-1)/2+1)),
                     (0,int((self.sirina-1)/2+2))}: # seznam zgornjega gola
-            return ("konec", self.igralec1) 
+            return (konec_igre, igralec1) 
         elif novo in {(self.visina-1,int((self.sirina-1)/2)),
                     (self.visina-1,int((self.sirina-1)/2+1)),
                     (self.visina-1,int((self.sirina-1)/2+2))}:
-            return ("konec", self.igralec2)
+            return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
-            return ("konec", None) #None pomeni remi
+            return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
         elif len(self.plosca[novo[0]][novo[1]]) != 1:
-            return ("ni konec", self.na_vrsti)
+            return (ni_konec_poteze, self.na_vrsti)
         elif len(self.plosca[novo[0]][novo[1]]) == 1:
-            self.na_vrsti =  self.nasprotnik(self.na_vrsti)
-            return ("ni konec", self.na_vrsti)
+            self.na_vrsti =  nasprotnik(self.na_vrsti)
+            return (konec_poteze, self.na_vrsti)
         else:
-            assert('Dobimo nemogoče trenutno stanje')
+            assert('Dobimo nemogoče trenutno stanje.') #TODO error
 

@@ -2,12 +2,12 @@ import tkinter as tk
 
 class Zakljucek():
 
-    def __init__(self, master, zmagovalec):
+    def __init__(self, master, napis):
         self.master = master
         master.geometry('200x100')
 
-        izpis_zmagovalca = tk.Label(master, text=zmagovalec)
-        izpis_zmagovalca.grid(row=0, column=0, columnspan = 5)
+        zmagovalec = tk.Label(master, text = napis)
+        zmagovalec.grid(row=0, column=0, columnspan = 5)
 
         vprasanje = tk.Label(master, text='Kaj želiš narediti sedaj?')
         vprasanje.grid(row=1, column=0, columnspan = 5)
