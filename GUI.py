@@ -8,6 +8,8 @@ from racunalnik import *
 clovek = "Čarovnik"
 racunalnik = "Duh"
 
+# URŠA, jst sm ugotovila, da ne vem v ker gol morm igrat, da bom zmagala :(
+
 
 class GUI():
     def __init__(self, master, root):
@@ -95,7 +97,7 @@ class GUI():
         self.zoga = tk.PhotoImage(file='slike/zoga.gif')
         self.id_zoga = self.polje.create_image(self.oglisca[self.zadnji_polozaj[0]]
                                            [self.zadnji_polozaj[1]], image=self.zoga)
-        self.igra = Igra()
+        self.igra = Igra(self.sirina, self.visina)
 		
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
@@ -129,7 +131,7 @@ class GUI():
         self.polje.move(self.id_zoga,
                         (s_nov - s_star)*self.sirina_kvadratka,
                         (v_nov - v_star)*self.sirina_kvadratka)#TODO Žoga čez črto
-
+                    # ej ne javlja več napak izven polja :)
     def povleci_korak(self, staro, novo):
         if not self.igra.dovoljen_korak(staro, novo):
             pass
@@ -144,11 +146,10 @@ class GUI():
                 if stanje[1] == igralec1:
                     self.objekt_igralec1.povleci_potezo(self.zadnji_polozaj)
                     self.trenutna_barva =self.barva_igralec1
-                    self.polje.config(bg=self.trenutna_barva)
                 if stanje[1] == igralec2:
                     self.objekt_igralec2.povleci_potezo(self.zadnji_polozaj)
                     self.trenutna_barva =self.barva_igralec2
-                    self.polje.config(bg=self.trenutna_barva)
+                self.polje.config(bg=self.trenutna_barva)
             elif stanje[0] == ni_konec_poteze:
                 if stanje[1] == igralec1:
                     self.objekt_igralec1.povleci_korak()
@@ -187,16 +188,17 @@ class GUI():
             if stanje[1] == igralec2:
                 self.trenutna_barva = self.barva_igralec2
                 #pokliče igralca 2 za novo potezo
-        #v končni verziji tega ne bi smelo bit, ker korake podelata igralca ssama:
-        elif  stanje[0] == ni_konec_poteze:
-            if stanje[1] == igralec1:
-                #pokliče igralca 1 za nov korak
-                pass
-            if stanje[1] == igralec2:
-                #pokliče igralca 2 za nov korak
-                pass
-        else:
-            assert False, 'Čudno stanje igre - GUI'
+        #v končni verziji tega ne bi smelo bit,
+        # ker korake podelata igralca sama: - DELA
+##        elif  stanje[0] == ni_konec_poteze:
+##            if stanje[1] == igralec1:
+##                #pokliče igralca 1 za nov korak
+##                pass
+##            if stanje[1] == igralec2:
+##                #pokliče igralca 2 za nov korak
+##                pass
+##        else:
+##            assert False, 'Čudno stanje igre - GUI'
                 
     def koncaj_igro(self, zmagovalec):
         domovi = {'red': 'Gryfondom',
