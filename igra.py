@@ -76,7 +76,31 @@ class Igra():
             else:
                 mozni.append(self.anti_smer_koraka(trenutno, smer))
         return mozni        
-        
+
+    def mozne_poteze(self, plosca, trenutno, prvi_korak=True):
+        mozni = self.mozen_korak(plosca, trenutno)
+        if mozni == [] or\
+                (not prvi_korak and len(mozni) == 7) or\
+                trenutno in self.gol_spodaj|self.gol_zgoraj:
+            return []
+
+        else:
+            poteze = []
+            for sosednje in mozni:
+                (sos_vrs, sos_stolp) = sosednje
+                (tre_vrs, tre_stolp) = trenutno
+                smer = self.smer_koraka(trenutno, sosednje)
+                plosca_tega = [plosca[i][:] for i in range(self.visina)]
+                plosca_tega[sos_vrs][sos_stolp].add(-smer)
+                plosca_tega[tre_vrs][tre_stolp].add(smer)
+                poteze_tega = self.mozne_poteze(plosca_tega, sosednje, prvi_korak=False)
+                if poteze_tega == []:
+                    poteze.append([sosednje])
+                else:
+                    for x in poteze_tega:
+                        poteze.append([sosednje]+x)
+            return poteze
+
 ###### Uršin drugi poskus ki niti blizu ne more delat
 ######    def mozne_poteze(self, plosca, trenutno, dosedanja_pot = []):
 ######        kopija =[plosca[i][:] for i in range(self.visina)]
@@ -191,7 +215,7 @@ class Igra():
         
 	
     def trenutno_stanje(self, novo):
-        print(self.mozen_korak(self.plosca, novo))
+        print(self.mozne_poteze(self.plosca, novo))
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         if novo in self.gol_zgoraj: # seznam zgornjega gola
             return (konec_igre, igralec1) 
@@ -208,3 +232,7 @@ class Igra():
         else:
             assert False, 'Dobimo nemogoče trenutno stanje.'
 
+k = Igra(9, 13)
+for (x,y) in [((2,4),(3,4)), ((4,3),(3,4)), ((2,3), (2,4)), ((7,7), (8,8)),((5,6), (6,6))]:
+    k.zapomni_korak(x,y)
+print(k.mozne_poteze(k.plosca, (2,3)))
