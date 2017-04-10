@@ -23,8 +23,8 @@ class Zakljucek():
     def zacni_novo(self):
         print('gremo v začetni meni')
         self.zacetni_master.deiconify()
-        self.master.destroy()
         self.gui_master.destroy()
+        self.master.destroy()
 
     def ponovi_igro(self):
         print('Ponovno izrišemo isto platno')

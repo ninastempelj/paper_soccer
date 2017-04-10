@@ -136,7 +136,7 @@ class GUI():
         if not self.igra.dovoljen_korak(staro, novo):
             pass
         else:
-            self.igra.povleci_korak(staro, novo) #ta ga doda na seznam
+            self.igra.zapomni_korak(staro, novo) #ta ga doda na seznam
             self.narisi_korak(novo)
             self.zadnji_polozaj = novo
             stanje = self.igra.trenutno_stanje(novo)

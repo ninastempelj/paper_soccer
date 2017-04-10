@@ -18,11 +18,12 @@ class Igra():
         self.na_vrsti = igralec1
 
         self.sirina = sirina 
+
         self.visina = visina
         self.plosca=[[set() for j in range(self.sirina)]
                      for i in range(self.visina)]
-        self.smeri=list(range(-4,4))
-
+        self.smeri=list(range(-4,0)) + list(range(1,5))
+		
         seznam_neproblematicnih=list(range(int((self.sirina-1)/2-1)))+list(
             range(int((self.sirina-1)/2+2),self.sirina))
         for i in seznam_neproblematicnih:
@@ -47,9 +48,18 @@ class Igra():
         self.plosca[-2][int((self.sirina-1)/2-1)] |={4,-1,-2}
         self.plosca[-2][int((self.sirina-1)/2+1)] |={2,3,4}
 
+        self.zgodovina = []
+        self.gol_zgoraj = {(0,int((self.sirina-1)/2)),
+                           (0,int((self.sirina-1)/2+1)),
+                           (0,int((self.sirina-1)/2+2))}
+        self.gol_spodaj = {(self.visina-1,int((self.sirina-1)/2)),
+                           (self.visina-1,int((self.sirina-1)/2+1)),
+                           (self.visina-1,int((self.sirina-1)/2+2))}
+
         #print(self.plosca)
 
     def dovoljen_korak(self, staro, novo):
+
         smer = self.smer_koraka(staro,novo)
         if smer == None:
             return False
@@ -58,6 +68,83 @@ class Igra():
         else:
             return True
 
+    def mozen_korak(self, igrisce, trenutno):
+        mozni = []
+        for smer in self.smeri:
+            if smer in igrisce[trenutno[0]][trenutno[1]]:
+                pass
+            else:
+                mozni.append(self.anti_smer_koraka(trenutno, smer))
+        return mozni        
+        
+###### Uršin drugi poskus ki niti blizu ne more delat
+######    def mozne_poteze(self, plosca, trenutno, dosedanja_pot = []):
+######        kopija =[plosca[i][:] for i in range(self.visina)]
+######        for mozen_korak in self.mozen_korak(kopija, trenutno):
+######            mozno_polje = kopija[mozen_korak[0]][mozen_korak[1]]
+######            if (len(mozno_polje)==1 or len(mozno_polje)==8 or (mozen_korak in self.gol_zgoraj|self.gol_spodaj)):
+######                dosedanja_pot.append(mozen_korak)
+######                smer = self.smer_koraka(trenutno, mozen_korak)
+######                kopija[trenutno[0]][trenutno[1]].add(smer)
+######                kopija[mozen_korak[0]][mozen_korak[1]].add(-smer)
+######                cela_poteza = dosedanja_pot
+######                return cela_poteza
+######            else:
+######                dosedanja_pot.append(mozen_korak)
+######                smer = self.smer_koraka(trenutno, mozen_korak)
+######                kopija[trenutno[0]][trenutno[1]].add(smer)
+######                kopija[mozen_korak[0]][mozen_korak[1]].add(-smer)
+######                return poteze.append(self.mozne_poteze(kopija, mozen_korak, dosedanja_pot))
+            
+        
+##        
+##    def mozne_poteze(self, plosca, staro, koraki = []):
+##        poteze = []
+##        (v_staro, s_staro) = staro
+##        for vrstica in range(v_staro - 1, v_staro + 2):
+##            for stolpec in range(s_staro - 1, s_staro + 2):
+##                if vrstica == v_staro and stolpec == s_staro:
+##                    pass
+##                else:
+##                    novo_staro = (vrstica, stolpec)
+##                    print(koraki)
+##                    koraki_do_zdej= koraki.append(novo_staro)
+##                    kopija_plosca = [plosca[i][:] for i in range(self.visina)]
+####                    for x in kopija_plosca:
+####                        print (x)
+##
+##                    smer = self.smer_koraka(staro,novo_staro)
+##                    print(smer)
+##                    kopija_plosca[staro[0]][staro[1]].add(smer)
+##                    kopija_plosca[novo_staro[0]][novo_staro[1]].add(-smer)
+####                    for x in kopija_plosca:
+####                        print (x)
+##                    if (len(kopija_plosca[vrstica][stolpec]) == 1
+##                        or len(kopija_plosca[vrstica][stolpec]) == 8 or
+##                        novo_staro in self.gol_spodaj|self.gol_zgoraj):
+##                        poteze.append(koraki)
+##                        koraki_do_zdej = []
+##                    else:
+##                        self.mozne_poteze(kopija_plosca, novo_staro, koraki_do_zdej)
+##        return poteze
+
+        
+    # kopija igre je za minimax    
+
+    def kopija(self): 
+        kopija = Igra(self.sirina, self.visina)
+        kopija.plosca = [self.plosca[i][:] for i in range(self.visina)]
+        kopija.na_vrsti = self.na_vrsti
+        return kopija
+
+    # za razveljavi
+    def shrani_pozicijo(self):
+        pozicija = [self.plosca[i][:] for i in range(self.visina)]
+        self.zgodovina.append((pozicija, self.na_vrsti))
+
+    def razveljavi(self):
+        (self.plosca, self.na_vrsti) = self.zgodovina.pop()
+        
     def zapomni_korak(self, staro, novo):
         smer = self.smer_koraka(staro,novo)
         self.plosca[staro[0]][staro[1]].add(smer)
@@ -82,28 +169,33 @@ class Igra():
             assert False, "Funkcija smer je v težavah."
         #print(x_razlika, y_razlika, smer)
         return smer
-	
-    def povleci_korak(self, staro, novo):
-        #NINA ali rabiva funkcijo zapomni korak posebej?
-        # Ja mislm da je tole brez veze :)
-        self.zapomni_korak(staro, novo)
-                            
-    
-    def preveri_konec_poteze(self):
-        # URŠA - ta funkcija je v bistvu trenutno_stanje a ne? pol tega ne rabva...
-        pass
-            # vrne ali je konec poteze ali ne (True, False)
-            # to vključuje konec igre!!!
+
+    def anti_smer_koraka(self, trenutno, smer):
+        (vrstica, stolpec) = trenutno
+        if smer == 1:
+            return (vrstica-1, stolpec+1)
+        if smer == 2:
+            return (vrstica, stolpec+1)
+        if smer == 3:
+            return (vrstica+1, stolpec+1)
+        if smer == 4:
+            return (vrstica+1, stolpec)
+        if smer == -1:
+            return (vrstica+1, stolpec-1)
+        if smer == -2:
+            return (vrstica, stolpec-1)
+        if smer == -3:
+            return (vrstica-1, stolpec-1)
+        if smer == -4:
+            return (vrstica-1, stolpec)
+        
 	
     def trenutno_stanje(self, novo):
+        print(self.mozen_korak(self.plosca, novo))
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
-        if novo in {(0,int((self.sirina-1)/2)),
-                    (0,int((self.sirina-1)/2+1)),
-                    (0,int((self.sirina-1)/2+2))}: # seznam zgornjega gola
+        if novo in self.gol_zgoraj: # seznam zgornjega gola
             return (konec_igre, igralec1) 
-        elif novo in {(self.visina-1,int((self.sirina-1)/2)),
-                    (self.visina-1,int((self.sirina-1)/2+1)),
-                    (self.visina-1,int((self.sirina-1)/2+2))}:
+        elif novo in self.gol_spodaj:
             return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
             return (konec_igre, None) #None pomeni remi
