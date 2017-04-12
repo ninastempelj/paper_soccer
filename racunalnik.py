@@ -35,7 +35,7 @@ class Racunalnik:
                self.povleci_korak()
           else:
                # Algoritem še ni našel poteze, preveri še enkrat čez 100ms
-               self.gui.polje.after(100, self.preveri_potezo)
+               self.gui.polje.after(100, self.preveri_potezo(staro))
 
      def prekini(self):
         # To metodo kliče GUI, če je treba prekiniti razmišljanje.

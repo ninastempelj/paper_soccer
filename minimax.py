@@ -1,7 +1,6 @@
 import logging
 from igra import nasprotnik, igralec1, igralec2, konec_igre, konec_poteze, ni_konec_poteze
 
-
 class Minimax:
     def __init__(self, globina, staro):
         self.globina = globina  # do katere globine iščemo?
@@ -22,6 +21,7 @@ class Minimax:
         self.igra = igra
         self.prekinitev = False # Glavno vlakno bo to nastvilo na True, če moramo nehati
         self.jaz = self.igra.na_vrsti
+        print(igra.na_vrsti)
         self.poteza = None # Sem napišemo potezo, ko jo najdemo
         # Poženemo minimax
         (poteza, vrednost) = self.minimax(self.globina, True, self.zacetek)
@@ -87,10 +87,14 @@ class Minimax:
             else:
                 # Naredimo eno stopnjo minimax
                 if maksimiziramo:
+                    print("maksi")
                     # Maksimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
+                    print(self.igra.mozne_poteze(self.igra.plosca, zacetek))
+                    print("tuki crkne")
                     for p in self.igra.mozne_poteze(self.igra.plosca, zacetek):
+                        print(p)
                         poteza = [zacetek] + p
                         self.igra.shrani_pozicijo()
                         for i in range(len(poteza)-1):
@@ -102,6 +106,7 @@ class Minimax:
                             najboljsa_poteza = p
                 else:
                     # Minimiziramo
+                    print("mini")
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
                     for p in self.igra.mozne_poteze(self.igra.plosca, zacetek):
