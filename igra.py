@@ -22,7 +22,7 @@ class Igra():
         self.visina = visina
         self.plosca=[[set() for j in range(self.sirina)]
                      for i in range(self.visina)]
-        self.smeri=list(range(-4,0)) + list(range(1,5))
+        self.smeri= list(range(-4,0)) + list(range(1,5))
 		
         seznam_neproblematicnih=list(range(int((self.sirina-1)/2-1)))+list(
             range(int((self.sirina-1)/2+2),self.sirina))
@@ -51,10 +51,10 @@ class Igra():
         self.zgodovina = []
         self.gol_zgoraj = {(0,int((self.sirina-1)/2)),
                            (0,int((self.sirina-1)/2+1)),
-                           (0,int((self.sirina-1)/2+2))}
+                           (0,int((self.sirina-1)/2-1))}
         self.gol_spodaj = {(self.visina-1,int((self.sirina-1)/2)),
                            (self.visina-1,int((self.sirina-1)/2+1)),
-                           (self.visina-1,int((self.sirina-1)/2+2))}
+                           (self.visina-1,int((self.sirina-1)/2-1))}
 
         #print(self.plosca)
 
@@ -75,6 +75,7 @@ class Igra():
                 pass
             else:
                 mozni.append(self.anti_smer_koraka(trenutno, smer))
+        # print(mozni)
         return mozni        
 
     def mozne_poteze(self, plosca, trenutno, prvi_korak=True):
@@ -90,15 +91,20 @@ class Igra():
                 (sos_vrs, sos_stolp) = sosednje
                 (tre_vrs, tre_stolp) = trenutno
                 smer = self.smer_koraka(trenutno, sosednje)
-                plosca_tega = [plosca[i][:] for i in range(self.visina)]
-                plosca_tega[sos_vrs][sos_stolp].add(-smer)
-                plosca_tega[tre_vrs][tre_stolp].add(smer)
-                poteze_tega = self.mozne_poteze(plosca_tega, sosednje, prvi_korak=False)
+                #plosca_tega = [plosca[i][:] for i in range(self.visina)]
+                #plosca_tega[sos_vrs][sos_stolp].add(-smer)
+                #plosca_tega[tre_vrs][tre_stolp].add(smer)
+                plosca[sos_vrs][sos_stolp].add(-smer)
+                plosca[tre_vrs][tre_stolp].add(smer)
+                poteze_tega = self.mozne_poteze(plosca, sosednje, prvi_korak=False)
+                plosca[sos_vrs][sos_stolp].remove(-smer)
+                plosca[tre_vrs][tre_stolp].remove(smer)
                 if poteze_tega == []:
                     poteze.append([sosednje])
                 else:
                     for x in poteze_tega:
                         poteze.append([sosednje]+x)
+                
             return poteze
 
 ###### Uršin drugi poskus ki niti blizu ne more delat
@@ -215,6 +221,7 @@ class Igra():
         
 	
     def trenutno_stanje(self, novo):
+        print(novo)
         print(self.mozne_poteze(self.plosca, novo))
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         if novo in self.gol_zgoraj: # seznam zgornjega gola
@@ -232,7 +239,9 @@ class Igra():
         else:
             assert False, 'Dobimo nemogoče trenutno stanje.'
 
-k = Igra(9, 13)
-for (x,y) in [((2,4),(3,4)), ((4,3),(3,4)), ((2,3), (2,4)), ((7,7), (8,8)),((5,6), (6,6))]:
-    k.zapomni_korak(x,y)
-print(k.mozne_poteze(k.plosca, (2,3)))
+##k = Igra(5, 7)
+##
+##for (x,y) in [((2,3),(3,4)), ((4,3),(3,4)), ((2,3), (2,4))]:
+##    k.zapomni_korak(x,y)
+###print(k.plosca)
+##a = k.mozne_poteze(k.plosca, (2,3))
