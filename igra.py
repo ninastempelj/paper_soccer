@@ -221,8 +221,8 @@ class Igra():
         
 	
     def trenutno_stanje(self, novo):
-        print(novo)
-        print(self.mozne_poteze(self.plosca, novo))
+        #print(novo)
+        #print(self.mozne_poteze(self.plosca, novo))
         #funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         if novo in self.gol_zgoraj: # seznam zgornjega gola
             return (konec_igre, igralec1) 

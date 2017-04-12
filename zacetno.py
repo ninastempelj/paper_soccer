@@ -5,7 +5,7 @@ from GUI import *
 class Zacetno:
     def __init__(self, master):
         self.tip_igralec1 = clovek
-        self.tip_igralec2 = clovek
+        self.tip_igralec2 = racunalnik
 
         self.dovoljene_barve = ['yellow', 'blue']
         self.barva_igralec1 = 'red'
@@ -243,7 +243,7 @@ class Zacetno:
 root = tk.Tk()
 
 root.title("Čarovniški nogomet")
-root.geometry("370x260")
+root.geometry("500x600")
 
 zacetni_meni = Zacetno(root)
 

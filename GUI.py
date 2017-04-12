@@ -3,7 +3,7 @@ from zakljucno_okno import *
 from igra import *
 from clovek import *
 from racunalnik import *
-
+import minimax
 
 clovek = "Čarovnik"
 racunalnik = "Duh"
@@ -23,6 +23,8 @@ class GUI():
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
+
+        self.globina = 2 # TODO: določi glede na izbrano težavnost
 
 
     def zacni_igro(self):
@@ -102,11 +104,12 @@ class GUI():
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
-            self.objekt_igralec1 = Racunalnik(self)
-        if self.tip_igralec1 == clovek:
+            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina, self.zadnji_polozaj))
+        if self.tip_igralec2 == clovek:
             self.objekt_igralec2 = Clovek(self)
         else:
-            self.objekt_igralec2 = Racunalnik(self)
+            self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.zadnji_polozaj))
+        print(self.objekt_igralec1, self.objekt_igralec2)
             
     
     def najblizje_oglisce(self, x, y):
