@@ -14,6 +14,7 @@ racunalnik = "Duh"
 class GUI():
     def __init__(self, master, zacetno_okno):
         self.master = master
+        self.master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno())
         self.sirina_kvadratka = 50
         #self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
         self.od_roba = 50
@@ -26,6 +27,9 @@ class GUI():
 
         self.globina = 2 # TODO: določi glede na izbrano težavnost
 
+    def zapri_okno(self):
+        self.master.destroy()
+        self.zacetno_okno.destroy()
 
     def zacni_igro(self):
         #Nastavi barvo ozadja
