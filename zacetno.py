@@ -18,7 +18,7 @@ class Zacetno:
         self.sirina = 9
         self.visina = 13
 
-        self.slika_ozadje = tk.PhotoImage(file='slike/hogwarts.gif')#Slika za ozadje
+        self.slika_ozadje = tk.PhotoImage(file='slike/hogwarts1.gif')#Slika za ozadje
         ozadje_label = tk.Label(zacetno_okno, image=self.slika_ozadje)
         ozadje_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -244,7 +244,7 @@ class Zacetno:
 app_zacetno_okno = tk.Tk()
 
 app_zacetno_okno.title("Čarovniški nogomet")
-app_zacetno_okno.geometry("500x600")
+app_zacetno_okno.geometry("450x450")
 
 zacetni_meni = Zacetno(app_zacetno_okno)
 
