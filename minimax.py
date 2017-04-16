@@ -70,7 +70,7 @@ class Minimax:
             # Sporočili so nam, da moramo prekiniti
             logging.debug ("Minimax prekinja, globina = {0}".format(globina))
             return (None, 0)
-        (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje(zacetek)
+        (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
         if konec_ali_ne == konec_igre:
             # Igre je konec, vrnemo njeno vrednost
             if na_vrsti == self.jaz:
@@ -93,16 +93,18 @@ class Minimax:
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
                     print(self.igra.mozne_poteze(zacetek))
-                    print("tuki crkne")
                     for p in self.igra.mozne_poteze(zacetek):
                         print(p)
                         poteza = [zacetek] + p
                         self.igra.shrani_pozicijo()
+                        self.igra.naredi_potezo(poteza)
                         # XXX to for zanko preselimo v metodo naredi_potezo v Igra.
+                        # YYY preseljeno
                         # self.igra.naredi_potezo(p)
                         # XXX ne pozabi spremeniti spodaj pri minimizaciji!
-                        for i in range(len(poteza)-1):
-                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
+                        # YYY nismo pozabili pri minimizaciji
+##                        for i in range(len(poteza)-1):
+##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
                         vrednost = self.minimax(globina-1, not maksimiziramo, poteza[-1])[1]
                         self.igra.razveljavi()
                         if vrednost > vrednost_najboljse:
@@ -116,8 +118,9 @@ class Minimax:
                     for p in self.igra.mozne_poteze(zacetek):
                         poteza = [zacetek] + p
                         self.igra.shrani_pozicijo()
-                        for i in range(len(poteza)-1):
-                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
+                        self.igra.naredi_potezo(poteza)
+##                        for i in range(len(poteza)-1):
+##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
                         vrednost = self.minimax(globina-1, not maksimiziramo, poteza[-1])[1]
                         self.igra.razveljavi()
                         if vrednost < vrednost_najboljse:

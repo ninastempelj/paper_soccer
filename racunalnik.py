@@ -11,8 +11,8 @@ class Racunalnik:
         self.algoritem = algoritem
         self.mislec = None
 
-     def povleci_potezo(self, staro):
-          self.zadnji_polozaj = staro
+     def povleci_potezo(self):
+          self.zadnji_polozaj = self.gui.igra.zadnji_polozaj
           self.stevec = 0
           #verjetno neuporabno self.naslednja_ polja = [staro,(5,6),(7,3)] začasno
           
@@ -23,10 +23,12 @@ class Racunalnik:
           self.mislec.start()
 
           # Gremo preverjat, ali je bila najdena poteza:
-          self.gui.polje.after(100, self.preveri_potezo(staro))
+          self.gui.polje.after(100, self.preveri_potezo())
 
-     def preveri_potezo(self, staro):
+     def preveri_potezo(self):
           """Vsakih 100ms preveri, ali je algoritem že izračunal potezo."""
+          staro = self.gui.igra.zadnji_polozaj ## A TO RABMO?
+
           if self.algoritem.poteza is not None:
                # Algoritem je našel potezo, povleci jo, če ni bilo prekinitve
                self.naslednja_polja = [staro] + self.algoritem.poteza
@@ -35,7 +37,7 @@ class Racunalnik:
                self.povleci_korak()
           else:
                # Algoritem še ni našel poteze, preveri še enkrat čez 100ms
-               self.gui.polje.after(100, self.preveri_potezo(staro))
+               self.gui.polje.after(100, self.preveri_potezo())
 
      def prekini(self):
         # To metodo kliče GUI, če je treba prekiniti razmišljanje.
@@ -54,7 +56,7 @@ class Racunalnik:
         self.gui.povleci_korak(self.polja[stevec-1], self.polja[stevec])
         pass
 
-     def klik(self, staro, novo):
+     def klik(self, novo):
         # Povlečemo potezo. Če ni veljavna, se ne bo zgodilo nič.
         pass
 
