@@ -12,13 +12,14 @@ racunalnik = "Duh"
 
 
 class GUI():
-    def __init__(self, master, root):
+    def __init__(self, master, zacetno_okno):
         self.master = master
+        self.master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno())
         self.sirina_kvadratka = 50
         #self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
-        self.zacetni_master = root
+        self.zacetno_okno = zacetno_okno
 
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
@@ -26,6 +27,9 @@ class GUI():
 
         self.globina = 2 # TODO: določi glede na izbrano težavnost
 
+    def zapri_okno(self):
+        self.master.destroy()
+        self.zacetno_okno.destroy()
 
     def zacni_igro(self):
         #Nastavi barvo ozadja
@@ -66,7 +70,7 @@ class GUI():
                                    self.oglisca[i+1][int((self.sirina-1)/2)],
                                    fill='grey80')
 
- 
+
 
         # for i in [1, -2]:
         #     ### Črte od roba do gola
@@ -100,7 +104,7 @@ class GUI():
         self.id_zoga = self.polje.create_image(self.oglisca[self.zadnji_polozaj[0]]
                                            [self.zadnji_polozaj[1]], image=self.zoga)
         self.igra = Igra(self.sirina, self.visina)
-		
+
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
@@ -110,12 +114,12 @@ class GUI():
         else:
             self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.zadnji_polozaj))
         print(self.objekt_igralec1, self.objekt_igralec2)
-            
-    
+
+
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         vrstica = (y + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
-        
+
         return (int(vrstica), int(stolpec))
 
     def klik_na_plosci(self, event):
@@ -125,7 +129,7 @@ class GUI():
             self.objekt_igralec1.klik(staro, novo)
         elif self.igra.na_vrsti == igralec2:
             self.objekt_igralec2.klik(staro, novo)
-    
+
     def narisi_korak(self, novo):
         (v_star, s_star) = self.zadnji_polozaj
         (v_nov, s_nov) = novo
@@ -160,9 +164,9 @@ class GUI():
                     self.objekt_igralec2.povleci_korak()
             else:
                 assert False, "Stanje igre je nekaj čudnega- gui.povleci_korak."
-        
 
-            
+
+
 
     # def preveri_korak(self, novo):
             # staro = self.zadnji_polozaj
@@ -173,10 +177,10 @@ class GUI():
                                                     # # - nope, tm nima to kej delat, sm kr zbrisala
                                                     # (novo[1] - staro[1])*self.sirina_kvadratka,
                                                     # (novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
-                    
+
 
                     # self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
-##            
+##
 ##            else:
 ##                    pass
 
@@ -202,7 +206,7 @@ class GUI():
 ##                pass
 ##        else:
 ##            assert False, 'Čudno stanje igre - GUI'
-                
+
     def koncaj_igro(self, zmagovalec):
         domovi = {'red': 'Gryfondom',
                 'yellow': 'Pihpuff', 'blue': 'Drznvraan', 'green': 'Spolzgad'}
@@ -217,13 +221,4 @@ class GUI():
         #print("Zmagovalec je {0}.".format(zmagovalec))
         #   Za zagon koncnega okna
         koncno_okno = tk.Toplevel()
-        konec = Zakljucek(koncno_okno, izpisi)
-        konec.zacetni = self.zacetni
-        konec.zacetni_master = self.zacetni_master
-        konec.gui = self
-        konec.gui_master = self.master
-
-
-
-
-
+        konec = Zakljucek(koncno_okno, izpisi, self.zacetni, self.zacetno_okno, self)

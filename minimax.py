@@ -63,6 +63,7 @@ class Minimax:
         return 3
 
     def minimax(self, globina, maksimiziramo, zacetek):
+        # XXX: "zacetek" ne sme biti argument, ker je (bo) spravljen v self.igra
         print(self.poteza)
         """Glavna metoda minimax."""
         if self.prekinitev:
@@ -91,12 +92,15 @@ class Minimax:
                     # Maksimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    print(self.igra.mozne_poteze(self.igra.plosca, zacetek))
+                    print(self.igra.mozne_poteze(zacetek))
                     print("tuki crkne")
-                    for p in self.igra.mozne_poteze(self.igra.plosca, zacetek):
+                    for p in self.igra.mozne_poteze(zacetek):
                         print(p)
                         poteza = [zacetek] + p
                         self.igra.shrani_pozicijo()
+                        # XXX to for zanko preselimo v metodo naredi_potezo v Igra.
+                        # self.igra.naredi_potezo(p)
+                        # XXX ne pozabi spremeniti spodaj pri minimizaciji!
                         for i in range(len(poteza)-1):
                             self.igra.zapomni_korak(poteza[i], poteza[i+1])
                         vrednost = self.minimax(globina-1, not maksimiziramo, poteza[-1])[1]
@@ -109,7 +113,7 @@ class Minimax:
                     print("mini")
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
-                    for p in self.igra.mozne_poteze(self.igra.plosca, zacetek):
+                    for p in self.igra.mozne_poteze(zacetek):
                         poteza = [zacetek] + p
                         self.igra.shrani_pozicijo()
                         for i in range(len(poteza)-1):
@@ -124,6 +128,3 @@ class Minimax:
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
             assert False, "minimax: ni vrnil cele poteze, ampak korak"
-
-
-    
