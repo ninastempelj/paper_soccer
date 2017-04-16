@@ -8,7 +8,7 @@ class Zacetno:
         self.tip_igralec1 = clovek
         self.tip_igralec2 = racunalnik
 
-        self.dovoljene_barve = ['yellow', 'blue']
+        self.dovoljene_barve = ['gold', 'blue']
         self.barva_igralec1 = 'red'
         self.barva_igralec2 = 'green'
 
@@ -18,7 +18,7 @@ class Zacetno:
         self.sirina = 9
         self.visina = 13
 
-        self.slika_ozadje = tk.PhotoImage(file='slike/hogwarts1.gif')#Slika za ozadje
+        self.slika_ozadje = tk.PhotoImage(file=os.path.join('slike','hogwarts1.gif'))#Slika za ozadje
         ozadje_label = tk.Label(zacetno_okno, image=self.slika_ozadje)
         ozadje_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -41,9 +41,9 @@ class Zacetno:
         barve_1 = tk.Label(zacetno_okno, text="Izberi dom:")
         barve_1.grid(row=2, column=0)
         self.slika_gryffindor = tk.PhotoImage(file=os.path.join('slike','gryffindor.gif'))
-        self.slika_hufflepuff = tk.PhotoImage(file='slike/hufflepuff.gif')
-        self.slika_ravenclaw = tk.PhotoImage(file='slike/ravenclaw.gif')
-        self.slika_slytherin = tk.PhotoImage(file='slike/slytherin.gif')
+        self.slika_hufflepuff = tk.PhotoImage(file=os.path.join('slike','hufflepuff.gif'))
+        self.slika_ravenclaw = tk.PhotoImage(file=os.path.join('slike','ravenclaw.gif'))
+        self.slika_slytherin = tk.PhotoImage(file=os.path.join('slike','slytherin.gif'))
 
         G1 = tk.Button(zacetno_okno, #text = "Gryfondom", #bg = 'red',
                        image=self.slika_gryffindor, anchor='n',
@@ -52,7 +52,7 @@ class Zacetno:
         P1 = tk.Button(zacetno_okno, #text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('yellow', P1))
+                       command=lambda: self.izberi_barvo('gold', P1))
         D1 = tk.Button(zacetno_okno, #text = "Drznvraan", bg= 'blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
@@ -79,7 +79,7 @@ class Zacetno:
         P2 = tk.Button(zacetno_okno, #text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('yellow', P2))
+                       command=lambda: self.izberi_barvo('gold', P2))
         D2 = tk.Button(zacetno_okno, #text = "Drznvraan", bg= 'blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,

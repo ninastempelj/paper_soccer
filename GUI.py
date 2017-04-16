@@ -4,6 +4,7 @@ from igra import *
 from clovek import *
 from racunalnik import *
 import minimax
+import os
 
 clovek = "Čarovnik"
 racunalnik = "Duh"
@@ -88,7 +89,7 @@ class GUI():
         self.igra = Igra(self.sirina, self.visina)
         #self.zadnji_polozaj = self.igra.zadnji_polozaj
 
-        self.zoga = tk.PhotoImage(file='slike/zoga.gif')
+        self.zoga = tk.PhotoImage(file=os.path.join('slike','zoga.gif'))
         self.id_zoga = self.polje.create_image(self.oglisca[self.igra.zadnji_polozaj[0]]
                                            [self.igra.zadnji_polozaj[1]], image=self.zoga)
 
