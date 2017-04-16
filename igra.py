@@ -33,6 +33,7 @@ class Igra():
         self.smeri= list(range(-4,0)) + list(range(1,5))
         self.zadnji_polozaj = (int((self.visina - 1) / 2), int((self.sirina - 1) / 2))
         # XXX Zakaj stanje igre ne vsebuje podatka o tem, kje je žoga?
+        # YYY sedaj ga vsebuje igra, GUI pa ne- GUI vedno vpraša igro
 
         seznam_neproblematicnih=list(range(int((self.sirina-1)/2-1)))+list(
             range(int((self.sirina-1)/2+2),self.sirina))
@@ -91,6 +92,7 @@ class Igra():
 
     def mozne_poteze(self, prvi_korak=True):
         # XXX tu se bomo znenbili trenutno, ker bo že v self.
+        # YYY smo se znebili trenutno
         trenutno = self.zadnji_polozaj
         mozni = self.mozen_korak()
         if (mozni == [] or
@@ -103,7 +105,6 @@ class Igra():
             for sosednje in mozni:
                 (sos_vrs, sos_stolp) = sosednje
                 (tre_vrs, tre_stolp) = trenutno
-                smer = self.smer_koraka(sosednje)
                 # XXX naslednje tri vrstice bi morale biti metoda naredi_korak
 ##                smer = self.smer_koraka(trenutno, sosednje)
 ##                self.plosca[sos_vrs][sos_stolp].add(-smer)
@@ -167,7 +168,7 @@ class Igra():
     def razveljavi_korak(self, staro):
         (trenutno_vrs, trenutno_stolp) = self.zadnji_polozaj
         (prejsno_vrs, prejsno_stolp) = staro
-        smer = smer_koraka(staro, self.zadnji_polozaj)
+        smer = self.smer_koraka(staro, self.zadnji_polozaj)
         self.plosca[trenutno_vrs][trenutno_stolp].remove(-smer)
         self.plosca[prejsno_vrs][prejsno_stolp].remove(smer)
         self.zadnji_polozaj = (prejsno_vrs, prejsno_stolp)
@@ -232,6 +233,7 @@ class Igra():
 
 
     def trenutno_stanje(self):
+        print(self.mozne_poteze())
         novo = self.zadnji_polozaj
         #print(novo)
         #print(self.mozne_poteze(self.plosca, novo))
