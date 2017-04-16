@@ -71,39 +71,12 @@ class GUI():
                                    fill='grey80')
 
 
-
-        # for i in [1, -2]:
-        #     ### Črte od roba do gola
-        #     self.polje.create_line(self.oglisca[i][0],
-        #                            self.oglisca[i][int((self.sirina-3)/2)],
-        #                            width=self.debelina_zunanjih_crt)
-        #     self.polje.create_line(self.oglisca[i][int((self.sirina+1)/2)],
-        #                            self.oglisca[i][-1],
-        #                            width=self.debelina_zunanjih_crt)
-        # for i in [0, -1]:
-        #     ### Stranske črte
-        #     self.polje.create_line(self.oglisca[1][i],
-        #                            self.oglisca[-2][i],
-        #                            width=self.debelina_zunanjih_crt)
-        #     ### Zadnji stranici golov
-        #     self.polje.create_line(self.oglisca[i][int((self.sirina - 3) / 2)],
-        #                            self.oglisca[i][int((self.sirina + 1) / 2)],
-        #                            width=self.debelina_zunanjih_crt)
-        # for i in [0, -2]:
-        #     ### štange
-        #     self.polje.create_line(self.oglisca[i][int((self.sirina-3)/2)],
-        #                            self.oglisca[i+1][int((self.sirina-3)/2)],
-        #                            width=self.debelina_zunanjih_crt)
-        #     self.polje.create_line(self.oglisca[i][int((self.sirina+1)/2)],
-        #                            self.oglisca[i+1][int((self.sirina+1)/2)],
-        #                            width=self.debelina_zunanjih_crt)
-
-        self.zadnji_polozaj = (int((self.visina - 1) / 2), int((self.sirina - 1) / 2))
+        self.igra = Igra(self.sirina, self.visina)
+        #self.zadnji_polozaj = self.igra.zadnji_polozaj
 
         self.zoga = tk.PhotoImage(file='slike/zoga.gif')
-        self.id_zoga = self.polje.create_image(self.oglisca[self.zadnji_polozaj[0]]
-                                           [self.zadnji_polozaj[1]], image=self.zoga)
-        self.igra = Igra(self.sirina, self.visina)
+        self.id_zoga = self.polje.create_image(self.oglisca[self.igra.zadnji_polozaj[0]]
+                                           [self.igra.zadnji_polozaj[1]], image=self.zoga)
 
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
@@ -119,19 +92,18 @@ class GUI():
     def najblizje_oglisce(self, x, y):
         stolpec = (x + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
         vrstica = (y + 1/2 * self.sirina_kvadratka - self.od_roba)//self.sirina_kvadratka
-
         return (int(vrstica), int(stolpec))
 
     def klik_na_plosci(self, event):
         novo = self.najblizje_oglisce(event.x, event.y)
-        staro = self.zadnji_polozaj
+        #staro = self.zadnji_polozaj ##Ne potrebujemo več?
         if self.igra.na_vrsti == igralec1:
-            self.objekt_igralec1.klik(staro, novo)
+            self.objekt_igralec1.klik(novo)
         elif self.igra.na_vrsti == igralec2:
-            self.objekt_igralec2.klik(staro, novo)
+            self.objekt_igralec2.klik(novo)
 
     def narisi_korak(self, novo):
-        (v_star, s_star) = self.zadnji_polozaj
+        (v_star, s_star) = self.igra.zadnji_polozaj
         (v_nov, s_nov) = novo
         self.polje.create_line(self.oglisca[v_star][s_star],
                                self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
@@ -139,22 +111,23 @@ class GUI():
                         (s_nov - s_star)*self.sirina_kvadratka,
                         (v_nov - v_star)*self.sirina_kvadratka)#TODO Žoga čez črto
                     # ej ne javlja več napak izven polja :)
-    def povleci_korak(self, staro, novo):
-        if not self.igra.dovoljen_korak(staro, novo):
+
+    def povleci_korak(self, novo):
+        staro = self.igra.zadnji_polozaj
+        if not self.igra.dovoljen_korak(novo):
             pass
         else:
-            self.igra.zapomni_korak(staro, novo) #ta ga doda na seznam
             self.narisi_korak(novo)
-            self.zadnji_polozaj = novo
-            stanje = self.igra.trenutno_stanje(novo)
+            self.igra.naredi_korak(novo) #ta ga doda na seznam in posodobi zadnji polozaj
+            stanje = self.igra.trenutno_stanje()
             if stanje[0] == konec_igre:
                 self.koncaj_igro(stanje[1])
             elif stanje[0] == konec_poteze:
                 if stanje[1] == igralec1:
-                    self.objekt_igralec1.povleci_potezo(self.zadnji_polozaj)
+                    self.objekt_igralec1.povleci_potezo()
                     self.trenutna_barva =self.barva_igralec1
                 if stanje[1] == igralec2:
-                    self.objekt_igralec2.povleci_potezo(self.zadnji_polozaj)
+                    self.objekt_igralec2.povleci_potezo()
                     self.trenutna_barva =self.barva_igralec2
                 self.polje.config(bg=self.trenutna_barva)
             elif stanje[0] == ni_konec_poteze:
@@ -184,8 +157,8 @@ class GUI():
 ##            else:
 ##                    pass
 
-    def stanje_igre(self, trenutno_polje):
-        stanje = self.igra.trenutno_stanje(trenutno_polje)
+    def stanje_igre(self):
+        stanje = self.igra.trenutno_stanje()
         if stanje[0] == konec_igre:
             self.koncaj_igro(stanje[1])
         elif stanje[0] == konec_poteze:

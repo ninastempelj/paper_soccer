@@ -4,7 +4,7 @@ class Clovek():
     def __init__(self, gui):
         self.gui = gui
 
-    def povleci_potezo(self, staro):
+    def povleci_potezo(self):
         #to funkcijo rabi samo računalnik - kot pri Bauerju igraj
         pass
 
@@ -13,9 +13,9 @@ class Clovek():
         # Človek jo lahko ignorira.
         pass
 
-    def klik(self, staro, novo):
+    def klik(self, novo):
         # Povlečemo potezo. Če ni veljavna, se ne bo zgodilo nič.
-        self.gui.povleci_korak(staro, novo)
+        self.gui.povleci_korak(novo)
 
     def povleci_korak(self):
         pass
