@@ -225,15 +225,20 @@ class Zacetno:
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
-        gui = GUI(okno_igrisca, self.zacetno_okno)  # , self)
+        gui = GUI(okno_igrisca, self.zacetno_okno,
+                  self.tezavnost1, self.tezavnost2,
+                  self.barva_igralec1, self.barva_igralec2,
+                  self.tip_igralec1, self.tip_igralec2,
+                  self.sirina, self.visina)  # , self)
         self.zacetno_okno.withdraw()
-        gui.zacetni = self
+        gui.zacetni = self #NINA TODO Kaj je to? A lahko dava kot argument al ubistvu ne rab?
+        ###PRESTAVLJENI KOT ARGUMENTI PRI DELANJU GUI-ja
         # Guiju in igri sporoči nastavitve.
-        (gui.tezavnost1, gui.tezavnost2) = (self.tezavnost1, self.tezavnost2)
-        (gui.barva_igralec1, gui.barva_igralec2) = (self.barva_igralec1, self.barva_igralec2)
-        (gui.tip_igralec1, gui.tip_igralec2) = (self.tip_igralec1, self.tip_igralec2)
-        gui.trenutna_barva = self.barva_igralec1
-        gui.sirina, gui.visina = self.sirina, self.visina
+        #(gui.tezavnost1, gui.tezavnost2) = (self.tezavnost1, self.tezavnost2)
+        #(gui.barva_igralec1, gui.barva_igralec2) = (self.barva_igralec1, self.barva_igralec2)
+        #(gui.tip_igralec1, gui.tip_igralec2) = (self.tip_igralec1, self.tip_igralec2)
+        #gui.trenutna_barva = self.barva_igralec1
+        #gui.sirina, gui.visina = self.sirina, self.visina
         #(gui.igra.igralec1, gui.igra.igralec2) = (self.igralec1, self.igralec2)
         #gui.igra.na_vrsti = self.igralec1
         okno_igrisca.geometry("{0}x{1}".format(

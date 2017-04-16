@@ -12,9 +12,23 @@ racunalnik = "Duh"
 
 
 class GUI():
-    def __init__(self, master, zacetno_okno):
+    def __init__(self, master, zacetno_okno,
+                 tezavnost1, tezavnost2,
+                 barva_igralec1, barva_igralec2,
+                 tip_igralec1, tip_igralec2,
+                 sirina, visina):
         self.master = master
         self.master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno())
+        self.tezavnost1 = tezavnost1
+        self.tezavnost2 = tezavnost2
+        self.barva_igralec1 = barva_igralec1
+        self.barva_igralec2 = barva_igralec2
+        self.tip_igralec1 = tip_igralec1
+        self.tip_igralec2 = tip_igralec2
+        self.trenutna_barva = self.barva_igralec1
+        self.sirina = sirina
+        self.visina = visina
+
         self.sirina_kvadratka = 50
         #self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
         self.od_roba = 50
@@ -31,7 +45,7 @@ class GUI():
         self.master.destroy()
         self.zacetno_okno.destroy()
 
-    def zacni_igro(self):
+    def zacni_igro(self): #NINA TODO ali še rabiva to funkcijo za risanje igrišča?
         #Nastavi barvo ozadja
         self.polje.config(bg=self.trenutna_barva)
         #Naredi matriko oglišč
@@ -81,11 +95,11 @@ class GUI():
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
-            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina, self.zadnji_polozaj))
+            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
         if self.tip_igralec2 == clovek:
             self.objekt_igralec2 = Clovek(self)
         else:
-            self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.zadnji_polozaj))
+            self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
         print(self.objekt_igralec1, self.objekt_igralec2)
 
 
