@@ -2,9 +2,9 @@ import tkinter as tk
 
 class Zakljucek():
 
-    def __init__(self, master, napis, zacetni, zacetno_okno, gui):
+    def __init__(self, master, napis, zacetni_meni, zacetno_okno, gui):
         self.master = master
-        self.zacetni = zacetni
+        self.zacetni_meni = zacetni_meni
         self.zacetno_okno = zacetno_okno
         self.gui = gui
         master.geometry('200x100')
@@ -23,14 +23,16 @@ class Zakljucek():
                           command=self.ponovi_igro)
         gumb_ista.grid(row=2, column=3)
 
+        master.attributes("-topmost", True)
+
     def zacni_novo(self):
-        print('gremo v začetni meni')
+        #print('gremo v začetni meni')
         self.zacetno_okno.deiconify()
         self.gui.master.destroy()
         self.master.destroy()
 
     def ponovi_igro(self):
-        print('Ponovno izrišemo isto platno')
+        #print('Ponovno izrišemo isto platno')
         self.gui.master.destroy()
-        self.zacetni.zacni_igro()
+        self.zacetni_meni.zacni_igro()
         self.master.destroy()

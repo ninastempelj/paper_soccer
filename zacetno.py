@@ -229,9 +229,9 @@ class Zacetno:
                   self.tezavnost1, self.tezavnost2,
                   self.barva_igralec1, self.barva_igralec2,
                   self.tip_igralec1, self.tip_igralec2,
-                  self.sirina, self.visina)  # , self)
+                  self.sirina, self.visina, self)
         self.zacetno_okno.withdraw()
-        gui.zacetni = self #NINA TODO Kaj je to? A lahko dava kot argument al ubistvu ne rab?
+        #gui.zacetni_meni = self #NINA TODO Kaj je to? A lahko dava kot argument al ubistvu ne rab?
         ###PRESTAVLJENI KOT ARGUMENTI PRI DELANJU GUI-ja
         # Guiju in igri sporoči nastavitve.
         #(gui.tezavnost1, gui.tezavnost2) = (self.tezavnost1, self.tezavnost2)

@@ -17,7 +17,8 @@ class GUI():
                  tezavnost1, tezavnost2,
                  barva_igralec1, barva_igralec2,
                  tip_igralec1, tip_igralec2,
-                 sirina, visina):
+                 sirina, visina, zacetni_meni):
+        self.zacetni_meni = zacetni_meni
         self.master = master
         self.master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno())
         self.tezavnost1 = tezavnost1
@@ -42,12 +43,7 @@ class GUI():
 
         self.globina = 2 # TODO: določi glede na izbrano težavnost
 
-    def zapri_okno(self):
-        self.master.destroy()
-        self.zacetno_okno.destroy()
-
-    def zacni_igro(self): #NINA TODO ali še rabiva to funkcijo za risanje igrišča?
-        #Nastavi barvo ozadja
+         #Nastavi barvo ozadja
         self.polje.config(bg=self.trenutna_barva)
         #Naredi matriko oglišč
         self.oglisca = [[(
@@ -93,6 +89,13 @@ class GUI():
         self.id_zoga = self.polje.create_image(self.oglisca[self.igra.zadnji_polozaj[0]]
                                            [self.igra.zadnji_polozaj[1]], image=self.zoga)
 
+
+
+    def zapri_okno(self):
+        self.master.destroy()
+        self.zacetno_okno.destroy()
+
+    def zacni_igro(self): 
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
@@ -101,7 +104,9 @@ class GUI():
             self.objekt_igralec2 = Clovek(self)
         else:
             self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
-        print(self.objekt_igralec1, self.objekt_igralec2)
+        #print(self.objekt_igralec1, self.objekt_igralec2)
+        self.master.attributes("-topmost", True)
+
 
 
     def najblizje_oglisce(self, x, y):
@@ -209,4 +214,4 @@ class GUI():
         #print("Zmagovalec je {0}.".format(zmagovalec))
         #   Za zagon koncnega okna
         koncno_okno = tk.Toplevel()
-        konec = Zakljucek(koncno_okno, izpisi, self.zacetni, self.zacetno_okno, self)
+        konec = Zakljucek(koncno_okno, izpisi, self.zacetni_meni, self.zacetno_okno, self)
