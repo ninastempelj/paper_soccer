@@ -36,3 +36,5 @@ class Zakljucek():
         self.gui.master.destroy()
         self.zacetni_meni.zacni_igro()
         self.master.destroy()
+
+## TODO če X zapri VSE!!!!!!!!!!

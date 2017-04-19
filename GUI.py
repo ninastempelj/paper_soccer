@@ -177,19 +177,20 @@ class GUI():
 ##            else:
 ##                    pass
 
-    def stanje_igre(self):
-        stanje = self.igra.trenutno_stanje()
-        if stanje[0] == konec_igre:
-            self.koncaj_igro(stanje[1])
-        elif stanje[0] == konec_poteze:
-            if stanje[1] == igralec1:
-                self.trenutna_barva = self.barva_igralec1
-                #pokliče igralca 1 za novo potezo
-            if stanje[1] == igralec2:
-                self.trenutna_barva = self.barva_igralec2
-                #pokliče igralca 2 za novo potezo
-        #v končni verziji tega ne bi smelo bit,
-        # ker korake podelata igralca sama: - DELA
+##    def stanje_igre(self):
+##        print('TUKI SE POKLIČE')
+##        stanje = self.igra.trenutno_stanje()
+##        if stanje[0] == konec_igre:
+##            self.koncaj_igro(stanje[1])
+##        elif stanje[0] == konec_poteze:
+##            if stanje[1] == igralec1:
+##                self.trenutna_barva = self.barva_igralec1
+##                #pokliče igralca 1 za novo potezo
+##            if stanje[1] == igralec2:
+##                self.trenutna_barva = self.barva_igralec2
+##                #pokliče igralca 2 za novo potezo
+##        #v končni verziji tega ne bi smelo bit,
+##        # ker korake podelata igralca sama: - DELA
 ##        elif  stanje[0] == ni_konec_poteze:
 ##            if stanje[1] == igralec1:
 ##                #pokliče igralca 1 za nov korak

@@ -122,7 +122,6 @@ class Igra():
                 else:
                     for x in poteze_tega:
                         poteze.append([sosednje]+x)
-
             return poteze
 
 
@@ -130,14 +129,14 @@ class Igra():
     def kopija(self):
         kopija = Igra(self.sirina, self.visina)
         #kopija.plosca = [self.plosca[i][:] for i in range(self.visina)]
-        ###Nina a je to isti problem kot pri unih ploščah?
+        ###Nina a je to isti problem kot pri unih ploščah? Najbrž da ja :)
         kopija.plosca = copy.deepcopy(self.plosca)
         kopija.na_vrsti = self.na_vrsti
         return kopija
 
     # za razveljavi
     def shrani_pozicijo(self):
-        pozicija = [self.plosca[i][:] for i in range(self.visina)]
+        pozicija = copy.deepcopy(self.plosca)
         self.zgodovina.append((pozicija, self.na_vrsti))
 
     def razveljavi(self):
@@ -153,7 +152,7 @@ class Igra():
 
     def naredi_potezo(self, poteza):
         del poteza[0] #ker ima poteza na začetku trenutno stanje(rabi za razveljavi)
-        for korak in poteza: 
+        for korak in poteza:
             self.naredi_korak(korak)
 
     ###ali razveljavi korak dobi smer ali polje v katerega more nazaj?!
@@ -191,6 +190,7 @@ class Igra():
         y_razlika = staro[0] - novo[0]
         if abs(x_razlika)>1 or abs(y_razlika)>1 or (
             x_razlika==0 and y_razlika==0):
+            print(staro, novo)
             return None
         elif x_razlika == 0:
             smer = (-4)*y_razlika
@@ -227,11 +227,28 @@ class Igra():
 
     def trenutno_stanje(self):#funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         novo = self.zadnji_polozaj
+        #print(self.mozne_poteze())
+        for x in self.plosca:
+            print(x)
+        print('_________________________')
+        self.naredi_potezo([(5,4),(4,4),(4,3)])
+        for x in self.plosca:
+            print(x)
+        print('_________________________')
+        self.razveljavi_potezo([(5,4),(4,4),(4,3)])
+        print(self.zadnji_polozaj, 'poteza')
+        for x in self.plosca:
+            print(x)
+        print('_________________________')
+
         if novo in self.gol_zgoraj: # seznam zgornjega gola
+            self.na_vrsti = None
             return (konec_igre, igralec1)
         elif novo in self.gol_spodaj:
+            self.na_vrsti = None
             return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
+            self.na_vrsti = None
             return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
         elif len(self.plosca[novo[0]][novo[1]]) != 1:

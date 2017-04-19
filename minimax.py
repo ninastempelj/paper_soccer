@@ -1,4 +1,5 @@
 import logging
+
 from igra import nasprotnik, igralec1, igralec2, konec_igre, konec_poteze, ni_konec_poteze
 
 class Minimax:
@@ -8,7 +9,7 @@ class Minimax:
         self.igra = None # objekt, ki opisuje igro (ga dobimo kasneje)
         self.jaz = None  # katerega igralca igramo (podatek dobimo kasneje)
         self.poteza = None # sem napišemo potezo, ko jo najdemo
-        self.zacetek = staro
+        self.trenutni_polozaj = staro
 
     def prekini(self):
         """Metoda, ki jo pokliče GUI, če je treba nehati razmišljati, ker
@@ -24,7 +25,7 @@ class Minimax:
         print(igra.na_vrsti)
         self.poteza = None # Sem napišemo potezo, ko jo najdemo
         # Poženemo minimax
-        (poteza, vrednost) = self.minimax(self.globina, True, self.zacetek)
+        (poteza, vrednost) = self.minimax(self.globina, True)
         self.jaz = None
         self.igra = None
         if not self.prekinitev:
@@ -62,9 +63,10 @@ class Minimax:
 ##            vrednost += vrednost_trojke.get((x,y), 0)
         return 3
 
-    def minimax(self, globina, maksimiziramo, zacetek):
-        # XXX: "zacetek" ne sme biti argument, ker je (bo) spravljen v self.igra
+    def minimax(self, globina, maksimiziramo):
+        # XXX: "trenutni_polozaj" ne sme biti argument, ker je (bo) spravljen v self.igra
         print(self.poteza)
+        trenutni_polozaj = self.igra.zadnji_polozaj
         """Glavna metoda minimax."""
         if self.prekinitev:
             # Sporočili so nam, da moramo prekiniti
@@ -92,11 +94,11 @@ class Minimax:
                     # Maksimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    print(self.igra.mozne_poteze(zacetek))
-                    for p in self.igra.mozne_poteze(zacetek):
-                        print(p)
-                        poteza = [zacetek] + p
-                        self.igra.shrani_pozicijo()
+                    #print(self.igra.mozne_poteze(trenutni_polozaj))
+                    for p in self.igra.mozne_poteze():
+                        #print(p)
+                        poteza = [trenutni_polozaj] + p
+                        #self.igra.shrani_pozicijo()
                         self.igra.naredi_potezo(poteza)
                         # XXX to for zanko preselimo v metodo naredi_potezo v Igra.
                         # YYY preseljeno
@@ -105,27 +107,27 @@ class Minimax:
                         # YYY nismo pozabili pri minimizaciji
 ##                        for i in range(len(poteza)-1):
 ##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
-                        vrednost = self.minimax(globina-1, not maksimiziramo, poteza[-1])[1]
-                        self.igra.razveljavi()
+                        vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                        self.igra.razveljavi_potezo(poteza)
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljsa_poteza = p
+                            najboljsa_poteza = poteza
                 else:
                     # Minimiziramo
                     print("mini")
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
-                    for p in self.igra.mozne_poteze(zacetek):
-                        poteza = [zacetek] + p
-                        self.igra.shrani_pozicijo()
+                    for p in self.igra.mozne_poteze():
+                        poteza = [trenutni_polozaj] + p
+                        #self.igra.shrani_pozicijo()
                         self.igra.naredi_potezo(poteza)
 ##                        for i in range(len(poteza)-1):
 ##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
-                        vrednost = self.minimax(globina-1, not maksimiziramo, poteza[-1])[1]
-                        self.igra.razveljavi()
+                        vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                        self.igra.razveljavi_potezo(poteza)
                         if vrednost < vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljsa_poteza = p
+                            najboljsa_poteza = poteza
 
                 assert (najboljsa_poteza is not None), "minimax: izračunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
