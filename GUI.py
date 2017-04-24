@@ -41,7 +41,7 @@ class GUI():
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
 
-        self.globina = 2 # TODO: določi glede na izbrano težavnost
+        self.globina = 1 # TODO: določi glede na izbrano težavnost
 
          #Nastavi barvo ozadja
         self.polje.config(bg=self.trenutna_barva)
@@ -106,6 +106,7 @@ class GUI():
             self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
         #print(self.objekt_igralec1, self.objekt_igralec2)
         self.master.attributes("-topmost", True)
+        self.objekt_igralec1.povleci_potezo()
 
 
 

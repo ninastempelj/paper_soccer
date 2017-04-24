@@ -187,7 +187,7 @@ class Igra():
         #del obrnjena_poteza[0] #da na začetku ne briše poteze samega sebe v samega sebe
         for korak in obrnjena_poteza[1:]:
             self.razveljavi_korak(korak)
-        self.na_vrsti = nasprotnik(self.na_vrsti)
+        self.na_vrsti = nasprotnik(self.na_vrsti) #ne bo ok, če je blo konc igre
             
     # XXX ali bo minimax potreboval naredi_potezo?
     # YYY če jo bo je napisana in po printanjih zgleda dela prav
@@ -234,7 +234,7 @@ class Igra():
 
     def trenutno_stanje(self):#funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         novo = self.zadnji_polozaj
-#        print(len(self.mozne_poteze()))
+        print(len(self.mozne_poteze()))
 ##        for x in self.plosca:
 ##            print(x)
 ##        print('_________________________')

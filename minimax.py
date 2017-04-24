@@ -61,7 +61,17 @@ class Minimax:
 ##                elif self.igra.plosca[i][j] == nasprotnik(self.jaz):
 ##                    y += 1
 ##            vrednost += vrednost_trojke.get((x,y), 0)
-        return 3
+        polozaj = self.igra.zadnji_polozaj
+        if polozaj in self.igra.gol_zgoraj:
+            vrednost = ZMAGA
+        if polozaj in self.igra.gol_spodaj:
+            vrednost = -ZMAGA
+        sredina_vrs = int((self.igra.visina -1)/2)
+        sredina_stolp = int((self.igra.sirina-1)/2)
+        vrednost_vrstice = (polozaj[0] - sredina_vrs)*1000 #Nižje na igrišču je več vredno
+        vrednost_stolpca = abs(polozaj[1] - sredina_stolp)
+        vrednost = vrednost_vrstice #+ vrednost_stolpca
+        return vrednost
 
     def minimax(self, globina, maksimiziramo):
         # XXX: "trenutni_polozaj" ne sme biti argument, ker je (bo) spravljen v self.igra
@@ -72,7 +82,7 @@ class Minimax:
             # Sporočili so nam, da moramo prekiniti
             logging.debug ("Minimax prekinja, globina = {0}".format(globina))
             return (None, 0)
-        print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
+        #print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
         (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
         if konec_ali_ne == konec_igre:
             # Igre je konec, vrnemo njeno vrednost
@@ -96,7 +106,7 @@ class Minimax:
                     # Maksimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    #print(self.igra.mozne_poteze(trenutni_polozaj))
+                    print(len(self.igra.mozne_poteze()))
                     for p in self.igra.mozne_poteze():
                         #print(p)
                         poteza = [self.igra.zadnji_polozaj] + p
