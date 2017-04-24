@@ -129,8 +129,7 @@ class GUI():
                                self.oglisca[v_nov][s_nov], fill = self.trenutna_barva)
         self.polje.move(self.id_zoga,
                         (s_nov - s_star)*self.sirina_kvadratka,
-                        (v_nov - v_star)*self.sirina_kvadratka)#TODO Žoga čez črto
-                    # ej ne javlja več napak izven polja :)
+                        (v_nov - v_star)*self.sirina_kvadratka)
 
     def povleci_korak(self, novo):
         staro = self.igra.zadnji_polozaj
@@ -144,9 +143,11 @@ class GUI():
                 self.koncaj_igro(stanje[1])
             elif stanje[0] == konec_poteze:
                 if stanje[1] == igralec1:
+                    #print("ZDEJ JE 1", self.igra.zadnji_polozaj)
                     self.objekt_igralec1.povleci_potezo()
                     self.trenutna_barva =self.barva_igralec1
                 if stanje[1] == igralec2:
+                    #print("ZDEJ JE 2", self.igra.zadnji_polozaj)
                     self.objekt_igralec2.povleci_potezo()
                     self.trenutna_barva =self.barva_igralec2
                 self.polje.config(bg=self.trenutna_barva)

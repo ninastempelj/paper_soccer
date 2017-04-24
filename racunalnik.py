@@ -28,14 +28,17 @@ class Racunalnik:
      def preveri_potezo(self):
           """Vsakih 100ms preveri, ali je algoritem že izračunal potezo."""
           #staro = self.gui.igra.zadnji_polozaj ## A TO RABMO?
-
+          #print("Računalnik preverja ali je že poteza")
           if self.algoritem.poteza is not None:
+               print("pršu 1")
                # Algoritem je našel potezo, povleci jo, če ni bilo prekinitve
                self.naslednja_polja = self.algoritem.poteza
                # Vzporedno vlakno ni več aktivno, zato ga "pozabimo"
+               print("Računalnik našel potezo: ", self.naslednja_polja)
                self.mislec = None
                self.povleci_korak()
           else:
+               #print("pršu2")
                # Algoritem še ni našel poteze, preveri še enkrat čez 100ms
                self.gui.polje.after(100, self.preveri_potezo)
 
@@ -53,7 +56,7 @@ class Racunalnik:
      def povleci_korak(self):
         self.stevec += 1
         # TODO počakaj 0,5 sekunde
-        self.gui.povleci_korak(self.polja[stevec])
+        self.gui.povleci_korak(self.naslednja_polja[self.stevec])
         
 
      def klik(self, novo):
