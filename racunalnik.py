@@ -15,7 +15,7 @@ class Racunalnik:
           #self.zadnji_polozaj = self.gui.igra.zadnji_polozaj
           self.stevec = 0
           #verjetno neuporabno self.naslednja_ polja = [staro,(5,6),(7,3)] začasno
-          
+
           # kliče algoritem, nastavi self.poteze na nasledno
           self.mislec = threading.Thread(
                target=lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))
@@ -56,11 +56,9 @@ class Racunalnik:
      def povleci_korak(self):
         self.stevec += 1
         print("čakam")
-        time.sleep(1)
-        self.gui.povleci_korak(self.naslednja_polja[self.stevec])
-        
+        self.gui.polje.after(300,
+                             lambda: self.gui.povleci_korak(self.naslednja_polja[self.stevec]))
 
      def klik(self, novo):
         # Računalnik ignorira klik
         pass
-
