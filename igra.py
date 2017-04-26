@@ -93,7 +93,7 @@ class Igra():
         # print(mozni)
         return mozni
 
-    def mozne_poteze2(self, prvi_korak=True):
+    def mozne_poteze(self, prvi_korak=True):
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
@@ -115,7 +115,7 @@ class Igra():
                         poteze.append([sosednje]+x)
             return poteze
 
-    def mozne_poteze(self, prvi_korak=True):
+    def mozne_poteze2(self, prvi_korak=True):
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
@@ -235,12 +235,12 @@ class Igra():
 
     def trenutno_stanje(self):#funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         novo = self.zadnji_polozaj
-        print(len(self.mozne_poteze()))
+        #print(len(self.mozne_poteze()))
         if novo in self.gol_zgoraj: # seznam zgornjega gola
-            self.na_vrsti = None
+            self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec1)
         elif novo in self.gol_spodaj:
-            self.na_vrsti = None
+            self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
             self.na_vrsti = None

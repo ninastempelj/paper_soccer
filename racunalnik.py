@@ -55,8 +55,8 @@ class Racunalnik:
 
      def povleci_korak(self):
         self.stevec += 1
-        print("čakam")
-        time.sleep(1)
+        #print("čakam")
+        #time.sleep(1)
         self.gui.povleci_korak(self.naslednja_polja[self.stevec])
         
 
