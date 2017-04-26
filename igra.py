@@ -5,6 +5,7 @@
 # plosca_tega = copy.deepcopy(plosca)
 #
 import copy
+import random
 
 igralec1 = 'prvi igralec'
 igralec2 = 'drugi igralec'
@@ -92,10 +93,7 @@ class Igra():
         # print(mozni)
         return mozni
 
-    def mozne_poteze(self, prvi_korak=True):
-        # XXX tu se bomo znenbili trenutno, ker bo že v self.
-        # YYY smo se znebili trenutno
-        #trenutno = self.zadnji_polozaj
+    def mozne_poteze2(self, prvi_korak=True):
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
@@ -107,17 +105,8 @@ class Igra():
             for sosednje in mozni:
                 (sos_vrs, sos_stolp) = sosednje
                 (tre_vrs, tre_stolp) = self.zadnji_polozaj
-                # XXX naslednje tri vrstice bi morale biti metoda naredi_korak
-                # YYY implementacija metode naredi_korak
-##                smer = self.smer_koraka(trenutno, sosednje)
-##                self.plosca[sos_vrs][sos_stolp].add(-smer)
-##                self.plosca[tre_vrs][tre_stolp].add(smer)
                 self.naredi_korak(sosednje)
                 poteze_tega = self.mozne_poteze(prvi_korak=False)
-                # XXX naslednji dve vrstici bi morali biti metoda razveljavi_korak
-                # YYY implementacija metode razveljavi korak
-##                self.plosca[sos_vrs][sos_stolp].remove(-smer)
-##                self.plosca[tre_vrs][tre_stolp].remove(smer)
                 self.razveljavi_korak((tre_vrs, tre_stolp))
                 if poteze_tega == []:
                     poteze.append([sosednje])
@@ -126,12 +115,37 @@ class Igra():
                         poteze.append([sosednje]+x)
             return poteze
 
+    def mozne_poteze(self, prvi_korak=True):
+        mozni = self.mozen_korak()
+        if (mozni == [] or
+                (not prvi_korak and len(mozni) == 7) or
+                self.zadnji_polozaj in self.gol_spodaj|self.gol_zgoraj):
+            return []
 
+        else:
+            poteze = []
+            random.shuffle(mozni)
+            for sosednje in mozni:
+                if True in [sosednje in p for p in poteze]:
+                    pass
+                else:
+                    (sos_vrs, sos_stolp) = sosednje
+                    (tre_vrs, tre_stolp) = self.zadnji_polozaj
+                    self.naredi_korak(sosednje)
+                    poteze_tega = self.mozne_poteze(prvi_korak=False)
+                    self.razveljavi_korak((tre_vrs, tre_stolp))
+                    if poteze_tega == []:
+                        poteze.append([sosednje])
+                    else:
+                        for x in poteze_tega:
+                            poteze.append([sosednje]+x)
+            return poteze   
+
+
+        
     # kopija igre je za minimax
     def kopija(self):
         kopija = Igra(self.sirina, self.visina)
-        #kopija.plosca = [self.plosca[i][:] for i in range(self.visina)]
-        ###Nina a je to isti problem kot pri unih ploščah? Najbrž da ja :)
         kopija.plosca = copy.deepcopy(self.plosca)
         kopija.na_vrsti = self.na_vrsti
         kopija.zadnji_polozaj = self.zadnji_polozaj
@@ -160,18 +174,7 @@ class Igra():
         for korak in poteza[1:]:
             self.naredi_korak(korak)
 
-    ###ali razveljavi korak dobi smer ali polje v katerega more nazaj?!
-    ### Odločiva se za eno od funkcij ampak sem spisala obe za vsak slučaj
 
-##    #razveljavi korak s podano smerjo 
-##    def razveljavi_korak2(self, smer):
-##        (trenutno_vrs, trenutno_stolp) = self.zadnji_polozaj
-##        (prejsno_vrs, prejsno_stolp) = self.anti_smer_koraka(-smer)
-##        self.plosca[trenutno_vrs][trenutno_stolp].remove(-smer)
-##        self.plosca[prejsno_vrs][prejsno_stolp].remove(smer)
-##        self.zadnji_polozaj = (prejsno_vrs, prejsno_stolp)
-
-    #razveljavi korak s podanim prejšnim poljem
     def razveljavi_korak(self, staro):
         (trenutno_vrs, trenutno_stolp) = self.zadnji_polozaj
         (prejsno_vrs, prejsno_stolp) = staro
@@ -188,9 +191,7 @@ class Igra():
         for korak in obrnjena_poteza[1:]:
             self.razveljavi_korak(korak)
         self.na_vrsti = nasprotnik(self.na_vrsti) #ne bo ok, če je blo konc igre
-            
-    # XXX ali bo minimax potreboval naredi_potezo?
-    # YYY če jo bo je napisana in po printanjih zgleda dela prav
+
 
     def smer_koraka(self, staro, novo):
         x_razlika = staro[1] - novo[1]
@@ -235,18 +236,6 @@ class Igra():
     def trenutno_stanje(self):#funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         novo = self.zadnji_polozaj
         print(len(self.mozne_poteze()))
-##        for x in self.plosca:
-##            print(x)
-##        print('_________________________')
-##        self.naredi_potezo([(5,4),(4,4),(4,3)])
-##        for x in self.plosca:
-##            print(x)
-##        print('_________________________')
-##        self.razveljavi_potezo([(5,4),(4,4),(4,3)])
-##        print(self.zadnji_polozaj, 'poteza')
-##        for x in self.plosca:
-##            print(x)
-##        print('_________________________')
         if novo in self.gol_zgoraj: # seznam zgornjega gola
             self.na_vrsti = None
             return (konec_igre, igralec1)

@@ -1,5 +1,5 @@
 import threading
-
+import time
 import minimax
 
 class Racunalnik:
@@ -55,7 +55,8 @@ class Racunalnik:
 
      def povleci_korak(self):
         self.stevec += 1
-        # TODO počakaj 0,5 sekunde
+        print("čakam")
+        time.sleep(1)
         self.gui.povleci_korak(self.naslednja_polja[self.stevec])
         
 
