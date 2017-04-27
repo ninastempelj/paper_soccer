@@ -1,15 +1,14 @@
 import logging
-
+import time
 from igra import nasprotnik, igralec1, igralec2, konec_igre, konec_poteze, ni_konec_poteze
 
 class Minimax:
-    def __init__(self, globina, staro):
+    def __init__(self, globina):
         self.globina = globina  # do katere globine iščemo?
         self.prekinitev = False # ali moramo končati?
         self.igra = None # objekt, ki opisuje igro (ga dobimo kasneje)
         self.jaz = None  # katerega igralca igramo (podatek dobimo kasneje)
         self.poteza = None # sem napišemo potezo, ko jo najdemo
-        self.trenutni_polozaj = staro
 
     def prekini(self):
         """Metoda, ki jo pokliče GUI, če je treba nehati razmišljati, ker
@@ -25,7 +24,10 @@ class Minimax:
         #print(igra.na_vrsti)
         self.poteza = None # Sem napišemo potezo, ko jo najdemo
         # Poženemo minimax
+        start = time.time()
         (poteza, vrednost) = self.minimax(self.globina, True)
+        end = time.time()
+        print("minimax", end-start)
         self.jaz = None
         self.igra = None
         if not self.prekinitev:
@@ -73,8 +75,8 @@ class Minimax:
             # Sporočili so nam, da moramo prekiniti
             logging.debug ("Minimax prekinja, globina = {0}".format(globina))
             return (None, 0)
-        #print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
         (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
+        #print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
         if konec_ali_ne == konec_igre:
             # Igre je konec, vrnemo njeno vrednost
             if na_vrsti == self.jaz:
@@ -82,7 +84,7 @@ class Minimax:
             elif na_vrsti == nasprotnik(self.jaz):
                 return (None, -Minimax.ZMAGA)
             elif na_vrsti == None:
-                print("remi v minimax")
+                #print("remi v minimax")
                 return (None, -Minimax.ZMAGA+1) # remi
             else:
                 assert False, 'stanje_igre vrne čudnega igralca, minimax'

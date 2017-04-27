@@ -5,6 +5,7 @@ from clovek import *
 from racunalnik import *
 import minimax
 import os
+import alfa_beta
 
 clovek = "Čarovnik"
 racunalnik = "Duh"
@@ -41,7 +42,7 @@ class GUI():
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
 
-        self.globina = 0 # TODO: določi glede na izbrano težavnost
+        self.globina = 4 # TODO: določi glede na izbrano težavnost
 
          #Nastavi barvo ozadja
         self.polje.config(bg=self.trenutna_barva)
@@ -99,11 +100,11 @@ class GUI():
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
-            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
+            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina))
         if self.tip_igralec2 == clovek:
             self.objekt_igralec2 = Clovek(self)
         else:
-            self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
+            self.objekt_igralec2 = Racunalnik(self, alfa_beta.Alfabeta(self.globina))
         #print(self.objekt_igralec1, self.objekt_igralec2)
         self.master.attributes("-topmost", True)
         self.objekt_igralec1.povleci_potezo()

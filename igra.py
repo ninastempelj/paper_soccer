@@ -243,7 +243,7 @@ class Igra():
             self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
-            print("remi v trenutno_stanje")
+            #print("remi v trenutno_stanje")
             self.na_vrsti = None
             return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
