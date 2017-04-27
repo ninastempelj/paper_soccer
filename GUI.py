@@ -42,7 +42,7 @@ class GUI():
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
 
-        self.globina = 4 # TODO: določi glede na izbrano težavnost
+        self.globina = -1 # TODO: določi glede na izbrano težavnost
 
          #Nastavi barvo ozadja
         self.polje.config(bg=self.trenutna_barva)
@@ -100,7 +100,7 @@ class GUI():
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
-            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina))
+            self.objekt_igralec1 = Racunalnik(self, alfa_beta.Alfabeta(self.globina))
         if self.tip_igralec2 == clovek:
             self.objekt_igralec2 = Clovek(self)
         else:
@@ -162,47 +162,6 @@ class GUI():
                 assert False, "Stanje igre je nekaj čudnega- gui.povleci_korak."
 
 
-
-
-    # def preveri_korak(self, novo):
-            # staro = self.zadnji_polozaj
-            # if self.igra.dovoljen_korak(staro, novo):
-                    # self.igra.zapomni_korak(staro, novo)
-                    # #Premik zoge - ne znam premaknit na druge koordinate, ampak samo za določen "vektor"
-                    # self.polje.move(self.id_zoga, #ZA butast premik žoge mava tut funcijo v igra.py ampak se pomoje ne rabi
-                                                    # # - nope, tm nima to kej delat, sm kr zbrisala
-                                                    # (novo[1] - staro[1])*self.sirina_kvadratka,
-                                                    # (novo[0] - staro[0])*self.sirina_kvadratka)#TODO Žoga čez črto
-
-
-                    # self.stanje_igre(novo) # ta bo ali poklicala igralca, ali končala igro
-##
-##            else:
-##                    pass
-
-##    def stanje_igre(self):
-##        print('TUKI SE POKLIČE')
-##        stanje = self.igra.trenutno_stanje()
-##        if stanje[0] == konec_igre:
-##            self.koncaj_igro(stanje[1])
-##        elif stanje[0] == konec_poteze:
-##            if stanje[1] == igralec1:
-##                self.trenutna_barva = self.barva_igralec1
-##                #pokliče igralca 1 za novo potezo
-##            if stanje[1] == igralec2:
-##                self.trenutna_barva = self.barva_igralec2
-##                #pokliče igralca 2 za novo potezo
-##        #v končni verziji tega ne bi smelo bit,
-##        # ker korake podelata igralca sama: - DELA
-##        elif  stanje[0] == ni_konec_poteze:
-##            if stanje[1] == igralec1:
-##                #pokliče igralca 1 za nov korak
-##                pass
-##            if stanje[1] == igralec2:
-##                #pokliče igralca 2 za nov korak
-##                pass
-##        else:
-##            assert False, 'Čudno stanje igre - GUI'
 
     def koncaj_igro(self, zmagovalec):
         domovi = {'red': 'Gryfondom',
