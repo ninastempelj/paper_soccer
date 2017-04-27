@@ -5,7 +5,7 @@ from GUI import *
 class Zacetno:
     def __init__(self, master):
         self.tip_igralec1 = clovek
-        self.tip_igralec2 = racunalnik
+        self.tip_igralec2 = clovek
 
         self.dovoljene_barve = ['yellow', 'blue']
         self.barva_igralec1 = 'red'

@@ -91,7 +91,7 @@ class Minimax:
                     # Maksimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    print(self.igra.mozne_poteze(self.igra.plosca, zacetek))
+                    #print(self.igra.mozne_poteze(self.igra.plosca, zacetek))
                     print("tuki crkne")
                     for p in self.igra.mozne_poteze(self.igra.plosca, zacetek):
                         print(p)
@@ -104,6 +104,8 @@ class Minimax:
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = p
+                        print(najboljsa_poteza)
+
                 else:
                     # Minimiziramo
                     print("mini")
