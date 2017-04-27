@@ -235,14 +235,15 @@ class Igra():
 
     def trenutno_stanje(self):#funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
         novo = self.zadnji_polozaj
-        print(len(self.mozne_poteze()))
+        #print(len(self.mozne_poteze()))
         if novo in self.gol_zgoraj: # seznam zgornjega gola
-            self.na_vrsti = None
+            self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec1)
         elif novo in self.gol_spodaj:
-            self.na_vrsti = None
+            self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
+            #print("remi v trenutno_stanje")
             self.na_vrsti = None
             return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega

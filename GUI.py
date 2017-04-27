@@ -5,24 +5,27 @@ from clovek import *
 from racunalnik import *
 import minimax
 import os
+import alfa_beta
 
 clovek = "Čarovnik"
 racunalnik = "Duh"
 
 # URŠA, jst sm ugotovila, da ne vem v ker gol morm igrat, da bom zmagala :(
+#NINA probej zdej :)
 
 
 class GUI():
     def __init__(self, master, zacetno_okno,
-                 tezavnost1, tezavnost2,
+                 tezavnost_igralca1, tezavnost_igralca2,
                  barva_igralec1, barva_igralec2,
                  tip_igralec1, tip_igralec2,
-                 sirina, visina, zacetni_meni):
+                 sirina, visina,
+                 zacetni_meni):
         self.zacetni_meni = zacetni_meni
         self.master = master
         self.master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno())
-        self.tezavnost1 = tezavnost1
-        self.tezavnost2 = tezavnost2
+        self.tezavnost1 = tezavnost_igralca1
+        self.tezavnost2 = tezavnost_igralca2
         self.barva_igralec1 = barva_igralec1
         self.barva_igralec2 = barva_igralec2
         self.tip_igralec1 = tip_igralec1
@@ -41,16 +44,26 @@ class GUI():
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
 
-        self.globina = 1 # TODO: določi glede na izbrano težavnost
+        self.globina = 2 # TODO: določi glede na izbrano težavnost
 
-         #Nastavi barvo ozadja
-        self.polje.config(bg=self.trenutna_barva)
+        self.slovar_slik = {'red': ['Gryfondom','ozadje_G.gif', 'puscica_gor_G.gif', 'puscica_dol_G.gif'],
+               'gold': ['Pihpuff','ozadje_P.gif', 'puscica_gor_P.gif', 'puscica_dol_P.gif'],
+               'blue': ['Drznvraan','ozadje_D.gif', 'puscica_gor_D.gif', 'puscica_dol_D.gif'],
+               'green': ['Spolzgad','ozadje_S.gif', 'puscica_gor_S.gif', 'puscica_dol_S.gif']}
+        
         #Naredi matriko oglišč
         self.oglisca = [[(
             self.od_roba + j * self.sirina_kvadratka,
             self.od_roba + i * self.sirina_kvadratka)
                         for j in range(self.sirina)]
                         for i in range(self.visina)]
+        #Nastavi ozadje:
+        self.ozadje_igralca2 = tk.PhotoImage(file=os.path.join('slike',self.slovar_slik.get(self.barva_igralec2)[1]))
+        self.id_ozadje_igralca2 = self.polje.create_image(self.oglisca[int((self.visina-1)/2)]
+                                           [int((self.sirina-1)/2)], image=self.ozadje_igralca2)
+        self.ozadje_igralca1 = tk.PhotoImage(file=os.path.join('slike',self.slovar_slik.get(self.barva_igralec1)[1]))
+        self.id_ozadje_igralca1 = self.polje.create_image(self.oglisca[int((self.visina-1)/2)]
+                                           [int((self.sirina-1)/2)], image=self.ozadje_igralca1)
 
         # RISANJE PODLAGE POLJA:
         ## Črne črte za rob igrišča
@@ -61,8 +74,20 @@ class GUI():
                      self.oglisca[-1][int((self.sirina - 3)/2)], self.oglisca[-2][int((self.sirina - 3) / 2)],
                      self.oglisca[-2][0]]
 
-        self.polje.create_polygon(*crne_crte, width=self.debelina_zunanjih_crt, fill='white', outline='black')
+        self.id_igrisca = self.polje.create_polygon(*crne_crte, width=self.debelina_zunanjih_crt, fill='white', outline='black')
 
+        ##Puščici
+        self.puscica_dol = tk.PhotoImage(file=os.path.join('slike',self.slovar_slik.get(self.barva_igralec2)[3]))
+        self.id_puscica_dol = self.polje.create_image(self.oglisca[int((self.visina-1)/2)]
+                                           [int((self.sirina-1)/2)], image=self.puscica_dol)
+        
+        self.puscica_gor = tk.PhotoImage(file=os.path.join('slike',self.slovar_slik.get(self.barva_igralec1)[2]))
+        self.id_puscica_gor = self.polje.create_image(self.oglisca[int((self.visina-1)/2)]
+                                           [int((self.sirina-1)/2)], image=self.puscica_gor)
+
+
+
+        
         ## Sive črte znotraj igrišča
         ### Glavna mreža
         for i in range(1, self.sirina-1):  # Navpične črte
@@ -99,11 +124,11 @@ class GUI():
         if self.tip_igralec1 == clovek:
             self.objekt_igralec1 = Clovek(self)
         else:
-            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
+            self.objekt_igralec1 = Racunalnik(self, minimax.Minimax(self.globina))
         if self.tip_igralec2 == clovek:
             self.objekt_igralec2 = Clovek(self)
         else:
-            self.objekt_igralec2 = Racunalnik(self, minimax.Minimax(self.globina, self.igra.zadnji_polozaj))
+            self.objekt_igralec2 = Racunalnik(self, alfa_beta.Alfabeta(self.globina))
         #print(self.objekt_igralec1, self.objekt_igralec2)
         self.master.attributes("-topmost", True)
         self.objekt_igralec1.povleci_potezo()
@@ -147,11 +172,15 @@ class GUI():
                     #print("ZDEJ JE 1", self.igra.zadnji_polozaj)
                     self.objekt_igralec1.povleci_potezo()
                     self.trenutna_barva =self.barva_igralec1
+                    self.polje.tag_raise(self.id_puscica_gor, self.id_puscica_dol)
+                    self.polje.tag_raise(self.id_ozadje_igralca1, self.id_ozadje_igralca2)
                 if stanje[1] == igralec2:
                     #print("ZDEJ JE 2", self.igra.zadnji_polozaj)
                     self.objekt_igralec2.povleci_potezo()
                     self.trenutna_barva =self.barva_igralec2
-                self.polje.config(bg=self.trenutna_barva)
+                    self.polje.tag_raise(self.id_puscica_dol, self.id_puscica_gor)
+                    self.polje.tag_raise(self.id_ozadje_igralca2, self.id_ozadje_igralca1)
+                #self.polje.config(bg=self.trenutna_barva)
             elif stanje[0] == ni_konec_poteze:
                 if stanje[1] == igralec1:
                     self.objekt_igralec1.povleci_korak()
@@ -204,15 +233,15 @@ class GUI():
 ##            assert False, 'Čudno stanje igre - GUI'
 
     def koncaj_igro(self, zmagovalec):
-        domovi = {'red': 'Gryfondom',
-                'yellow': 'Pihpuff', 'blue': 'Drznvraan', 'green': 'Spolzgad'}
+##        domovi = {'red': 'Gryfondom',
+##                'yellow': 'Pihpuff', 'blue': 'Drznvraan', 'green': 'Spolzgad'}
 
         if zmagovalec is None:
             izpisi =  "Izenačenje."
         elif zmagovalec == igralec1:
-            izpisi = "Zmagal je {0}.".format(domovi.get(self.barva_igralec1))
+            izpisi = "Zmagal je {0}.".format(self.slovar_slik.get(self.barva_igralec1)[0])
         elif zmagovalec == igralec2:
-            izpisi = "Zmagal je {0}.".format(domovi.get(self.barva_igralec2))
+            izpisi = "Zmagal je {0}.".format(self.slovar_slik.get(self.barva_igralec2)[0])
 
         #   Za zagon koncnega okna
         koncno_okno = tk.Toplevel()

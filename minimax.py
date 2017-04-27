@@ -1,15 +1,14 @@
 import logging
-
+import time
 from igra import nasprotnik, igralec1, igralec2, konec_igre, konec_poteze, ni_konec_poteze
 
 class Minimax:
-    def __init__(self, globina, staro):
+    def __init__(self, globina):
         self.globina = globina  # do katere globine iščemo?
         self.prekinitev = False # ali moramo končati?
         self.igra = None # objekt, ki opisuje igro (ga dobimo kasneje)
         self.jaz = None  # katerega igralca igramo (podatek dobimo kasneje)
         self.poteza = None # sem napišemo potezo, ko jo najdemo
-        self.trenutni_polozaj = staro
 
     def prekini(self):
         """Metoda, ki jo pokliče GUI, če je treba nehati razmišljati, ker
@@ -25,7 +24,10 @@ class Minimax:
         #print(igra.na_vrsti)
         self.poteza = None # Sem napišemo potezo, ko jo najdemo
         # Poženemo minimax
+        start = time.time()
         (poteza, vrednost) = self.minimax(self.globina, True)
+        end = time.time()
+        print("minimax", end-start)
         self.jaz = None
         self.igra = None
         if not self.prekinitev:
@@ -39,51 +41,42 @@ class Minimax:
 
     def vrednost_pozicije(self):
         """Ocena vrednosti pozicije: sešteje vrednosti vseh trojk na plošči."""
-        # Slovar, ki pove, koliko so vredne posamezne trojke, kjer "(x,y) : v" pomeni:
-        # če imamo v trojki x znakov igralca in y znakov nasprotnika (in 3-x-y praznih polj),
-        # potem je taka trojka za self.jaz vredna v.
-##        # Trojke, ki se ne pojavljajo v slovarju, so vredne 0.
-##        vrednost_trojke = {
-##            (3,0) : Minimax.ZMAGA,
-##            (0,3) : -Minimax.ZMAGA//10,
-##            (2,0) : Minimax.ZMAGA//100,
-##            (0,2) : -Minimax.ZMAGA//1000,
-##            (1,0) : Minimax.ZMAGA//10000,
-##            (0,1) : -Minimax.ZMAGA//100000
-##        }
-##        vrednost = 0
-##        for t in self.igra.trojke:
-##            x = 0
-##            y = 0
-##            for (i,j) in t:
-##                if self.igra.plosca[i][j] == self.jaz:
-##                    x += 1
-##                elif self.igra.plosca[i][j] == nasprotnik(self.jaz):
-##                    y += 1
-##            vrednost += vrednost_trojke.get((x,y), 0)
-        polozaj = self.igra.zadnji_polozaj
-        if polozaj in self.igra.gol_zgoraj:
-            vrednost = ZMAGA
-        if polozaj in self.igra.gol_spodaj:
-            vrednost = -ZMAGA
-        sredina_vrs = int((self.igra.visina -1)/2)
-        sredina_stolp = int((self.igra.sirina-1)/2)
-        vrednost_vrstice = (polozaj[0] - sredina_vrs)*1000 #Nižje na igrišču je več vredno
-        vrednost_stolpca = abs(polozaj[1] - sredina_stolp)
-        vrednost = vrednost_vrstice #+ vrednost_stolpca
-        return vrednost
+        (tren_vrs, tren_stolp) = self.igra.zadnji_polozaj
+        oddaljenost_od_vertikale =abs(tren_stolp -((self.igra.sirina-1)/2))
+        oddaljenost_od_horizontale = ((self.igra.visina-1)/2-tren_vrs)
+        #print(self.igra.zadnji_polozaj, self.igra.plosca[tren_vrs][tren_stolp])
+        if self.jaz == igralec1:
+##            if (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
+##                return Minimax.ZMAGA
+##            elif (tren_vrs, tren_stolp) in self.igra.gol_spodaj:
+##                return -Minimax.ZMAGA
+##            elif len(self.igra.plosca[tren_vrs][tren_stolp])==7:
+##                print("remi zgoraj")
+##                return -Minimax.ZMAGA +1
+##            else:
+            return  1000*oddaljenost_od_horizontale - 100*oddaljenost_od_vertikale
+        if self.jaz == igralec2:
+##            if (tren_vrs, tren_stolp) in self.igra.gol_spodaj:
+##                return Minimax.ZMAGA
+##            elif (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
+##                return -Minimax.ZMAGA
+##            elif len(self.igra.plosca[tren_vrs][tren_stolp])==7:
+##                print("remi spodaj")
+##                return -Minimax.ZMAGA +1
+##            else:
+            return  -(1000*oddaljenost_od_horizontale)# - 100*oddaljenost_od_vertikale
 
     def minimax(self, globina, maksimiziramo):
         # XXX: "trenutni_polozaj" ne sme biti argument, ker je (bo) spravljen v self.igra
-        #print("printamo potezo", self.poteza)
+        #print("printamo potezo", self.igra.zadnji_polozaj)
         trenutni_polozaj = self.igra.zadnji_polozaj
         """Glavna metoda minimax."""
         if self.prekinitev:
             # Sporočili so nam, da moramo prekiniti
             logging.debug ("Minimax prekinja, globina = {0}".format(globina))
             return (None, 0)
-        #print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
         (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
+        #print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
         if konec_ali_ne == konec_igre:
             # Igre je konec, vrnemo njeno vrednost
             if na_vrsti == self.jaz:
@@ -91,7 +84,8 @@ class Minimax:
             elif na_vrsti == nasprotnik(self.jaz):
                 return (None, -Minimax.ZMAGA)
             elif na_vrsti == None:
-                return (None, 0) # remi
+                #print("remi v minimax")
+                return (None, -Minimax.ZMAGA+1) # remi
             else:
                 assert False, 'stanje_igre vrne čudnega igralca, minimax'
         elif konec_ali_ne != konec_igre:
@@ -106,21 +100,13 @@ class Minimax:
                     # Maksimiziramo
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    print(len(self.igra.mozne_poteze()))
+                    #print(len(self.igra.mozne_poteze()))
                     for p in self.igra.mozne_poteze():
                         #print(p)
                         poteza = [self.igra.zadnji_polozaj] + p
                         #self.igra.shrani_pozicijo()
                         #print("minimaks vleče potezo", poteza, self.igra.zadnji_polozaj)
                         self.igra.naredi_potezo(poteza)
-                        
-                        # XXX to for zanko preselimo v metodo naredi_potezo v Igra.
-                        # YYY preseljeno
-                        # self.igra.naredi_potezo(p)
-                        # XXX ne pozabi spremeniti spodaj pri minimizaciji!
-                        # YYY nismo pozabili pri minimizaciji
-##                        for i in range(len(poteza)-1):
-##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
                         vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                         #print(poteza)
                         self.igra.razveljavi_potezo(poteza)
@@ -128,6 +114,7 @@ class Minimax:
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = poteza
+							
                 else:
                     # Minimiziramo
                     #print("mini")

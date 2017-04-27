@@ -6,14 +6,14 @@ class Racunalnik:
 
      def __init__(self, gui, algoritem):
         self.gui = gui
-        self.stevec = 0
+        self.stevec_korakov = 0
         self.naslednja_polja = []
         self.algoritem = algoritem
         self.mislec = None
 
      def povleci_potezo(self):
           #self.zadnji_polozaj = self.gui.igra.zadnji_polozaj
-          self.stevec = 0
+          self.stevec_korakov = 0
           #verjetno neuporabno self.naslednja_ polja = [staro,(5,6),(7,3)] začasno
 
           # kliče algoritem, nastavi self.poteze na nasledno
