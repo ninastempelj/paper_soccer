@@ -10,7 +10,7 @@ class Clovek():
 
     def prekini(self):
         # To metodo kliče GUI, če je treba prekiniti razmišljanje.
-        # Človek jo lahko ignorira.
+        # Človek jo lahko ignorira. Test
         pass
 
     def klik(self, novo):
