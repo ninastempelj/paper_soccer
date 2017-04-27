@@ -41,7 +41,7 @@ class GUI():
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
 
-        self.globina = 1 # TODO: določi glede na izbrano težavnost
+        self.globina = 0 # TODO: določi glede na izbrano težavnost
 
          #Nastavi barvo ozadja
         self.polje.config(bg=self.trenutna_barva)

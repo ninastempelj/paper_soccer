@@ -93,7 +93,7 @@ class Igra():
         # print(mozni)
         return mozni
 
-    def mozne_poteze(self, prvi_korak=True):
+    def mozne_poteze2(self, prvi_korak=True):
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
@@ -115,7 +115,7 @@ class Igra():
                         poteze.append([sosednje]+x)
             return poteze
 
-    def mozne_poteze2(self, prvi_korak=True):
+    def mozne_poteze(self, prvi_korak=True):
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
@@ -243,6 +243,7 @@ class Igra():
             self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec2)
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
+            print("remi v trenutno_stanje")
             self.na_vrsti = None
             return (konec_igre, None) #None pomeni remi
         # Ker že prej dodava na seznam, mora imeti seznam le en element, ne nobenega
