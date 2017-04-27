@@ -1,5 +1,6 @@
 import logging
 import time
+import random
 from igra import nasprotnik, igralec1, igralec2, konec_igre, konec_poteze, ni_konec_poteze
 
 
@@ -72,6 +73,8 @@ class Alfabeta:
                 assert False, 'stanje_igre vrne čudnega igralca, alfabeta'
         elif konec_ali_ne != konec_igre:
             # Igre ni konec
+            if globina == -1:
+                return random.shuffle(self.igra.mozne_poteze)[0]
             if globina == 0:
                 # print("konec rekurzije, globina 0")
                 return (None, self.vrednost_pozicije())
@@ -83,8 +86,7 @@ class Alfabeta:
                     najboljsa_poteza = None
                     vrednost_najboljse = -Alfabeta.NESKONCNO
                     # print(len(self.igra.mozne_poteze()))
-                    for p in self.igra.mozne_poteze():
-                        # print(p)
+                    for p in self.uredi_poteze(self.igra.mozne_poteze(), maksimiziramo):
                         poteza = [self.igra.zadnji_polozaj] + p
                         # self.igra.shrani_pozicijo()
                         # print("alfabeta vleče potezo", poteza, self.igra.zadnji_polozaj)
@@ -106,8 +108,8 @@ class Alfabeta:
                     najboljsa_poteza = None
                     vrednost_najboljse = Alfabeta.NESKONCNO
                     # print(len(self.igra.mozne_poteze()))
-                    for p in self.igra.mozne_poteze():
-                        # print(p)
+                    for p in self.uredi_poteze(self.igra.mozne_poteze(), maksimiziramo):
+                        #print(p)
                         poteza = [self.igra.zadnji_polozaj] + p
                         # self.igra.shrani_pozicijo()
                         # print("alfabeta vleče potezo", poteza, self.igra.zadnji_polozaj)
@@ -128,3 +130,35 @@ class Alfabeta:
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
             assert False, "alfabeta: ni vrnil cele poteze, ampak korak"
+
+    def uredi_poteze(self, poteze, maksimiziramo):
+        '''Funkcija uredi možne poteze, da so na začetku tiste, kjer gre prvi korak v smeri našega gola'''
+
+        (tren_vrst, _) = self.igra.zadnji_polozaj
+        dobre_poteze = []
+        ostale_poteze = []
+
+        if ((self.jaz == igralec1 and maksimiziramo) or
+                (self.jaz == igralec2 and not maksimiziramo)):
+            for poteza in poteze:
+                nova_vrst = poteza[0][0]
+                if nova_vrst < tren_vrst:
+                    dobre_poteze.append(poteza)
+                elif nova_vrst == tren_vrst:
+                    ostale_poteze = [poteza] + ostale_poteze
+                elif nova_vrst > tren_vrst:
+                    ostale_poteze.append(poteza)
+                # mora končati do tukaj
+
+        else:
+            for poteza in poteze:
+                nova_vrst = poteza[0][0]
+                if nova_vrst > tren_vrst:
+                    dobre_poteze.append(poteza)
+                elif nova_vrst == tren_vrst:
+                    ostale_poteze = [poteza] + ostale_poteze
+                elif nova_vrst < tren_vrst:
+                        ostale_poteze.append(poteza)
+                    # mora končati do tukaj
+
+        return random.shuffle(dobre_poteze) + ostale_poteze
