@@ -12,8 +12,8 @@ class Zacetno:
         self.barva_igralec1 = 'red'
         self.barva_igralec2 = 'green'
 
-        self.tezavnost1 = 0
-        self.tezavnost2 = 0
+        self.tezavnost_igralca1 = 0
+        self.tezavnost_igralca2 = 0
 
         self.sirina = 9
         self.visina = 13
@@ -208,25 +208,25 @@ class Zacetno:
     def spremeni_tezavnost(self, tezavnost, trenutni_gumb):
         trenutni_igralec = self.gumbi_tezavnost.index(trenutni_gumb) // 3  # 0 pomeni 1. igralca, 1 pa drugega
         if trenutni_igralec == 0:
-            if tezavnost == self.tezavnost1:
+            if tezavnost == self.tezavnost_igralca1:
                 pass
             else:
-                self.gumbi_tezavnost[self.tezavnost1].config(relief='raised')
-                self.tezavnost1 = tezavnost
+                self.gumbi_tezavnost[self.tezavnost_igralca1].config(relief='raised')
+                self.tezavnost_igralca1 = tezavnost
                 trenutni_gumb.config(relief='groove')
         else:
-            if tezavnost == self.tezavnost2:
+            if tezavnost == self.tezavnost_igralca2:
                 pass
             else:
-                self.gumbi_tezavnost[self.tezavnost2 + 3].config(relief='raised')
-                self.tezavnost2 = tezavnost
+                self.gumbi_tezavnost[self.tezavnost_igralca2 + 3].config(relief='raised')
+                self.tezavnost_igralca2 = tezavnost
                 trenutni_gumb.config(relief='groove')
 
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
         gui = GUI(okno_igrisca, self.zacetno_okno,
-                  self.tezavnost1, self.tezavnost2,
+                  self.tezavnost_igralca1, self.tezavnost_igralca2,
                   self.barva_igralec1, self.barva_igralec2,
                   self.tip_igralec1, self.tip_igralec2,
                   self.sirina, self.visina, self)
