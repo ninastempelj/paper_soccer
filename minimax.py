@@ -42,46 +42,27 @@ class Minimax:
         (tren_vrs, tren_stolp) = self.igra.zadnji_polozaj
         oddaljenost_od_vertikale =abs(tren_stolp -((self.igra.sirina-1)/2))
         oddaljenost_od_horizontale = ((self.igra.visina-1)/2-tren_vrs)
-        print(self.igra.zadnji_polozaj, self.igra.plosca[tren_vrs][tren_stolp])
-        if len(self.igra.plosca[tren_vrs][tren_stolp])==7:
-            print("remi")
-            return -99998
+        #print(self.igra.zadnji_polozaj, self.igra.plosca[tren_vrs][tren_stolp])
         if self.jaz == igralec1:
-            return  1000*oddaljenost_od_horizontale + 100*oddaljenost_od_vertikale
+##            if (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
+##                return Minimax.ZMAGA
+##            elif (tren_vrs, tren_stolp) in self.igra.gol_spodaj:
+##                return -Minimax.ZMAGA
+##            elif len(self.igra.plosca[tren_vrs][tren_stolp])==7:
+##                print("remi zgoraj")
+##                return -Minimax.ZMAGA +1
+##            else:
+            return  1000*oddaljenost_od_horizontale - 100*oddaljenost_od_vertikale
         if self.jaz == igralec2:
-            return -(1000*oddaljenost_od_horizontale) + 100*oddaljenost_od_vertikale
-##        (tren_vrs, tren_stolp) = self.igra.zadnji_polozaj
-##        sredina_vrs = int((self.igra.visina -1)/2)
-##        sredina_stolp = int((self.igra.sirina-1)/2)
-##
-##        x = abs(tren_stolp - sredina_stolp)
-##        y = tren_vrs
-##        y_dol =12 - y
-##        #print(x, y, y_dol)
-##        if y > x:
-##            oddaljenost_gol_zgoraj = y
-##        if y <= x:
-##            oddaljenost_gol_zgoraj = x+1
-##        if y_dol > x:
-##            oddaljenost_gol_spodaj = y_dol
-##        if y_dol <= x:
-##            oddaljenost_gol_spodaj = x+1
-##
-####        vrednosti = (Minimax.ZMAGA-1000*oddaljenost_gol_zgoraj,
-####                     Minimax.ZMAGA-1000*oddaljenost_gol_spodaj)
-##
-##        if self.jaz == nasprotnik(self.igra.na_vrsti):#maksimiziramo
-##            if self.jaz == igralec1:
-##                return Minimax.ZMAGA-1000*y-100*x
+##            if (tren_vrs, tren_stolp) in self.igra.gol_spodaj:
+##                return Minimax.ZMAGA
+##            elif (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
+##                return -Minimax.ZMAGA
+##            elif len(self.igra.plosca[tren_vrs][tren_stolp])==7:
+##                print("remi spodaj")
+##                return -Minimax.ZMAGA +1
 ##            else:
-##                return Minimax.ZMAGA-1000*y_dol-100*x
-##        if self.jaz == self.igra.na_vrsti: #minimiziramo
-##            if self.jaz == igralec1:
-##                return -(Minimax.ZMAGA-1000*y_dol-100*x)
-##            else:
-##                return -(Minimax.ZMAGA-1000*y-100*x)
-##        if self.igra.na_vrsti == None:
-##            return -99999
+            return  -(1000*oddaljenost_od_horizontale)# - 100*oddaljenost_od_vertikale
 
     def minimax(self, globina, maksimiziramo):
         # XXX: "trenutni_polozaj" ne sme biti argument, ker je (bo) spravljen v self.igra
@@ -101,7 +82,8 @@ class Minimax:
             elif na_vrsti == nasprotnik(self.jaz):
                 return (None, -Minimax.ZMAGA)
             elif na_vrsti == None:
-                return (None, 0) # remi
+                print("remi v minimax")
+                return (None, -Minimax.ZMAGA+1) # remi
             else:
                 assert False, 'stanje_igre vrne čudnega igralca, minimax'
         elif konec_ali_ne != konec_igre:
