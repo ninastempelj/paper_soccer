@@ -36,6 +36,8 @@ class Alfabeta:
             # Potezo izvedemo v primeru, da nismo bili prekinjeni
             logging.debug("alfabeta: poteza {0}, vrednost {1}".format(poteza, vrednost))
             self.poteza = poteza
+            print("shranili smo potezo", self.poteza)
+
 
     # Vrednosti igre
     ZMAGA = 100000  # Mora biti vsaj 10^5
@@ -43,24 +45,25 @@ class Alfabeta:
 
     def vrednost_pozicije(self):
         """Ocena vrednosti pozicije: sešteje vrednosti vseh trojk na plošči."""
-        (tren_vrs, tren_stolp) = self.igra.zadnji_polozaj
+        (tren_vrs, tren_stolp) = self.igra.polozaj_zoge
         oddaljenost_od_vertikale = abs(tren_stolp - ((self.igra.sirina - 1) / 2))
         oddaljenost_od_horizontale = ((self.igra.visina - 1) / 2 - tren_vrs)
-        # print(self.igra.zadnji_polozaj, self.igra.plosca[tren_vrs][tren_stolp])
+        # print(self.igra.polozaj_zoge, self.igra.plosca[tren_vrs][tren_stolp])
         if self.jaz == igralec1:
             return 1000 * oddaljenost_od_horizontale - 100 * oddaljenost_od_vertikale
         if self.jaz == igralec2:
             return -(1000 * oddaljenost_od_horizontale)  # - 100*oddaljenost_od_vertikale
 
     def alfabeta(self, globina, maksimiziramo, alfa=-NESKONCNO, beta=NESKONCNO):
-        #trenutni_polozaj = self.igra.zadnji_polozaj
+        #trenutni_polozaj = self.igra.polozaj_zoge
         """Glavna metoda alfabeta."""
         if self.prekinitev:
             # Sporočili so nam, da moramo prekiniti
             logging.debug("Alfabeta prekinja, globina = {0}".format(globina))
             return (None, 0)
-        # print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
+        # print(self.igra.polozaj_zoge, self.igra.na_vrsti)
         (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
+        print("na začetku alfabeta na vrsti je ", self.igra.na_vrsti)
         if konec_ali_ne == konec_igre:
             # Igre je konec, vrnemo njeno vrednost
             if na_vrsti == self.jaz:
@@ -73,8 +76,12 @@ class Alfabeta:
                 assert False, 'stanje_igre vrne čudnega igralca, alfabeta'
         elif konec_ali_ne != konec_igre:
             # Igre ni konec
-            if globina == -1:
-                return random.shuffle(self.igra.mozne_poteze)[0]
+            if globina == -1: #v primeru, da imamo nastavljeno najlažjo težavnost
+                #  računalnik izbere naključno pozezo
+                print("v alfabeta: na vrsti je ", self.igra.na_vrsti)
+                mozne = self.igra.mozne_poteze()
+                self.uredi_poteze(mozne,maksimiziramo)
+                return [self.igra.polozaj_zoge]+ self.uredi_poteze(mozne,maksimiziramo)[0], 1
             if globina == 0:
                 # print("konec rekurzije, globina 0")
                 return (None, self.vrednost_pozicije())
@@ -87,14 +94,14 @@ class Alfabeta:
                     vrednost_najboljse = -Alfabeta.NESKONCNO
                     # print(len(self.igra.mozne_poteze()))
                     for p in self.uredi_poteze(self.igra.mozne_poteze(), maksimiziramo):
-                        poteza = [self.igra.zadnji_polozaj] + p
+                        poteza = [self.igra.polozaj_zoge] + p
                         # self.igra.shrani_pozicijo()
-                        # print("alfabeta vleče potezo", poteza, self.igra.zadnji_polozaj)
+                        # print("alfabeta vleče potezo", poteza, self.igra.polozaj_zoge)
                         self.igra.naredi_potezo(poteza)
                         vrednost = self.alfabeta(globina - 1, not maksimiziramo, alfa, beta)[1]
                         # print(poteza)
                         self.igra.razveljavi_potezo(poteza)
-                        # print("maksi", self.igra.zadnji_polozaj, trenutni_polozaj)
+                        # print("maksi", self.igra.polozaj_zoge, trenutni_polozaj)
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = poteza
@@ -110,14 +117,14 @@ class Alfabeta:
                     # print(len(self.igra.mozne_poteze()))
                     for p in self.uredi_poteze(self.igra.mozne_poteze(), maksimiziramo):
                         #print(p)
-                        poteza = [self.igra.zadnji_polozaj] + p
+                        poteza = [self.igra.polozaj_zoge] + p
                         # self.igra.shrani_pozicijo()
-                        # print("alfabeta vleče potezo", poteza, self.igra.zadnji_polozaj)
+                        # print("alfabeta vleče potezo", poteza, self.igra.polozaj_zoge)
                         self.igra.naredi_potezo(poteza)
                         vrednost = self.alfabeta(globina - 1, maksimiziramo, alfa, beta)[1]
                         # print(poteza)
                         self.igra.razveljavi_potezo(poteza)
-                        # print("maksi", self.igra.zadnji_polozaj, trenutni_polozaj)
+                        # print("maksi", self.igra.polozaj_zoge, trenutni_polozaj)
                         if vrednost < vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = poteza
@@ -132,9 +139,9 @@ class Alfabeta:
             assert False, "alfabeta: ni vrnil cele poteze, ampak korak"
 
     def uredi_poteze(self, poteze, maksimiziramo):
-        '''Funkcija uredi možne poteze, da so na začetku tiste, kjer gre prvi korak v smeri našega gola'''
+        """Funkcija uredi možne poteze, da so na začetku tiste, kjer gre prvi korak v smeri našega gola"""
 
-        (tren_vrst, _) = self.igra.zadnji_polozaj
+        (tren_vrst, _) = self.igra.polozaj_zoge
         dobre_poteze = []
         ostale_poteze = []
 
@@ -160,5 +167,5 @@ class Alfabeta:
                 elif nova_vrst < tren_vrst:
                         ostale_poteze.append(poteza)
                     # mora končati do tukaj
-
-        return random.shuffle(dobre_poteze) + ostale_poteze
+        random.shuffle(dobre_poteze)
+        return dobre_poteze + ostale_poteze

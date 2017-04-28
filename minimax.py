@@ -41,10 +41,10 @@ class Minimax:
 
     def vrednost_pozicije(self):
         """Ocena vrednosti pozicije: sešteje vrednosti vseh trojk na plošči."""
-        (tren_vrs, tren_stolp) = self.igra.zadnji_polozaj
+        (tren_vrs, tren_stolp) = self.igra.polozaj_zoge
         oddaljenost_od_vertikale =abs(tren_stolp -((self.igra.sirina-1)/2))
         oddaljenost_od_horizontale = ((self.igra.visina-1)/2-tren_vrs)
-        #print(self.igra.zadnji_polozaj, self.igra.plosca[tren_vrs][tren_stolp])
+        #print(self.igra.polozaj_zoge, self.igra.plosca[tren_vrs][tren_stolp])
         if self.jaz == igralec1:
 ##            if (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
 ##                return Minimax.ZMAGA
@@ -68,15 +68,15 @@ class Minimax:
 
     def minimax(self, globina, maksimiziramo):
         # XXX: "trenutni_polozaj" ne sme biti argument, ker je (bo) spravljen v self.igra
-        #print("printamo potezo", self.igra.zadnji_polozaj)
-        trenutni_polozaj = self.igra.zadnji_polozaj
+        #print("printamo potezo", self.igra.polozaj_zoge)
+        trenutni_polozaj = self.igra.polozaj_zoge
         """Glavna metoda minimax."""
         if self.prekinitev:
             # Sporočili so nam, da moramo prekiniti
             logging.debug ("Minimax prekinja, globina = {0}".format(globina))
             return (None, 0)
         (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
-        #print(self.igra.zadnji_polozaj, self.igra.na_vrsti)
+        #print(self.igra.polozaj_zoge, self.igra.na_vrsti)
         if konec_ali_ne == konec_igre:
             # Igre je konec, vrnemo njeno vrednost
             if na_vrsti == self.jaz:
@@ -103,14 +103,14 @@ class Minimax:
                     #print(len(self.igra.mozne_poteze()))
                     for p in self.igra.mozne_poteze():
                         #print(p)
-                        poteza = [self.igra.zadnji_polozaj] + p
+                        poteza = [self.igra.polozaj_zoge] + p
                         #self.igra.shrani_pozicijo()
-                        #print("minimaks vleče potezo", poteza, self.igra.zadnji_polozaj)
+                        #print("minimaks vleče potezo", poteza, self.igra.polozaj_zoge)
                         self.igra.naredi_potezo(poteza)
                         vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                         #print(poteza)
                         self.igra.razveljavi_potezo(poteza)
-                        #print("maksi", self.igra.zadnji_polozaj, trenutni_polozaj)
+                        #print("maksi", self.igra.polozaj_zoge, trenutni_polozaj)
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = poteza
@@ -121,15 +121,15 @@ class Minimax:
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
                     for p in self.igra.mozne_poteze():
-                        poteza = [self.igra.zadnji_polozaj] + p
+                        poteza = [self.igra.polozaj_zoge] + p
                         #self.igra.shrani_pozicijo()
-                        #print("minimaks vleče potezo", poteza, self.igra.zadnji_polozaj)
+                        #print("minimaks vleče potezo", poteza, self.igra.polozaj_zoge)
                         self.igra.naredi_potezo(poteza)
 ##                        for i in range(len(poteza)-1):
 ##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
                         vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         self.igra.razveljavi_potezo(poteza)
-                        #print("mini", self.igra.zadnji_polozaj, trenutni_polozaj)
+                        #print("mini", self.igra.polozaj_zoge, trenutni_polozaj)
                         if vrednost < vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = poteza

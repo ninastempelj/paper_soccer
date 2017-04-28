@@ -1,9 +1,3 @@
-# XXX TU SMO POZABILI KOPIRATI MNOŽICE, KI SO SPRAVLJENE V TABELI
-# TAKOLE NAREDIMO:
-#
-# import copy
-# plosca_tega = copy.deepcopy(plosca)
-#
 import copy
 import random
 
@@ -34,7 +28,7 @@ class Igra():
         self.plosca=[[set() for j in range(self.sirina)]
                      for i in range(self.visina)]
         self.smeri= list(range(-4,0)) + list(range(1,5))
-        self.zadnji_polozaj = (int((self.visina - 1) / 2), int((self.sirina - 1) / 2))
+        self.polozaj_zoge = (int((self.visina - 1) / 2), int((self.sirina - 1) / 2))
         # XXX Zakaj stanje igre ne vsebuje podatka o tem, kje je žoga?
         # YYY sedaj ga vsebuje igra, GUI pa ne- GUI vedno vpraša igro
 
@@ -73,7 +67,7 @@ class Igra():
         #print(self.plosca)
 
     def dovoljen_korak(self, novo):
-        staro = self.zadnji_polozaj
+        staro = self.polozaj_zoge
         smer = self.smer_koraka(staro,novo)
         if smer == None:
             return False
@@ -83,10 +77,10 @@ class Igra():
             return True
 
     def mozen_korak(self):
-        #trenutno = self.zadnji_polozaj
+        #trenutno = self.polozaj_zoge
         mozni = []
         for smer in self.smeri:
-            if smer in self.plosca[self.zadnji_polozaj[0]][self.zadnji_polozaj[1]]:
+            if smer in self.plosca[self.polozaj_zoge[0]][self.polozaj_zoge[1]]:
                 pass
             else:
                 mozni.append(self.anti_smer_koraka(smer))
@@ -94,17 +88,18 @@ class Igra():
         return mozni
 
     def mozne_poteze2(self, prvi_korak=True):
+        """Funkcija poišče vse možne poteze in jih vrne kot seznam seznamov parov."""
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
-                self.zadnji_polozaj in self.gol_spodaj|self.gol_zgoraj):
+                self.polozaj_zoge in self.gol_spodaj|self.gol_zgoraj):
             return []
 
         else:
             poteze = []
             for sosednje in mozni:
                 (sos_vrs, sos_stolp) = sosednje
-                (tre_vrs, tre_stolp) = self.zadnji_polozaj
+                (tre_vrs, tre_stolp) = self.polozaj_zoge
                 self.naredi_korak(sosednje)
                 poteze_tega = self.mozne_poteze(prvi_korak=False)
                 self.razveljavi_korak((tre_vrs, tre_stolp))
@@ -116,21 +111,24 @@ class Igra():
             return poteze
 
     def mozne_poteze(self, prvi_korak=True):
+        """Funkcija poišče del možnih potez - ko pride poteza v polje, kjer
+        je že bila izvedena kakšna poteza, neha pregledovati tisto možnost."""
+        #print("Računam možne poteze")
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
-                self.zadnji_polozaj in self.gol_spodaj|self.gol_zgoraj):
+                self.polozaj_zoge in self.gol_spodaj|self.gol_zgoraj):
             return []
 
         else:
             poteze = []
             random.shuffle(mozni)
             for sosednje in mozni:
-                if True in [sosednje in p for p in poteze]:
+                if True in [sosednje in p for p in poteze]:  # se da izboljšati!!!
                     pass
                 else:
                     (sos_vrs, sos_stolp) = sosednje
-                    (tre_vrs, tre_stolp) = self.zadnji_polozaj
+                    (tre_vrs, tre_stolp) = self.polozaj_zoge
                     self.naredi_korak(sosednje)
                     poteze_tega = self.mozne_poteze(prvi_korak=False)
                     self.razveljavi_korak((tre_vrs, tre_stolp))
@@ -148,7 +146,7 @@ class Igra():
         kopija = Igra(self.sirina, self.visina)
         kopija.plosca = copy.deepcopy(self.plosca)
         kopija.na_vrsti = self.na_vrsti
-        kopija.zadnji_polozaj = self.zadnji_polozaj
+        kopija.polozaj_zoge = self.polozaj_zoge
         return kopija
 
     # za razveljavi
@@ -160,13 +158,13 @@ class Igra():
         (self.plosca, self.na_vrsti) = self.zgodovina.pop()
 
     def naredi_korak(self, novo):
-        staro = self.zadnji_polozaj
+        staro = self.polozaj_zoge
         smer = self.smer_koraka(staro,novo)
         if smer == None:
             print("igra.naredi_korak", staro, novo)
         self.plosca[staro[0]][staro[1]].add(smer)
         self.plosca[novo[0]][novo[1]].add(-smer)
-        self.zadnji_polozaj = novo
+        self.polozaj_zoge = novo
         #print(smer)
 
     def naredi_potezo(self, poteza):
@@ -176,13 +174,13 @@ class Igra():
 
 
     def razveljavi_korak(self, staro):
-        (trenutno_vrs, trenutno_stolp) = self.zadnji_polozaj
+        (trenutno_vrs, trenutno_stolp) = self.polozaj_zoge
         (prejsno_vrs, prejsno_stolp) = staro
-        smer = self.smer_koraka(staro, self.zadnji_polozaj)
+        smer = self.smer_koraka(staro, self.polozaj_zoge)
         self.plosca[trenutno_vrs][trenutno_stolp].remove(-smer)
         self.plosca[prejsno_vrs][prejsno_stolp].remove(smer)
-        self.zadnji_polozaj = (prejsno_vrs, prejsno_stolp)
-        #print("zadnji položaj v razveljavi korak", self.zadnji_polozaj)
+        self.polozaj_zoge = (prejsno_vrs, prejsno_stolp)
+        #print("zadnji položaj v razveljavi korak", self.polozaj_zoge)
             
     def razveljavi_potezo(self, poteza):
         obrnjena_poteza = poteza[::-1]
@@ -214,7 +212,7 @@ class Igra():
         return smer
 
     def anti_smer_koraka(self, smer):
-        (vrstica, stolpec) = self.zadnji_polozaj
+        (vrstica, stolpec) = self.polozaj_zoge
         if smer == 1:
             return (vrstica-1, stolpec+1)
         if smer == 2:
@@ -234,8 +232,8 @@ class Igra():
 
 
     def trenutno_stanje(self):#funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi)
-        novo = self.zadnji_polozaj
-        #print(len(self.mozne_poteze()))
+        novo = self.polozaj_zoge
+        #print("v trenutn stanje: na vrsti je ", self.na_vrsti)
         if novo in self.gol_zgoraj: # seznam zgornjega gola
             self.na_vrsti = nasprotnik(self.na_vrsti)
             return (konec_igre, igralec1)
