@@ -11,6 +11,7 @@ class Racunalnik:
         self.algoritem = algoritem
         self.mislec = None
 
+
     def povleci_potezo(self):
          self.stevec_korakov = 0
          # kliče algoritem, nastavi self.poteze na naslednjo
@@ -22,7 +23,6 @@ class Racunalnik:
          print("preverjamo v povleci_ potezo")
          self.gui.polje.after(100, self.preveri_potezo)
          #self.preveri_potezo()
-
 
     def preveri_potezo(self):
         """Vsakih 100ms preveri, ali je algoritem že izračunal potezo."""
@@ -54,11 +54,8 @@ class Racunalnik:
     def povleci_korak(self):
         self.stevec_korakov += 1
         print("polja za narisat", self.naslednja_polja, "števec korakov", self.stevec_korakov)
-        #time.sleep(1)
-        self.gui.povleci_korak(self.naslednja_polja[self.stevec_korakov])
-        
+        self.gui.polje.after(300, lambda: self.gui.povleci_korak(self.naslednja_polja[self.stevec_korakov]))
 
     def klik(self, novo):
         # Računalnik ignorira klik
         pass
-
