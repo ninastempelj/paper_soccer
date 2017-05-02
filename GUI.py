@@ -15,7 +15,7 @@ racunalnik = "Duh"
 
 
 class GUI():
-    def __init__(self, master, zacetno_okno,
+    def __init__(self, master,
                  tezavnost_igralca1, tezavnost_igralca2,
                  barva_igralec1, barva_igralec2,
                  tip_igralec1, tip_igralec2,
@@ -38,7 +38,6 @@ class GUI():
         #self.sirina, self.visina = 9, 13 # Štejemo število oglišč (obe nujno lihi!!!)
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
-        self.zacetno_okno = zacetno_okno
 
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
@@ -120,7 +119,7 @@ class GUI():
 
     def zapri_okno(self):
         self.master.destroy()
-        self.zacetno_okno.destroy()
+        self.zacetni_meni.master.destroy()
 
     def zacni_igro(self): 
         if self.tip_igralec1 == clovek:
@@ -208,4 +207,4 @@ class GUI():
 
         #   Za zagon koncnega okna
         koncno_okno = tk.Toplevel()
-        konec = Zakljucek(koncno_okno, izpisi, self.zacetni_meni, self.zacetno_okno, self)
+        konec = Zakljucek(koncno_okno, izpisi, self.zacetni_meni, self)

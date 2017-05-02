@@ -3,8 +3,8 @@ from GUI import *
 import os
 
 class Zacetno:
-    def __init__(self, zacetno_okno):
-        self.zacetno_okno = zacetno_okno
+    def __init__(self, master):
+        self.master = master
         self.tip_igralec1 = clovek
         self.tip_igralec2 = clovek
 
@@ -19,45 +19,45 @@ class Zacetno:
         self.visina = 13
 
         self.slika_ozadje = tk.PhotoImage(file=os.path.join('slike','hogwarts1.gif'))#Slika za ozadje
-        ozadje_label = tk.Label(zacetno_okno, image=self.slika_ozadje)
+        ozadje_label = tk.Label(master, image=self.slika_ozadje)
         ozadje_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        naslov = tk.Label(zacetno_okno, text = "Čarovniški nogomet")
+        naslov = tk.Label(master, text ="Čarovniški nogomet")
         naslov.grid(row=0, column=0, columnspan=7)
 
-        self.gumb_tip_1igralec = tk.Button(zacetno_okno, text=self.tip_igralec1,
-                                      command=lambda: self.spremeni_tip_igralca(self.gumb_tip_1igralec))
+        self.gumb_tip_1igralec = tk.Button(master, text=self.tip_igralec1,
+                                           command=lambda: self.spremeni_tip_igralca(self.gumb_tip_1igralec))
         self.gumb_tip_1igralec.grid(row=1, column=0)
 
-        self.gumb_tip_2igralec = tk.Button(zacetno_okno, text=self.tip_igralec2,
-                               command=lambda: self.spremeni_tip_igralca(self.gumb_tip_2igralec))
+        self.gumb_tip_2igralec = tk.Button(master, text=self.tip_igralec2,
+                                           command=lambda: self.spremeni_tip_igralca(self.gumb_tip_2igralec))
         self.gumb_tip_2igralec.grid(row=1, column=5)
 
-        gumb_igraj = tk.Button(zacetno_okno, text='Igraj',
+        gumb_igraj = tk.Button(master, text='Igraj',
                                command=self.zacni_igro)
         gumb_igraj.grid(row=20, column=0, columnspan=7)
 
         #Gumbi za barve 1.igralca:
-        barve_1 = tk.Label(zacetno_okno, text="Izberi dom:")
+        barve_1 = tk.Label(master, text="Izberi dom:")
         barve_1.grid(row=2, column=0)
         self.slika_gryffindor = tk.PhotoImage(file=os.path.join('slike','gryffindor.gif'))
         self.slika_hufflepuff = tk.PhotoImage(file=os.path.join('slike','hufflepuff.gif'))
         self.slika_ravenclaw = tk.PhotoImage(file=os.path.join('slike','ravenclaw.gif'))
         self.slika_slytherin = tk.PhotoImage(file=os.path.join('slike','slytherin.gif'))
 
-        G1 = tk.Button(zacetno_okno, #text = "Gryfondom", #bg = 'red',
+        G1 = tk.Button(master,  #text = "Gryfondom", #bg = 'red',
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50, relief='sunken',
                        command=lambda: self.izberi_barvo('red', G1))
-        P1 = tk.Button(zacetno_okno, #text = "Pihpuff", bg = 'yellow',
+        P1 = tk.Button(master,  #text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('gold', P1))
-        D1 = tk.Button(zacetno_okno, #text = "Drznvraan", bg= 'blue',
+        D1 = tk.Button(master,  #text = "Drznvraan", bg= 'blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('blue', D1))
-        S1 = tk.Button(zacetno_okno, #text = "Spolzgad", bg= 'green',
+        S1 = tk.Button(master,  #text = "Spolzgad", bg= 'green',
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('green', S1))
@@ -69,22 +69,22 @@ class Zacetno:
 
 
     # Gumbi za barve 2.igralca:
-        barve_2 = tk.Label(zacetno_okno, text="Izberi dom:")
+        barve_2 = tk.Label(master, text="Izberi dom:")
         barve_2.grid(row=2, column=5)
 
-        G2 = tk.Button(zacetno_okno, #text = "Gryfondom", bg = 'red',
+        G2 = tk.Button(master,  #text = "Gryfondom", bg = 'red',
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('red', G2))
-        P2 = tk.Button(zacetno_okno, #text = "Pihpuff", bg = 'yellow',
+        P2 = tk.Button(master,  #text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('gold', P2))
-        D2 = tk.Button(zacetno_okno, #text = "Drznvraan", bg= 'blue',
+        D2 = tk.Button(master,  #text = "Drznvraan", bg= 'blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
                        command=lambda: self.izberi_barvo('blue', D2))
-        S2 = tk.Button(zacetno_okno, #text = "Spolzgad", bg= 'green',
+        S2 = tk.Button(master,  #text = "Spolzgad", bg= 'green',
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50, relief='sunken',
                        command=lambda: self.izberi_barvo('green', S2))
@@ -225,12 +225,12 @@ class Zacetno:
 
     def zacni_igro(self):
         okno_igrisca = tk.Toplevel()
-        gui = GUI(okno_igrisca, self.zacetno_okno,
+        gui = GUI(okno_igrisca,
                   self.tezavnost_igralca1, self.tezavnost_igralca2,
                   self.barva_igralec1, self.barva_igralec2,
                   self.tip_igralec1, self.tip_igralec2,
                   self.sirina, self.visina, self)
-        self.zacetno_okno.withdraw()
+        self.master.withdraw()
         okno_igrisca.geometry("{0}x{1}".format(
             (self.sirina + 1) * gui.sirina_kvadratka,
             (self.visina + 1) * gui.sirina_kvadratka))
