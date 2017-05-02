@@ -144,9 +144,9 @@ class GUI:
         Računalnik ta poziv ignorira, človek pa naredi potezo.
         """
         novo = self.najblizje_oglisce(event.x, event.y)
-        if self.igra.na_vrsti == igralec1:
+        if self.igra.na_vrsti == IGRALEC1:
             self.objekt_igralec1.klik(novo)
-        elif self.igra.na_vrsti == igralec2:
+        elif self.igra.na_vrsti == IGRALEC2:
             self.objekt_igralec2.klik(novo)
 
     def narisi_korak(self, novo):
@@ -170,28 +170,28 @@ class GUI:
             self.igra.naredi_korak(novo)
             # Preverimo, kdo je naslednji na vrsti:
             stanje = self.igra.trenutno_stanje()
-            if stanje[0] == konec_igre:
+            if stanje[0] == KONEC_IGRE:
                 self.koncaj_igro(stanje[1])
-            elif stanje[0] == konec_poteze:
+            elif stanje[0] == KONEC_POTEZE:
                 # pokličemo drugega igralca, uskladimo vse barve in smeri...
-                if stanje[1] == igralec1:
+                if stanje[1] == IGRALEC1:
                     #print("ZDEJ JE 1", self.igra.polozaj_zoge)
                     self.objekt_igralec1.povleci_potezo()
                     self.trenutna_barva = self.barva_igralec1
                     self.polje.tag_raise(self.id_puscica_gor, self.id_puscica_dol)
                     self.polje.tag_raise(self.id_ozadje_igralca1, self.id_ozadje_igralca2)
-                if stanje[1] == igralec2:
+                if stanje[1] == IGRALEC2:
                     #print("ZDEJ JE 2", self.igra.polozaj_zoge)
                     self.objekt_igralec2.povleci_potezo()
                     self.trenutna_barva = self.barva_igralec2
                     self.polje.tag_raise(self.id_puscica_dol, self.id_puscica_gor)
                     self.polje.tag_raise(self.id_ozadje_igralca2, self.id_ozadje_igralca1)
-            elif stanje[0] == ni_konec_poteze:
+            elif stanje[0] == NI_KONEC_POTEZE:
                 # pokličemo istega igralca za nov korak
-                if stanje[1] == igralec1:
+                if stanje[1] == IGRALEC1:
                     #print("GUI poklical 1. igralca")
                     self.objekt_igralec1.povleci_korak()
-                if stanje[1] == igralec2:
+                if stanje[1] == IGRALEC2:
                     #print("GUI poklical 2. igralca")
                     self.objekt_igralec2.povleci_korak()
             else:
@@ -201,9 +201,9 @@ class GUI:
         """Pripravi napis za zaključno okno in ga odpre."""
         if zmagovalec is None:
             izpisi = "Izenačenje."
-        elif zmagovalec == igralec1:
+        elif zmagovalec == IGRALEC1:
             izpisi = "Zmagal je {0}.".format(self.slovar_slik.get(self.barva_igralec1)[0])
-        elif zmagovalec == igralec2:
+        elif zmagovalec == IGRALEC2:
             izpisi = "Zmagal je {0}.".format(self.slovar_slik.get(self.barva_igralec2)[0])
         else:
             assert False, "Igra se je čudno končala - GUI.koncaj_igro"

@@ -1,6 +1,6 @@
 import logging
 import time
-from igra import nasprotnik, igralec1, igralec2, konec_igre, konec_poteze, ni_konec_poteze
+from igra import nasprotnik, IGRALEC1, IGRALEC2, KONEC_IGRE, KONEC_POTEZE, NI_KONEC_POTEZE
 
 class Minimax:
     def __init__(self, globina):
@@ -45,7 +45,7 @@ class Minimax:
         oddaljenost_od_vertikale =abs(tren_stolp -((self.igra.sirina-1)/2))
         oddaljenost_od_horizontale = ((self.igra.visina-1)/2-tren_vrs)
         #print(self.igra.polozaj_zoge, self.igra.plosca[tren_vrs][tren_stolp])
-        if self.jaz == igralec1:
+        if self.jaz == IGRALEC1:
 ##            if (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
 ##                return Minimax.ZMAGA
 ##            elif (tren_vrs, tren_stolp) in self.igra.gol_spodaj:
@@ -55,7 +55,7 @@ class Minimax:
 ##                return -Minimax.ZMAGA +1
 ##            else:
             return  1000*oddaljenost_od_horizontale - 100*oddaljenost_od_vertikale
-        if self.jaz == igralec2:
+        if self.jaz == IGRALEC2:
 ##            if (tren_vrs, tren_stolp) in self.igra.gol_spodaj:
 ##                return Minimax.ZMAGA
 ##            elif (tren_vrs, tren_stolp) in self.igra.gol_zgoraj:
@@ -77,7 +77,7 @@ class Minimax:
             return (None, 0)
         (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
         #print(self.igra.polozaj_zoge, self.igra.na_vrsti)
-        if konec_ali_ne == konec_igre:
+        if konec_ali_ne == KONEC_IGRE:
             # Igre je konec, vrnemo njeno vrednost
             if na_vrsti == self.jaz:
                 return (None, Minimax.ZMAGA)
@@ -88,7 +88,7 @@ class Minimax:
                 return (None, -Minimax.ZMAGA+1) # remi
             else:
                 assert False, 'stanje_igre vrne čudnega igralca, minimax'
-        elif konec_ali_ne != konec_igre:
+        elif konec_ali_ne != KONEC_IGRE:
             # Igre ni konec
             if globina == 0:
                 #print("konec rekurzije, globina 0")
@@ -127,7 +127,7 @@ class Minimax:
                         self.igra.naredi_potezo(poteza)
 ##                        for i in range(len(poteza)-1):
 ##                            self.igra.zapomni_korak(poteza[i], poteza[i+1])
-                        vrednost = self.minimax(globina-1, maksimiziramo)[1]
+                        vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                         self.igra.razveljavi_potezo(poteza)
                         #print("mini", self.igra.polozaj_zoge, trenutni_polozaj)
                         if vrednost < vrednost_najboljse:
