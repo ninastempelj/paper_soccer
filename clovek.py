@@ -1,16 +1,15 @@
-
 class Clovek:
     
     def __init__(self, gui):
         self.gui = gui
 
     def povleci_potezo(self):
-        # to funkcijo rabi samo računalnik - kot pri Bauerju igraj
+        """To funkcijo potrebuje samo računalnik."""
         pass
 
     def prekini(self):
-        # To metodo kliče GUI, če je treba prekiniti razmišljanje.
-        # Človek jo lahko ignorira
+        """Če kdo zapre okno ali drugače nasilno prekine razmišljanje.
+        To metodo kliče GUI, če je treba prekiniti razmišljanje. """
         pass
 
     def klik(self, novo):
@@ -18,6 +17,5 @@ class Clovek:
         self.gui.povleci_korak(novo)
 
     def povleci_korak(self):
-        # za računalnik je drugače, če vleče korak ali potezo, zato še ta.
-        # Človek v obeh primerih čaka na klik uporabnika.
+        """To funkcijo potrebuje samo računalnik."""
         pass

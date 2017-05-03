@@ -4,7 +4,7 @@ import random
 from igra import nasprotnik, IGRALEC1, IGRALEC2, KONEC_IGRE
 
 # Vrednosti igre
-ZMAGA = 100000  # Mora biti vsaj 10^5
+ZMAGA = 100000  
 NESKONCNO = ZMAGA + 1  # Več kot zmaga
 
 
@@ -40,7 +40,7 @@ class Alfabeta:
             # Potezo izvedemo v primeru, da nismo bili prekinjeni
             logging.debug("alfabeta: poteza {0}, vrednost {1}".format(poteza, vrednost))
             self.poteza = poteza
-            print("shranili smo potezo", self.poteza)
+            ### print("shranili smo potezo", self.poteza)
 
     def vrednost_pozicije(self):
         """Ocena vrednosti pozicije: pogleda kako blizu gola smo."""

@@ -15,11 +15,14 @@ class Zacetno:
         self.barva_igralec1 = 'red'
         self.barva_igralec2 = 'green'
 
-        self.tezavnost_igralca1 = 0
-        self.tezavnost_igralca2 = 0
+        self.tezavnost_igralca1 = -1
+        self.tezavnost_igralca2 = -1
 
         self.sirina = 9
         self.visina = 13
+
+        self.visina_slike = 450
+        self.sirina_slike = 450
 
         # uvažanje slik:
         self.slika_gryffindor = tk.PhotoImage(
@@ -35,11 +38,16 @@ class Zacetno:
 
         # osnovni izgled menija:
         ozadje_label = tk.Label(master, image=self.slika_ozadje)
-        ozadje_label.place(x=0, y=0, relwidth=1, relheight=1)
+        ozadje_label.place(x=0, y=0, anchor='nw',
+                           height=self.visina_slike,
+                           width=self.sirina_slike)
+##        ozadje_label.bind("<Configure>", self.spremeni_velikost)
+        
 
-        naslov = tk.Label(master, text="Čarovniški nogomet")
-        naslov.grid(row=0, column=0, columnspan=7)
 
+##        naslov = tk.Label(master, text="Čarovniški nogomet")
+##        naslov.grid(row=0, column=0, columnspan=7)
+##
         gumb_igraj = tk.Button(master, text='Igraj',
                                command=self.zacni_igro)
         gumb_igraj.grid(row=20, column=0, columnspan=7)
@@ -116,12 +124,12 @@ class Zacetno:
         tez1.grid(column=1, row=0)
 
         lahko1 = tk.Button(self.nastavi_tez1, text="Shamer",  relief='groove',
-                           command=lambda: self.spremeni_tezavnost(0, lahko1))
+                           command=lambda: self.spremeni_tezavnost(-1, lahko1))
         tezje1 = tk.Button(self.nastavi_tez1, text="Smottan",
                            command=lambda: self.spremeni_tezavnost(1, tezje1))
         tezko1 = tk.Button(self.nastavi_tez1, text="Wulf",
                            command=lambda: self.spremeni_tezavnost(2, tezko1))
-        self.gumbi_tezavnost = [lahko1, tezje1, tezko1]
+        self.gumbi_tezavnost_igralca1 = [lahko1, tezje1, tezko1]
 
         # gumbi za težavnost drugega igralca
         self.nastavi_tez2 = tk.Frame()
@@ -131,15 +139,15 @@ class Zacetno:
         tez2.grid(column=1, row=0)
 
         lahko2 = tk.Button(self.nastavi_tez2, text="Shamer",  relief='groove',
-                           command=lambda: self.spremeni_tezavnost(0, lahko2))
+                           command=lambda: self.spremeni_tezavnost(-1, lahko2))
         tezje2 = tk.Button(self.nastavi_tez2, text="Smottan",
                            command=lambda: self.spremeni_tezavnost(1, tezje2))
         tezko2 = tk.Button(self.nastavi_tez2, text="Wulf",
                            command=lambda: self.spremeni_tezavnost(2, tezko2))
-        self.gumbi_tezavnost += [lahko2, tezje2, tezko2]
+        self.gumbi_tezavnost_igralca2 = [lahko2, tezje2, tezko2]
 
         # izrišemo vse gumbe za težavnost:
-        for (i, gumb) in enumerate(self.gumbi_tezavnost):
+        for (i, gumb) in enumerate(self.gumbi_tezavnost_igralca1 + self.gumbi_tezavnost_igralca2):
             gumb.grid(column=i % 3, row=1)
         self.nastavi_tez1.grid_remove()  # Ker default igralec 1 človek
         self.nastavi_tez2.grid_remove()  # Ker default igralec 2 človek
@@ -167,8 +175,7 @@ class Zacetno:
         # izrišemo vse gumbe za velikost:
         for (i, gumb) in enumerate(self.gumbi_velikost):
             gumb.grid(column=i % 3, row=1)
-
-
+            
     def spremeni_velikost(self, gumb):
         """Ob kliku uporabnika spremeni velikost igrišča."""
         for gumbek in self.gumbi_velikost:
@@ -227,23 +234,15 @@ class Zacetno:
 
     def spremeni_tezavnost(self, tezavnost, trenutni_gumb):
         """Ob kliku uporabnika spremeni težavnost igre (če igra računalnik)."""
-        trenutni_igralec = self.gumbi_tezavnost.index(trenutni_gumb) // 3
-        if trenutni_igralec == 0:
-            if tezavnost == self.tezavnost_igralca1:
-                pass
-            else:
-                self.gumbi_tezavnost[self.tezavnost_igralca1]\
-                    .config(relief='raised')
-                self.tezavnost_igralca1 = tezavnost
-                trenutni_gumb.config(relief='groove')
-        else:
-            if tezavnost == self.tezavnost_igralca2:
-                pass
-            else:
-                self.gumbi_tezavnost[self.tezavnost_igralca2 + 3]\
-                    .config(relief='raised')
-                self.tezavnost_igralca2 = tezavnost
-                trenutni_gumb.config(relief='groove')
+        if trenutni_gumb in self.gumbi_tezavnost_igralca1:
+            self.tezavnost_igralca1 = tezavnost
+            for gumbek in self.gumbi_tezavnost_igralca1:
+                gumbek.config(relief='raised')
+        if trenutni_gumb in self.gumbi_tezavnost_igralca2:
+            self.tezavnost_igralca2 = tezavnost
+            for gumbek in self.gumbi_tezavnost_igralca2:
+                gumbek.config(relief='raised')
+        trenutni_gumb.config(relief='groove')
 
     def zacni_igro(self):
         """Požene novo igro z izbranimi nastavitvami."""

@@ -7,14 +7,13 @@ class Racunalnik:
     def __init__(self, gui, algoritem):
         self.gui = gui
         self.stevec_korakov = 0  # števec doslej izrisanih korakov
-        self.naslednja_polja = []  # tu se bo shranila poteza
-        #  URŠA: a bi blo boljš, da to preimenujeva v poteza al pa kej tazga?
+        self.poteza = []  # tu se bo shranila poteza
         self.algoritem = algoritem
         self.mislec = None
 
 
     def povleci_potezo(self):
-        """Požene algoritem na kopiji igre - požene vlakno"""
+        """Požene algoritem na kopiji igre - požene vlakno."""
         # Ko se začne poteza, ponastavimo števec korakov:
         self.stevec_korakov = 0
         # Ustvarimo vlakno:
@@ -32,14 +31,13 @@ class Racunalnik:
         if self.algoritem.poteza is not None:
             ### print("pršu 1")
             # Algoritem je našel potezo, shrani si jo, da jo mora narediti
-            self.naslednja_polja = self.algoritem.poteza
+            self.poteza = self.algoritem.poteza
             # Vzporedno vlakno ni več aktivno, zato ga "pozabimo"
-            ### print("Računalnik našel potezo: ", self.naslednja_polja)
+            ### print("Računalnik našel potezo: ", self.poteza)
             self.mislec = None
             self.povleci_korak()
             # s tem klicem začnemo res izvajati potezo (po korakih)
         else:
-            print("pršu2")
             # Algoritem še ni našel poteze, preveri še enkrat čez 100ms
             self.gui.polje.after(100, self.preveri_potezo)
 
@@ -50,12 +48,12 @@ class Racunalnik:
         # Prvi element poteze je trenutni položaj,
         # zato števec povečamo pred risanjem:
         self.stevec_korakov += 1
-        ### print("polja za narisat", self.naslednja_polja, "števec korakov", self.stevec_korakov)
+        ### print("polja za narisat", self.poteza, "števec korakov", self.stevec_korakov)
         self.gui.polje.after(300, lambda: self.gui.povleci_korak(
-                                  self.naslednja_polja[self.stevec_korakov]))
+                                  self.poteza[self.stevec_korakov]))
 
     def klik(self, novo):
-        # Računalnik ignorira klik
+        """Računalnik ignorira klik."""
         pass
 
 
