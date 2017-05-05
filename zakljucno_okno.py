@@ -16,7 +16,7 @@ class Zakljucek:
         vprasanje.grid(row=1, column=0, columnspan=5)
 
         gumb_na_novo = tk.Button(master, text='Nova igra',
-                                 command=self.zacni_novo)
+                                 command=self.zacni_novo_igro)
         gumb_na_novo.grid(row=2, column=1)
 
         gumb_ista = tk.Button(master, text='Ponovno igraj',
@@ -25,7 +25,7 @@ class Zakljucek:
 
         master.attributes("-topmost", True)
 
-    def zacni_novo(self):
+    def zacni_novo_igro(self):
         """Ponovno odpre začetni meni."""
         self.zacetni_meni.master.deiconify()
         self.gui.master.destroy()

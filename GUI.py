@@ -22,10 +22,8 @@ class GUI:
         self.master = master
         self.master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno())
 
-        self.tezavnost1 = tezavnost_igralca1
-        self.tezavnost2 = tezavnost_igralca2
-        self.globina1 = [-1, 1, 2][tezavnost_igralca1]
-        self.globina2 = [-1, 1, 2][tezavnost_igralca2]
+        self.globina1 = tezavnost_igralca1
+        self.globina2 = tezavnost_igralca2
         self.tip_igralec1 = tip_igralec1
         self.tip_igralec2 = tip_igralec2
         self.barva_igralec1 = barva_igralec1
@@ -36,7 +34,21 @@ class GUI:
         # Igralca se ustvarita ob zagonu igre - glej začni_igro
         self.objekt_igralec1 = None
         self.objekt_igralec2 = None
+        self.igra = Igra(self.sirina, self.visina)
+        self.zgodovina = []  # za razveljavi, ki ga igra uporabnik
 
+        
+        # Meni
+        glavni_menu = tk.Menu(master)
+        master.config(menu=glavni_menu) #ustvari glavni meni
+        
+        moznosti = tk.Menu(glavni_menu, tearoff=0)#ustvari prvi zavihek menija
+        glavni_menu.add_cascade(label="Možnosti", menu=moznosti)
+        moznosti.add_command(label="Začni znova", command=self.ponovi_igro)
+        moznosti.add_command(label="Spremeni nastavitve", command=self.zacni_novo_igro)
+        moznosti.add_command(label="Razveljavi zadnji korak", command=self.ups)
+
+        # Naredimo polje
         self.sirina_kvadratka = 50
         self.od_roba = 50
         self.debelina_zunanjih_crt = 2
@@ -44,8 +56,7 @@ class GUI:
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
-
-        self.igra = Igra(self.sirina, self.visina)
+        ###TODO crtl-Z :self.polje.bind('<Control-z>', self.ups)
 
         # Naredi matriko koordinat oglišč
         self.oglisca = [[(self.od_roba + j * self.sirina_kvadratka,
@@ -59,6 +70,9 @@ class GUI:
                             'green': ['Spolzgad', 'ozadje_S.gif', 'puscica_gor_S.gif', 'puscica_dol_S.gif']}
 
         # Nastavi ozadje:
+##        self.polje.bind("<Configure>", self.spremeni_velikost_ozadja) ##rabi preveč pomnilnika
+##        self.visina_slike = (self.visina+2)*self.sirina_kvadratka
+##        self.sirina_slike = (self.sirina+2)*self.sirina_kvadratka
         self.ozadje_igralca2 = tk.PhotoImage(file=os.path.join('slike', self.slovar_slik.get(self.barva_igralec2)[1]))
         self.id_ozadje_igralca2 = self.polje.create_image(self.oglisca[int((self.visina-1)/2)]
                                                           [int((self.sirina-1)/2)], image=self.ozadje_igralca2)
@@ -153,11 +167,20 @@ class GUI:
         """Na igrišču izrišemo potezo od položaja žoge do novo."""
         (v_star, s_star) = self.igra.polozaj_zoge
         (v_nov, s_nov) = novo
-        self.polje.create_line(self.oglisca[v_star][s_star],
-                               self.oglisca[v_nov][s_nov], fill=self.trenutna_barva)
+        crta = self.polje.create_line(self.oglisca[v_star][s_star],
+                               self.oglisca[v_nov][s_nov],
+                               fill=self.trenutna_barva,
+                               width=2)
+        self.premakni_zogo(self.igra.polozaj_zoge, novo)
+        self.zgodovina.append([crta, self.igra.polozaj_zoge, self.igra.na_vrsti])
+
+    def premakni_zogo(self, staro, novo):
+        (v_star, s_star) = staro
+        (v_nov, s_nov) = novo
         self.polje.move(self.id_zoga,
-                        (s_nov - s_star)*self.sirina_kvadratka,
-                        (v_nov - v_star)*self.sirina_kvadratka)
+                (s_nov - s_star)*self.sirina_kvadratka,
+                (v_nov - v_star)*self.sirina_kvadratka)
+        
 
     def povleci_korak(self, novo):
         """Če gre za dovoljeno potezo, jo izriše in pokliče naslednjega igralca,
@@ -177,15 +200,11 @@ class GUI:
                 if stanje[1] == IGRALEC1:
                     #print("ZDEJ JE 1", self.igra.polozaj_zoge)
                     self.objekt_igralec1.povleci_potezo()
-                    self.trenutna_barva = self.barva_igralec1
-                    self.polje.tag_raise(self.id_puscica_gor, self.id_puscica_dol)
-                    self.polje.tag_raise(self.id_ozadje_igralca1, self.id_ozadje_igralca2)
+                    self.nastavi_igralca()
                 if stanje[1] == IGRALEC2:
                     #print("ZDEJ JE 2", self.igra.polozaj_zoge)
                     self.objekt_igralec2.povleci_potezo()
-                    self.trenutna_barva = self.barva_igralec2
-                    self.polje.tag_raise(self.id_puscica_dol, self.id_puscica_gor)
-                    self.polje.tag_raise(self.id_ozadje_igralca2, self.id_ozadje_igralca1)
+                    self.nastavi_igralca()
             elif stanje[0] == NI_KONEC_POTEZE:
                 # pokličemo istega igralca za nov korak
                 if stanje[1] == IGRALEC1:
@@ -196,6 +215,64 @@ class GUI:
                     self.objekt_igralec2.povleci_korak()
             else:
                 assert False, "Stanje igre je nekaj čudnega- gui.povleci_korak."
+
+    def nastavi_igralca(self):
+        """Preveri, kdo je na vrsti in nastavi ustrezna ozadja in trenutno barvo."""
+        na_vrsti = self.igra.na_vrsti
+        if na_vrsti == IGRALEC1:
+            self.trenutna_barva = self.barva_igralec1
+            self.polje.tag_raise(self.id_puscica_gor, self.id_puscica_dol)
+            self.polje.tag_raise(self.id_ozadje_igralca1, self.id_ozadje_igralca2)
+        if na_vrsti == IGRALEC2:
+            self.trenutna_barva = self.barva_igralec2
+            self.polje.tag_raise(self.id_puscica_dol, self.id_puscica_gor)
+            self.polje.tag_raise(self.id_ozadje_igralca2, self.id_ozadje_igralca1)
+
+    def tip_igralca(self, igralec):
+        if igralec == IGRALEC1:
+            return self.tip_igralec1
+        elif igralec ==IGRALEC2:
+            return self.tip_igralec2
+        else:
+            assert False, "V tip_igralca ni ne igralec1, ne igralec2."
+##    def spremeni_velikost_ozadja(self, event):
+##        sirina_nova = int(event.height/10)
+##        visina_nova = int(event.width/10)
+##        sirina_stara = int(self.sirina_slike/10)
+##        visina_stara = int(self.visina_slike/10)
+##        
+##        self.ozadje_igralca1.zoom(sirina_nova, visina_nova)
+##        self.ozadje_igralca1.subsample(sirina_stara, visina_stara)
+##        
+##        self.visina_slike = event.height
+##        self.sirina_slike = event.width
+##
+    def ups(self, event=None):
+        if self.tip_igralec1 == self.tip_igralec2 == RACUNALNIK:
+            pass
+        else:
+            koncni_polozaj_zoge = self.igra.polozaj_zoge
+            self.objekt_igralec1.prekini()
+            self.objekt_igralec2.prekini()
+            (id_crta, zacetno_oglisce, aktiven_igralec) = self.zgodovina.pop()
+            while self.tip_igralca(aktiven_igralec)== RACUNALNIK:
+                self.polje.delete(id_crta)
+                self.igra.razveljavi_korak(zacetno_oglisce)
+                (id_crta, zacetno_oglisce, aktiven_igralec) = self.zgodovina.pop()
+            self.polje.delete(id_crta)
+            self.igra.na_vrsti = aktiven_igralec
+            self.igra.razveljavi_korak(zacetno_oglisce)
+            self.premakni_zogo(koncni_polozaj_zoge, zacetno_oglisce)
+            self.nastavi_igralca()
+            if aktiven_igralec == IGRALEC1:
+                self.objekt_igralec1.povleci_korak()
+            elif aktiven_igralec == IGRALEC2:
+                self.objekt_igralec2.povleci_korak()
+            else:
+                assert False, "V ups ni ne igralec1, ne igralec2"
+                
+        
+            
 
     def koncaj_igro(self, zmagovalec):
         """Pripravi napis za zaključno okno in ga odpre."""
@@ -210,3 +287,18 @@ class GUI:
         # Za zagon koncnega okna
         koncno_okno = tk.Toplevel()
         Zakljucek(koncno_okno, izpisi, self.zacetni_meni, self)
+
+    def zacni_novo_igro(self):
+        """Ponovno odpre začetni meni."""
+        self.zacetni_meni.master.deiconify()
+        self.master.destroy()
+
+    def ponovi_igro(self):
+        """Narišemo čisto polje, igramo še enkrat z istimi nastavitvami."""
+        self.master.destroy()
+        self.zacetni_meni.zacni_igro()
+
+
+
+        
+        

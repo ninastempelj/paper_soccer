@@ -60,9 +60,6 @@ class Igra:
         self.plosca[-2][int((self.sirina-1)/2 - 1)] |= {4, -1, -2}
         self.plosca[-2][int((self.sirina-1)/2 + 1)] |= {2, 3, 4}
 
-        # TODO: razveljavi uporabnika
-        self.zgodovina = []  # za razveljavi, ki ga igra uporabnik
-
         # za potrebe preverjanja stanja igre si shranimo polja v golu:
         self.gol_zgoraj = {(0, int((self.sirina-1)/2)),
                            (0, int((self.sirina-1)/2 + 1)),
@@ -227,24 +224,21 @@ class Igra:
     def anti_smer_koraka(self, smer):
         """Vrne nam polje v smeri iz trenutnega položaja žoge."""
         (vrstica, stolpec) = self.polozaj_zoge
-        # TODO: A se da to kej skrajšat?
-        if smer == 1:
-            return vrstica-1, stolpec+1
-        if smer == 2:
-            return vrstica, stolpec+1
-        if smer == 3:
-            return vrstica+1, stolpec+1
-        if smer == 4:
-            return vrstica+1, stolpec
-        if smer == -1:
-            return vrstica+1, stolpec-1
-        if smer == -2:
-            return vrstica, stolpec-1
-        if smer == -3:
-            return vrstica-1, stolpec-1
-        if smer == -4:
-            return vrstica-1, stolpec
+        if smer in [1, -1]:
+            nova_vrstica = int(vrstica - smer)
+            nov_stolpec = int(stolpec + smer)
+        if smer in [2, -2]:
+            nova_vrstica = vrstica
+            nov_stolpec = int(stolpec + smer/2)
+        if smer in [3, -3]:
+            nova_vrstica = int(vrstica + smer/3)
+            nov_stolpec = int(stolpec + smer/3)
+        if smer in [4, -4]:
+            nova_vrstica = int(vrstica + smer/4)
+            nov_stolpec = stolpec
+        return nova_vrstica, nov_stolpec
 
+            
     def trenutno_stanje(self):
         """funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi"""
         novo = self.polozaj_zoge
