@@ -42,7 +42,7 @@ class Alfabeta:
             self.poteza = poteza
             print("shranili smo potezo", self.poteza)
 
-    def vrednost_pozicije(self):
+    def pametna_cenilka(self):
         """Ocena vrednosti pozicije: pogleda kako blizu gola smo."""
         (tren_vrs, tren_stolp) = self.igra.polozaj_zoge
         oddaljenost_od_vertikale = abs(tren_stolp - ((self.igra.sirina - 1) / 2))
@@ -53,7 +53,19 @@ class Alfabeta:
         if self.jaz == IGRALEC2:
             return -(1000 * oddaljenost_od_horizontale)  # - 100*oddaljenost_od_vertikale
 
-    # TODO: najlažja težavnost
+    def neumna_cenilka(self):
+        """Vsem potezam priredi enako vrednost, razen, če gre za zmago, poraz ali remi."""
+        (konec_ali_ne, na_vrsti) = self.igra.trenutno_stanje()
+        if konec_ali_ne == KONEC_IGRE:
+            # Igre je konec, vrnemo njeno vrednost
+            if na_vrsti == self.jaz:
+                return ZMAGA
+            elif na_vrsti == nasprotnik(self.jaz):
+                return -ZMAGA
+            elif na_vrsti is None:
+                return -ZMAGA + 1  # remi
+        else:
+            return 3 # naključno izbrana vrednost, važno da je za vse enaka
 
     def alfabeta(self, globina, maksimiziramo, alfa=-NESKONCNO, beta=NESKONCNO):
         """Glavna metoda alfabeta."""
@@ -77,14 +89,22 @@ class Alfabeta:
         elif konec_ali_ne != KONEC_IGRE:
             # Igre ni konec
             if globina == -1:  # v primeru, da imamo nastavljeno najlažjo težavnost
-                # računalnik izbere naključno pozezo
-                #print("v alfabeta: na vrsti je ", self.igra.na_vrsti)
-                mozne = self.igra.mozne_poteze()
-                self.uredi_poteze(mozne, maksimiziramo)
-                return [self.igra.polozaj_zoge] + self.uredi_poteze(mozne, maksimiziramo)[0], 1
-            if globina == 0:
+                # računalnik naredi korak alfabeta (samo maksimizira) z neumno cenilko:
+                najboljsa_poteza = None
+                vrednost_najboljse = -NESKONCNO
+                for p in self.uredi_poteze(self.igra.mozne_poteze(), maksimiziramo):
+                    poteza = [self.igra.polozaj_zoge] + p
+                    self.igra.naredi_potezo(poteza)
+                    vrednost = self.neumna_cenilka()
+                    self.igra.razveljavi_potezo(poteza)
+                    if vrednost > vrednost_najboljse:
+                        vrednost_najboljse = vrednost
+                        najboljsa_poteza = poteza
+                assert (najboljsa_poteza is not None), "alfabeta: izračunana poteza je None"
+                return najboljsa_poteza, vrednost_najboljse
+            elif globina == 0:
                 # print("konec rekurzije, globina 0")
-                return None, self.vrednost_pozicije()
+                return None, self.pametna_cenilka()
             else:
                 # Naredimo eno stopnjo alfabeta
                 if maksimiziramo:
@@ -137,8 +157,8 @@ class Alfabeta:
             assert False, "alfabeta: ni vrnil cele poteze, ampak korak"
 
     def uredi_poteze(self, poteze, maksimiziramo):
-        """Funkcija uredi možne poteze, da so na začetku tiste, kjer gre prvi korak v smeri našega gola"""
-
+        """Funkcija uredi možne poteze, da so na začetku tiste, kjer gre prvi korak v smeri našega gola,
+           dobre poteze še premeša, da dobimo naključnost."""
         (tren_vrst, _) = self.igra.polozaj_zoge
         dobre_poteze = []
         ostale_poteze = []

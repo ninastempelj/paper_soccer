@@ -39,7 +39,7 @@ class Racunalnik:
             self.povleci_korak()
             # s tem klicem začnemo res izvajati potezo (po korakih)
         else:
-            print("pršu2")
+            #print("pršu2")
             # Algoritem še ni našel poteze, preveri še enkrat čez 100ms
             self.gui.polje.after(100, self.preveri_potezo)
 
