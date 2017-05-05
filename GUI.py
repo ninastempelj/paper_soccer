@@ -46,7 +46,7 @@ class GUI:
         glavni_menu.add_cascade(label="Možnosti", menu=moznosti)
         moznosti.add_command(label="Začni znova", command=self.ponovi_igro)
         moznosti.add_command(label="Spremeni nastavitve", command=self.zacni_novo_igro)
-        moznosti.add_command(label="Razveljavi zadnji korak", command=self.igra.razveljavi_korak)
+        moznosti.add_command(label="Razveljavi zadnji korak", command=self.ups)
 
         # Naredimo polje
         self.sirina_kvadratka = 50
@@ -56,6 +56,7 @@ class GUI:
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
+        ###TODO crtl-Z :self.polje.bind('<Control-z>', self.ups)
 
         # Naredi matriko koordinat oglišč
         self.oglisca = [[(self.od_roba + j * self.sirina_kvadratka,
@@ -170,9 +171,16 @@ class GUI:
                                self.oglisca[v_nov][s_nov],
                                fill=self.trenutna_barva,
                                width=2)
+        self.premakni_zogo(self.igra.polozaj_zoge, novo)
+        self.zgodovina.append([crta, self.igra.polozaj_zoge, self.igra.na_vrsti])
+
+    def premakni_zogo(self, staro, novo):
+        (v_star, s_star) = staro
+        (v_nov, s_nov) = novo
         self.polje.move(self.id_zoga,
-                        (s_nov - s_star)*self.sirina_kvadratka,
-                        (v_nov - v_star)*self.sirina_kvadratka)
+                (s_nov - s_star)*self.sirina_kvadratka,
+                (v_nov - v_star)*self.sirina_kvadratka)
+        
 
     def povleci_korak(self, novo):
         """Če gre za dovoljeno potezo, jo izriše in pokliče naslednjega igralca,
@@ -220,6 +228,13 @@ class GUI:
             self.polje.tag_raise(self.id_puscica_dol, self.id_puscica_gor)
             self.polje.tag_raise(self.id_ozadje_igralca2, self.id_ozadje_igralca1)
 
+    def tip_igralca(self, igralec):
+        if igralec == IGRALEC1:
+            return self.tip_igralec1
+        elif igralec ==IGRALEC2:
+            return self.tip_igralec2
+        else:
+            assert False, "V tip_igralca ni ne igralec1, ne igralec2."
 ##    def spremeni_velikost_ozadja(self, event):
 ##        sirina_nova = int(event.height/10)
 ##        visina_nova = int(event.width/10)
@@ -231,8 +246,33 @@ class GUI:
 ##        
 ##        self.visina_slike = event.height
 ##        self.sirina_slike = event.width
-##        
+##
+    def ups(self, event=None):
+        if self.tip_igralec1 == self.tip_igralec2 == RACUNALNIK:
+            pass
+        else:
+            koncni_polozaj_zoge = self.igra.polozaj_zoge
+            self.objekt_igralec1.prekini()
+            self.objekt_igralec2.prekini()
+            (id_crta, zacetno_oglisce, aktiven_igralec) = self.zgodovina.pop()
+            while self.tip_igralca(aktiven_igralec)== RACUNALNIK:
+                self.polje.delete(id_crta)
+                self.igra.razveljavi_korak(zacetno_oglisce)
+                (id_crta, zacetno_oglisce, aktiven_igralec) = self.zgodovina.pop()
+            self.polje.delete(id_crta)
+            self.igra.na_vrsti = aktiven_igralec
+            self.igra.razveljavi_korak(zacetno_oglisce)
+            self.premakni_zogo(koncni_polozaj_zoge, zacetno_oglisce)
+            self.nastavi_igralca()
+            if aktiven_igralec == IGRALEC1:
+                self.objekt_igralec1.povleci_korak()
+            elif aktiven_igralec == IGRALEC2:
+                self.objekt_igralec2.povleci_korak()
+            else:
+                assert False, "V ups ni ne igralec1, ne igralec2"
+                
         
+            
 
     def koncaj_igro(self, zmagovalec):
         """Pripravi napis za zaključno okno in ga odpre."""

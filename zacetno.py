@@ -51,6 +51,7 @@ class Zacetno:
         gumb_igraj = tk.Button(master, text='Igraj',
                                command=self.zacni_igro)
         gumb_igraj.grid(row=20, column=0, columnspan=7)
+        master.bind("<Return>", self.zacni_igro)
 
 
         # gumbi za tip 1. in 2. igralca:
@@ -244,7 +245,7 @@ class Zacetno:
                 gumbek.config(relief='raised')
         trenutni_gumb.config(relief='groove')
 
-    def zacni_igro(self):
+    def zacni_igro(self, event=None):
         """Požene novo igro z izbranimi nastavitvami."""
         okno_igrisca = tk.Toplevel()
         gui = GUI(okno_igrisca,

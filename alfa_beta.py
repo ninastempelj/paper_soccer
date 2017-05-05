@@ -51,7 +51,7 @@ class Alfabeta:
         if self.jaz == IGRALEC1:
             return 1000 * oddaljenost_od_horizontale - 100 * oddaljenost_od_vertikale
         if self.jaz == IGRALEC2:
-            return -(1000 * oddaljenost_od_horizontale)  # - 100*oddaljenost_od_vertikale
+            return -(1000 * oddaljenost_od_horizontale) - 100 * oddaljenost_od_vertikale
 
     # TODO: najlažja težavnost
 
