@@ -38,36 +38,33 @@ class Zacetno:
 
         # osnovni izgled menija:
         ozadje_label = tk.Label(master, image=self.slika_ozadje)
-        ozadje_label.place(x=0, y=0, anchor='nw',
-                           height=self.visina_slike,
-                           width=self.sirina_slike)
-##        ozadje_label.bind("<Configure>", self.spremeni_velikost)
-        
-
+        ozadje_label.place(x=0, y=0, anchor='nw')
 
 ##        naslov = tk.Label(master, text="Čarovniški nogomet")
 ##        naslov.grid(row=0, column=0, columnspan=7)
 ##
         gumb_igraj = tk.Button(master, text='Igraj',
-                               command=self.zacni_igro)
-        gumb_igraj.grid(row=20, column=0, columnspan=7)
+                               command=self.zacni_igro)###mejbi dodava barve?, bg="blue")
+        gumb_igraj.grid(row=14, column=0, columnspan=10)
         master.bind("<Return>", self.zacni_igro)
 
 
         # gumbi za tip 1. in 2. igralca:
         self.gumb_tip_1igralec = \
             tk.Button(master, text=self.tip_igralec1, command=lambda:
-                      self.spremeni_tip_igralca(self.gumb_tip_1igralec))
-        self.gumb_tip_1igralec.grid(row=1, column=0)
+                      self.spremeni_tip_igralca(self.gumb_tip_1igralec), width=7)
+        self.gumb_tip_1igralec.grid(row=0, column=0, columnspan=5, rowspan=3,
+                                    padx=70, pady=20)
 
         self.gumb_tip_2igralec = \
             tk.Button(master, text=self.tip_igralec2, command=lambda:
-                      self.spremeni_tip_igralca(self.gumb_tip_2igralec))
-        self.gumb_tip_2igralec.grid(row=1, column=5)
+                      self.spremeni_tip_igralca(self.gumb_tip_2igralec), width=7)
+        self.gumb_tip_2igralec.grid(row=0, column=5, columnspan=5, rowspan=3,
+                                    padx=70, pady=20)
 
         # gumbi za barve 1.igralca:
         barve_1 = tk.Label(master, text="Izberi dom:")
-        barve_1.grid(row=2, column=0)
+        barve_1.grid(row=3, column=0, columnspan=5,pady=5)
 
         G1 = tk.Button(master,  ###text = "Gryfondom", #bg = 'red',
                        image=self.slika_gryffindor, anchor='n',
@@ -89,11 +86,11 @@ class Zacetno:
         self.gumbi_barve_igralca1 = [G1, P1, D1, S1]
 
         for (i, gumb) in enumerate(self.gumbi_barve_igralca1):
-            gumb.grid(row=i//2+3, column=i % 2)
+            gumb.grid(row=i//2+4, column=(i % 2)*2+1)
 
         # gumbi za barve 2.igralca:
         barve_2 = tk.Label(master, text="Izberi dom:")
-        barve_2.grid(row=2, column=5)
+        barve_2.grid(row=3, column=5, columnspan=5, pady=5)
 
         G2 = tk.Button(master,  ###text = "Gryfondom", bg = 'red',
                        image=self.slika_gryffindor, anchor='n',
@@ -115,11 +112,11 @@ class Zacetno:
         self.gumbi_barve_igralca2 = [G2, P2, D2, S2]
 
         for (i, gumb) in enumerate(self.gumbi_barve_igralca2):
-            gumb.grid(row=i//2+3, column=i % 2 + 5)
+            gumb.grid(row=i//2+4, column=(i % 2)*2 + 6)
 
         # gumbi za težavnost prvega igralca
         self.nastavi_tez1 = tk.Frame()
-        self.nastavi_tez1.grid(row=6, column=0, columnspan=3)
+        self.nastavi_tez1.grid(row=6, column=0, columnspan=5, rowspan=4, padx=5, pady=5)
 
         tez1 = tk.Label(self.nastavi_tez1, text="Izberi težavnost:")
         tez1.grid(column=1, row=0)
@@ -134,7 +131,7 @@ class Zacetno:
 
         # gumbi za težavnost drugega igralca
         self.nastavi_tez2 = tk.Frame()
-        self.nastavi_tez2.grid(row=6, column=4, columnspan=3)
+        self.nastavi_tez2.grid(row=6, column=5, columnspan=5, rowspan=4, padx=5, pady=5)
 
         tez2 = tk.Label(self.nastavi_tez2, text="Izberi težavnost:")
         tez2.grid(column=1, row=0)
@@ -155,7 +152,7 @@ class Zacetno:
 
         # gumbi za velikost polja
         self.nastavi_velikost = tk.Frame()
-        self.nastavi_velikost.grid(row=7, column=3, columnspan=3)
+        self.nastavi_velikost.grid(row=10, column=0, columnspan=10,rowspan=4, pady=5)
 
         velikost_napis = tk.Label(self.nastavi_velikost, text="Izberi velikost igrišča:")
         velikost_napis.grid(column=1, row=0)
@@ -213,7 +210,7 @@ class Zacetno:
                 self.nastavi_tez2.grid_remove()
             self.gumb_tip_2igralec.config(text=self.tip_igralec2)
 
-    def izberi_barvo(self, barva, gumb):
+    def izberi_barvo(self, barva, gumb): ###TODO Nina Vse funkcije so spremeni, ta je pa izberi. mogoče je lepš če so vse isto?
         """Ob kliku uporabnika spremeni barvo igralca."""
         if barva in self.dovoljene_barve:
             self.dovoljene_barve.remove(barva)
