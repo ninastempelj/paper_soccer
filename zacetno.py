@@ -11,18 +11,15 @@ class Zacetno:
         self.tip_igralec1 = CLOVEK
         self.tip_igralec2 = CLOVEK
 
-        self.dovoljene_barve = ['gold', 'blue']
-        self.barva_igralec1 = 'red'
-        self.barva_igralec2 = 'green'
+        self.dovoljene_barve = ['DarkGoldenrod1', 'midnight blue']
+        self.barva_igralec1 = 'red4'
+        self.barva_igralec2 = 'dark green'
 
         self.tezavnost_igralca1 = -1
         self.tezavnost_igralca2 = -1
 
         self.sirina = 9
         self.visina = 13
-
-        self.visina_slike = 450
-        self.sirina_slike = 450
 
         # uvažanje slik:
         self.slika_gryffindor = tk.PhotoImage(
@@ -44,7 +41,7 @@ class Zacetno:
 ##        naslov.grid(row=0, column=0, columnspan=7)
 ##
         gumb_igraj = tk.Button(master, text='Igraj',
-                               command=self.zacni_igro)###mejbi dodava barve?, bg="blue")
+                               command=self.zacni_igro)###mejbi dodava barve?, bg="midnight blue")
         gumb_igraj.grid(row=14, column=0, columnspan=10)
         master.bind("<Return>", self.zacni_igro)
 
@@ -66,22 +63,22 @@ class Zacetno:
         barve_1 = tk.Label(master, text="Izberi dom:")
         barve_1.grid(row=3, column=0, columnspan=5,pady=5)
 
-        G1 = tk.Button(master,  ###text = "Gryfondom", #bg = 'red',
+        G1 = tk.Button(master,  ###text = "Gryfondom", #bg = 'red4',
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50, relief='sunken',
-                       command=lambda: self.izberi_barvo('red', G1))
+                       command=lambda: self.izberi_barvo('red4', G1))
         P1 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('gold', P1))
-        D1 = tk.Button(master,  ###text = "Drznvraan", bg= 'blue',
+                       command=lambda: self.izberi_barvo('DarkGoldenrod1', P1))
+        D1 = tk.Button(master,  ###text = "Drznvraan", bg= 'midnight blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('blue', D1))
-        S1 = tk.Button(master,  ###text = "Spolzgad", bg= 'green',
+                       command=lambda: self.izberi_barvo('midnight blue', D1))
+        S1 = tk.Button(master,  ###text = "Spolzgad", bg= 'dark green',
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('green', S1))
+                       command=lambda: self.izberi_barvo('dark green', S1))
 
         self.gumbi_barve_igralca1 = [G1, P1, D1, S1]
 
@@ -92,22 +89,22 @@ class Zacetno:
         barve_2 = tk.Label(master, text="Izberi dom:")
         barve_2.grid(row=3, column=5, columnspan=5, pady=5)
 
-        G2 = tk.Button(master,  ###text = "Gryfondom", bg = 'red',
+        G2 = tk.Button(master,  ###text = "Gryfondom", bg = 'red4',
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('red', G2))
+                       command=lambda: self.izberi_barvo('red4', G2))
         P2 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('gold', P2))
-        D2 = tk.Button(master,  ###text = "Drznvraan", bg= 'blue',
+                       command=lambda: self.izberi_barvo('DarkGoldenrod1', P2))
+        D2 = tk.Button(master,  ###text = "Drznvraan", bg= 'midnight blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('blue', D2))
-        S2 = tk.Button(master,  ###text = "Spolzgad", bg= 'green',
+                       command=lambda: self.izberi_barvo('midnight blue', D2))
+        S2 = tk.Button(master,  ###text = "Spolzgad", bg= 'dark green',
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50, relief='sunken',
-                       command=lambda: self.izberi_barvo('green', S2))
+                       command=lambda: self.izberi_barvo('dark green', S2))
 
         self.gumbi_barve_igralca2 = [G2, P2, D2, S2]
 

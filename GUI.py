@@ -48,6 +48,10 @@ class GUI:
         moznosti.add_command(label="Spremeni nastavitve", command=self.zacni_novo_igro)
         moznosti.add_command(label="Razveljavi zadnji korak", command=self.ups)
 
+        pomoc = tk.Menu(glavni_menu, tearoff=0)#ustvari prvi zavihek menija
+        glavni_menu.add_cascade(label="Pomoč", menu=pomoc)
+        pomoc.add_command(label="Navodila igre", command=self.ups) ##TODO command=self.pomoc) odpre navodila igre al neki
+
         # Naredimo polje
         self.sirina_kvadratka = 50
         self.od_roba = 50
@@ -56,7 +60,7 @@ class GUI:
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
-        ###TODO crtl-Z :self.polje.bind('<Control-z>', self.ups)
+        ###TODO crtl-z (NUJNO MALI z, veliki vklučuje še shift): self.polje.bind('<Control-z>', self.ups)
 
         # Naredi matriko koordinat oglišč
         self.oglisca = [[(self.od_roba + j * self.sirina_kvadratka,
@@ -64,15 +68,12 @@ class GUI:
                         for j in range(self.sirina)]
                         for i in range(self.visina)]
 
-        self.slovar_slik = {'red': ['Gryfondom', 'ozadje_G.gif', 'puscica_gor_G.gif', 'puscica_dol_G.gif'],
-                            'gold': ['Pihpuff', 'ozadje_P.gif', 'puscica_gor_P.gif', 'puscica_dol_P.gif'],
-                            'blue': ['Drznvraan', 'ozadje_D.gif', 'puscica_gor_D.gif', 'puscica_dol_D.gif'],
-                            'green': ['Spolzgad', 'ozadje_S.gif', 'puscica_gor_S.gif', 'puscica_dol_S.gif']}
+        self.slovar_slik = {'red4': ['Gryfondom', 'ozadje_G.gif', 'puscica_gor_G.gif', 'puscica_dol_G.gif'],
+                            'DarkGoldenrod1': ['Pihpuff', 'ozadje_P.gif', 'puscica_gor_P.gif', 'puscica_dol_P.gif'],
+                            'midnight blue': ['Drznvraan', 'ozadje_D.gif', 'puscica_gor_D.gif', 'puscica_dol_D.gif'],
+                            'dark green': ['Spolzgad', 'ozadje_S.gif', 'puscica_gor_S.gif', 'puscica_dol_S.gif']}
 
-        # Nastavi ozadje:
-##        self.polje.bind("<Configure>", self.spremeni_velikost_ozadja) ##rabi preveč pomnilnika
-##        self.visina_slike = (self.visina+2)*self.sirina_kvadratka
-##        self.sirina_slike = (self.sirina+2)*self.sirina_kvadratka
+        # Nastavi ozadji:
         self.ozadje_igralca2 = tk.PhotoImage(file=os.path.join('slike', self.slovar_slik.get(self.barva_igralec2)[1]))
         self.id_ozadje_igralca2 = self.polje.create_image(self.oglisca[int((self.visina-1)/2)]
                                                           [int((self.sirina-1)/2)], image=self.ozadje_igralca2)
@@ -175,13 +176,13 @@ class GUI:
         self.zgodovina.append([crta, self.igra.polozaj_zoge, self.igra.na_vrsti])
 
     def premakni_zogo(self, staro, novo):
-        (v_star, s_star) = staro
+        """Premakne žogo na nov položaj"""
+        (v_star, s_star) = staro #Dobi podatek staro, ker ups ne premika nujno iz zadnjega položaja
         (v_nov, s_nov) = novo
         self.polje.move(self.id_zoga,
                 (s_nov - s_star)*self.sirina_kvadratka,
                 (v_nov - v_star)*self.sirina_kvadratka)
         
-
     def povleci_korak(self, novo):
         """Če gre za dovoljeno potezo, jo izriše in pokliče naslednjega igralca,
         ali sproži konec igre."""
@@ -229,28 +230,24 @@ class GUI:
             self.polje.tag_raise(self.id_ozadje_igralca2, self.id_ozadje_igralca1)
 
     def tip_igralca(self, igralec):
+        """Ugotovi ali je igralec računalnik ali človek."""
         if igralec == IGRALEC1:
             return self.tip_igralec1
         elif igralec ==IGRALEC2:
             return self.tip_igralec2
         else:
             assert False, "V tip_igralca ni ne igralec1, ne igralec2."
-##    def spremeni_velikost_ozadja(self, event):
-##        sirina_nova = int(event.height/10)
-##        visina_nova = int(event.width/10)
-##        sirina_stara = int(self.sirina_slike/10)
-##        visina_stara = int(self.visina_slike/10)
-##        
-##        self.ozadje_igralca1.zoom(sirina_nova, visina_nova)
-##        self.ozadje_igralca1.subsample(sirina_stara, visina_stara)
-##        
-##        self.visina_slike = event.height
-##        self.sirina_slike = event.width
-##
-    def ups(self, event=None):
-        if self.tip_igralec1 == self.tip_igralec2 == RACUNALNIK:
+
+
+    def ups(self, event=None): ###TODO preimenovati ups v razveljavi nekaj
+        """Na pobudo človeka razveljavlja poteze."""
+        if self.tip_igralec1 == self.tip_igralec2 == RACUNALNIK or len(self.zgodovina) == 0:
             pass
         else:
+            if self.igra.trenutno_stanje()[0] == KONEC_IGRE:
+                pass
+                ###TODO Nina nej prosim zapre zakljucno_okno
+                ###Nina sej ko kličeva povleci korak se potem igra normalno naprej odvija in ni potrebno popravljat stanje, da ni konc igre, ane?
             koncni_polozaj_zoge = self.igra.polozaj_zoge
             self.objekt_igralec1.prekini()
             self.objekt_igralec2.prekini()
@@ -269,10 +266,7 @@ class GUI:
             elif aktiven_igralec == IGRALEC2:
                 self.objekt_igralec2.povleci_korak()
             else:
-                assert False, "V ups ni ne igralec1, ne igralec2"
-                
-        
-            
+                assert False, "V ups ni ne igralec1, ne igralec2"      
 
     def koncaj_igro(self, zmagovalec):
         """Pripravi napis za zaključno okno in ga odpre."""
