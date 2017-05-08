@@ -32,7 +32,7 @@ class Zacetno:
         self.slika_slytherin = tk.PhotoImage(
             file=os.path.join('slike', 'slytherin.gif'))
         self.slika_ozadje = tk.PhotoImage(
-            file=os.path.join('slike', 'hogwarts1.gif'))
+            file=os.path.join('slike', 'hogwarts.gif'))
 
         # osnovni izgled menija:
         self.ozadje_label = tk.Label(master, image=self.slika_ozadje)
