@@ -6,7 +6,7 @@ class Zakljucek:
     def __init__(self, master, napis, zacetni_meni, gui):
         self.master = master              # zaključno okno
         self.zacetni_meni = zacetni_meni  # objekt na začetnem oknu
-        self.gui = gui   # objekt GUI
+        self.gui = gui                    # objekt GUI
         master.geometry('200x100')
 
         rezultat = tk.Label(master, text=napis)
