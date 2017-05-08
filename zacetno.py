@@ -66,19 +66,19 @@ class Zacetno:
         G1 = tk.Button(master,  ###text = "Gryfondom", #bg = 'red4',
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50, relief='sunken',
-                       command=lambda: self.izberi_barvo('red4', G1))
+                       command=lambda: self.spremeni_barvo('red4', G1))
         P1 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('DarkGoldenrod1', P1))
+                       command=lambda: self.spremeni_barvo('DarkGoldenrod1', P1))
         D1 = tk.Button(master,  ###text = "Drznvraan", bg= 'midnight blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('midnight blue', D1))
+                       command=lambda: self.spremeni_barvo('midnight blue', D1))
         S1 = tk.Button(master,  ###text = "Spolzgad", bg= 'dark green',
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('dark green', S1))
+                       command=lambda: self.spremeni_barvo('dark green', S1))
 
         self.gumbi_barve_igralca1 = [G1, P1, D1, S1]
 
@@ -92,19 +92,19 @@ class Zacetno:
         G2 = tk.Button(master,  ###text = "Gryfondom", bg = 'red4',
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('red4', G2))
+                       command=lambda: self.spremeni_barvo('red4', G2))
         P2 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('DarkGoldenrod1', P2))
+                       command=lambda: self.spremeni_barvo('DarkGoldenrod1', P2))
         D2 = tk.Button(master,  ###text = "Drznvraan", bg= 'midnight blue',
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
-                       command=lambda: self.izberi_barvo('midnight blue', D2))
+                       command=lambda: self.spremeni_barvo('midnight blue', D2))
         S2 = tk.Button(master,  ###text = "Spolzgad", bg= 'dark green',
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50, relief='sunken',
-                       command=lambda: self.izberi_barvo('dark green', S2))
+                       command=lambda: self.spremeni_barvo('dark green', S2))
 
         self.gumbi_barve_igralca2 = [G2, P2, D2, S2]
 
@@ -207,7 +207,7 @@ class Zacetno:
                 self.nastavi_tez2.grid_remove()
             self.gumb_tip_2igralec.config(text=self.tip_igralec2)
 
-    def izberi_barvo(self, barva, gumb): ###TODO Nina Vse funkcije so spremeni, ta je pa izberi. mogoče je lepš če so vse isto?
+    def spremeni_barvo(self, barva, gumb):
         """Ob kliku uporabnika spremeni barvo igralca."""
         if barva in self.dovoljene_barve:
             self.dovoljene_barve.remove(barva)
@@ -225,7 +225,6 @@ class Zacetno:
         else:
             # v tem primeru je uporabnik izbral za oba nasprotnika enako barvo
             pass
-        ### print(self.barva_igralec1,self.barva_igralec2, gumb)
 
     def spremeni_tezavnost(self, tezavnost, trenutni_gumb):
         """Ob kliku uporabnika spremeni težavnost igre (če igra računalnik)."""
