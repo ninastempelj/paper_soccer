@@ -87,37 +87,12 @@ class Igra:
                 pass
             else:
                 mozni.append(self.anti_smer_koraka(smer))
-        # print(mozni)
         return mozni
-
-    def mozne_poteze2(self, prvi_korak=True):
-        """Funkcija vrne seznam vseh možnih potez.
-        Poteza = seznam polj po katerih se premikamo, prvo je trenutno polje."""
-        mozni = self.mozen_korak()
-        if (mozni == [] or
-                (not prvi_korak and len(mozni) == 7) or  # potezo vedno začnemo v polju z le eno smerjo.
-                self.polozaj_zoge in (self.gol_spodaj | self.gol_zgoraj)):
-            return []
-
-        else:
-            trenutno = self.polozaj_zoge
-            poteze = []
-            for sosednje in mozni:
-                self.naredi_korak(sosednje)
-                poteze_tega = self.mozne_poteze(prvi_korak=False)
-                self.razveljavi_korak(trenutno)
-                if poteze_tega == []:
-                    poteze.append([sosednje])
-                else:
-                    for x in poteze_tega:
-                        poteze.append([sosednje]+x)
-            return poteze
 
     def mozne_poteze(self, prvi_korak=True):
         """Funkcija poišče del možnih potez - ko pride poteza v polje, kjer
         je že bila izvedena kakšna poteza, neha pregledovati tisto možnost.
         """
-        #print("Računam možne poteze")
         mozni = self.mozen_korak()
         if (mozni == [] or
                 (not prvi_korak and len(mozni) == 7) or
@@ -155,14 +130,6 @@ class Igra:
         kopija.polozaj_zoge = self.polozaj_zoge
         return kopija
 
-    def shrani_pozicijo(self):
-        """V seznam zgodovine doda trenutno stanje igre, da bo uporabnik lahko razveljavil potezo."""
-        pozicija = copy.deepcopy(self.plosca)
-        self.zgodovina.append((pozicija, self.na_vrsti))
-
-    def razveljavi_uporabnik(self):
-        """Razveljavi za uporabnika - vrne ga nazaj za morebitno potezo računalnika in en svoj korak."""
-        (self.plosca, self.na_vrsti) = self.zgodovina.pop()
 
     def naredi_korak(self, novo):
         """V ploščo na trenutno in novo polje doda smer zadnjega koraka.
@@ -175,7 +142,6 @@ class Igra:
         self.plosca[staro[0]][staro[1]].add(smer)
         self.plosca[novo[0]][novo[1]].add(-smer)
         self.polozaj_zoge = novo
-        #print(smer)
 
     def naredi_potezo(self, poteza):
         """Naredi vse korake v potezi."""
@@ -190,7 +156,6 @@ class Igra:
         self.plosca[trenutno_vrs][trenutno_stolp].remove(-smer)
         self.plosca[prejsno_vrs][prejsno_stolp].remove(smer)
         self.polozaj_zoge = (prejsno_vrs, prejsno_stolp)
-        #print("zadnji položaj v razveljavi korak", self.polozaj_zoge)
             
     def razveljavi_potezo(self, poteza):
         """Razveljavi vse korake v potezi"""
@@ -206,7 +171,6 @@ class Igra:
         y_razlika = staro[0] - novo[0]
         if abs(x_razlika) > 1 or abs(y_razlika) > 1 or (
                         x_razlika == 0 and y_razlika == 0):
-            #print("smer koraka", staro, novo)
             return None
         elif x_razlika == 0:
             smer = (-4)*y_razlika
@@ -218,7 +182,6 @@ class Igra:
             smer = (-1)*x_razlika
         else:
             assert False, "Funkcija smer je v težavah."
-        #print(x_razlika, y_razlika, smer)
         return smer
 
     def anti_smer_koraka(self, smer):
@@ -242,7 +205,6 @@ class Igra:
     def trenutno_stanje(self):
         """funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi"""
         novo = self.polozaj_zoge
-        #print("v trenutn stanje: na vrsti je ", self.na_vrsti)
         if novo in self.gol_zgoraj:
             self.na_vrsti = nasprotnik(self.na_vrsti)
             return KONEC_IGRE, IGRALEC1
@@ -250,7 +212,6 @@ class Igra:
             self.na_vrsti = nasprotnik(self.na_vrsti)
             return KONEC_IGRE, IGRALEC2
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
-            #print("remi v trenutno_stanje")
             self.na_vrsti = None
             return KONEC_IGRE, None
         # Poteze je konec, ko pridemo v polje ki ima vrisano le smer tega prihoda - ima dolžino 1:

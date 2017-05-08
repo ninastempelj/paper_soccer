@@ -42,7 +42,7 @@ class GUI:
         glavni_menu = tk.Menu(master)
         master.config(menu=glavni_menu) #ustvari glavni meni
         
-        moznosti = tk.Menu(glavni_menu, tearoff=0)#ustvari prvi zavihek menija
+        moznosti = tk.Menu(glavni_menu, tearoff=0)# ustvari prvi zavihek menija
         glavni_menu.add_cascade(label="Možnosti", menu=moznosti)
         moznosti.add_command(label="Začni znova", command=self.ponovi_igro)
         moznosti.add_command(label="Spremeni nastavitve", command=self.zacni_novo_igro)
