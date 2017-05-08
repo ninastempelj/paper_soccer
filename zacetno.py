@@ -37,11 +37,8 @@ class Zacetno:
         self.ozadje_label = tk.Label(master, image=self.slika_ozadje)
         self.ozadje_label.place(x=0, y=0, anchor='nw')
 
-##        naslov = tk.Label(master, text="Čarovniški nogomet")
-##        naslov.grid(row=0, column=0, columnspan=7)
-##
         gumb_igraj = tk.Button(master, text='Igraj',
-                               command=self.zacni_igro)###mejbi dodava barve?, bg="medium blue")
+                               command=self.zacni_igro)
         gumb_igraj.grid(row=14, column=0, columnspan=10)
         master.bind("<Return>", self.zacni_igro)
 
@@ -63,19 +60,19 @@ class Zacetno:
         barve_1 = tk.Label(master, text="Izberi dom:")
         barve_1.grid(row=3, column=0, columnspan=5,pady=5)
 
-        G1 = tk.Button(master,  ###text = "Gryfondom", #bg = 'red3',
+        G1 = tk.Button(master,
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50, relief='sunken',
                        command=lambda: self.spremeni_barvo('red3', G1))
-        P1 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
+        P1 = tk.Button(master,
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('DarkGoldenrod1', P1))
-        D1 = tk.Button(master,  ###text = "Drznvraan", bg= 'medium blue',
+        D1 = tk.Button(master,
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('medium blue', D1))
-        S1 = tk.Button(master,  ###text = "Spolzgad", bg= 'green4',
+        S1 = tk.Button(master,
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('green4', S1))
@@ -89,19 +86,19 @@ class Zacetno:
         barve_2 = tk.Label(master, text="Izberi dom:")
         barve_2.grid(row=3, column=5, columnspan=5, pady=5)
 
-        G2 = tk.Button(master,  ###text = "Gryfondom", bg = 'red3',
+        G2 = tk.Button(master,
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('red3', G2))
-        P2 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
+        P2 = tk.Button(master,
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('DarkGoldenrod1', P2))
-        D2 = tk.Button(master,  ###text = "Drznvraan", bg= 'medium blue',
+        D2 = tk.Button(master,
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('medium blue', D2))
-        S2 = tk.Button(master,  ###text = "Spolzgad", bg= 'green4',
+        S2 = tk.Button(master,
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50, relief='sunken',
                        command=lambda: self.spremeni_barvo('green4', S2))
