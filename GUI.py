@@ -68,10 +68,10 @@ class GUI:
                         for j in range(self.sirina)]
                         for i in range(self.visina)]
 
-        self.slovar_slik = {'red4': ['Gryfondom', 'ozadje_G.gif', 'puscica_gor_G.gif', 'puscica_dol_G.gif'],
+        self.slovar_slik = {'red3': ['Gryfondom', 'ozadje_G.gif', 'puscica_gor_G.gif', 'puscica_dol_G.gif'],
                             'DarkGoldenrod1': ['Pihpuff', 'ozadje_P.gif', 'puscica_gor_P.gif', 'puscica_dol_P.gif'],
-                            'midnight blue': ['Drznvraan', 'ozadje_D.gif', 'puscica_gor_D.gif', 'puscica_dol_D.gif'],
-                            'dark green': ['Spolzgad', 'ozadje_S.gif', 'puscica_gor_S.gif', 'puscica_dol_S.gif']}
+                            'medium blue': ['Drznvraan', 'ozadje_D.gif', 'puscica_gor_D.gif', 'puscica_dol_D.gif'],
+                            'green4': ['Spolzgad', 'ozadje_S.gif', 'puscica_gor_S.gif', 'puscica_dol_S.gif']}
 
         # Nastavi ozadji:
         self.ozadje_igralca2 = tk.PhotoImage(file=os.path.join('slike', self.slovar_slik.get(self.barva_igralec2)[1]))
