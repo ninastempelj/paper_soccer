@@ -102,7 +102,8 @@ class Igra:
         else:
             trenutno = self.polozaj_zoge
             poteze = []
-            # ker so poteze, ki jih bomo našli odvisne od vrstnega reda pregledovanja korakov, bomo te premešali
+            # ker so poteze, ki jih bomo našli odvisne od vrstnega
+            # reda pregledovanja korakov, bomo te premešali
             random.shuffle(mozni)
             for sosednje in mozni:
                 ze_preverjen = False
@@ -129,7 +130,6 @@ class Igra:
         kopija.na_vrsti = self.na_vrsti
         kopija.polozaj_zoge = self.polozaj_zoge
         return kopija
-
 
     def naredi_korak(self, novo):
         """V ploščo na trenutno in novo polje doda smer zadnjega koraka.
@@ -159,14 +159,15 @@ class Igra:
             
     def razveljavi_potezo(self, poteza):
         """Razveljavi vse korake v potezi"""
-        # Poteza se mora vedno začenjati s trenutnim položajem (kjerkoli jo sestavljamo)
+        # Poteza se vedno začenja s trenutnim položajem
         obrnjena_poteza = poteza[::-1]
         for korak in obrnjena_poteza[1:]:
             self.razveljavi_korak(korak)
         self.na_vrsti = nasprotnik(self.na_vrsti)
 
     def smer_koraka(self, staro, novo):
-        """Vrne smer, v kateri je narejen korak med podanima poljema. (Vrstni red je pomemben)"""
+        """Vrne smer, v kateri je narejen korak med podanima
+        poljema. (Vrstni red je pomemben)"""
         x_razlika = staro[1] - novo[1]
         y_razlika = staro[0] - novo[0]
         if abs(x_razlika) > 1 or abs(y_razlika) > 1 or (
@@ -190,20 +191,23 @@ class Igra:
         if smer in [1, -1]:
             nova_vrstica = int(vrstica - smer)
             nov_stolpec = int(stolpec + smer)
-        if smer in [2, -2]:
+        elif smer in [2, -2]:
             nova_vrstica = vrstica
             nov_stolpec = int(stolpec + smer/2)
-        if smer in [3, -3]:
+        elif smer in [3, -3]:
             nova_vrstica = int(vrstica + smer/3)
             nov_stolpec = int(stolpec + smer/3)
-        if smer in [4, -4]:
+        elif smer in [4, -4]:
             nova_vrstica = int(vrstica + smer/4)
             nov_stolpec = stolpec
+        else:
+            assert False, "Kakšno smer je dobila anti_smer?"
         return nova_vrstica, nov_stolpec
 
             
     def trenutno_stanje(self):
-        """funkcija ki iz trenutnega stanja ugotovi ali je konec igre in kdo je zmagovalec/oziroma na potezi"""
+        """Iz trenutnega stanja ugotovi ali je konec igre
+        in kdo je zmagovalec ali na potezi."""
         novo = self.polozaj_zoge
         if novo in self.gol_zgoraj:
             self.na_vrsti = nasprotnik(self.na_vrsti)
@@ -214,7 +218,8 @@ class Igra:
         elif len(self.plosca[novo[0]][novo[1]]) == 8:
             self.na_vrsti = None
             return KONEC_IGRE, None
-        # Poteze je konec, ko pridemo v polje ki ima vrisano le smer tega prihoda - ima dolžino 1:
+        # Poteze je konec, ko pridemo v polje ki ima
+        # vrisano le smer tega prihoda - ima dolžino 1:
         elif len(self.plosca[novo[0]][novo[1]]) != 1:
             return NI_KONEC_POTEZE, self.na_vrsti
         elif len(self.plosca[novo[0]][novo[1]]) == 1:
