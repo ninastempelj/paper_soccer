@@ -252,6 +252,8 @@ class Zacetno:
             (self.visina + 1) * gui.sirina_kvadratka))
         gui.zacni_igro()
 
+     
+
 
 app_zacetno_okno = tk.Tk()
 

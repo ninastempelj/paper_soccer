@@ -4,8 +4,8 @@ from zakljucno_okno import *
 from igra import *
 from clovek import *
 from racunalnik import *
-# import minimax
 import alfa_beta
+import navodila
 
 CLOVEK = "Čarovnik"
 RACUNALNIK = "Duh"
@@ -50,7 +50,7 @@ class GUI:
 
         pomoc = tk.Menu(glavni_menu, tearoff=0)#ustvari prvi zavihek menija
         glavni_menu.add_cascade(label="Pomoč", menu=pomoc)
-        pomoc.add_command(label="Navodila igre", command=self.ups) ##TODO command=self.pomoc) odpre navodila igre al neki
+        pomoc.add_command(label="Navodila igre", command=self.pokazi_navodila) ##TODO command=self.pomoc) odpre navodila igre al neki
 
         # Naredimo polje
         self.sirina_kvadratka = 50
@@ -60,7 +60,8 @@ class GUI:
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
         self.polje.bind('<Button-1>', self.klik_na_plosci)
-        ###TODO crtl-z (NUJNO MALI z, veliki vklučuje še shift): self.polje.bind('<Control-z>', self.ups)
+        self.polje.focus_force()
+        self.polje.bind('<Control-z>', self.ups)
 
         # Naredi matriko koordinat oglišč
         self.oglisca = [[(self.od_roba + j * self.sirina_kvadratka,
@@ -144,7 +145,6 @@ class GUI:
             self.objekt_igralec2 = Clovek(self)
         else:
             self.objekt_igralec2 = Racunalnik(self, alfa_beta.Alfabeta(self.globina2))
-        #print(self.objekt_igralec1, self.objekt_igralec2)
         self.master.attributes("-topmost", True)
         self.objekt_igralec1.povleci_potezo()
 
@@ -197,22 +197,18 @@ class GUI:
             if stanje[0] == KONEC_IGRE:
                 self.koncaj_igro(stanje[1])
             elif stanje[0] == KONEC_POTEZE:
-                # pokličemo drugega igralca, uskladimo vse barve in smeri...
+                # pokličemo drugega igralca, uskladimo vse barve in ozadja
                 if stanje[1] == IGRALEC1:
-                    #print("ZDEJ JE 1", self.igra.polozaj_zoge)
                     self.objekt_igralec1.povleci_potezo()
                     self.nastavi_igralca()
                 if stanje[1] == IGRALEC2:
-                    #print("ZDEJ JE 2", self.igra.polozaj_zoge)
                     self.objekt_igralec2.povleci_potezo()
                     self.nastavi_igralca()
             elif stanje[0] == NI_KONEC_POTEZE:
                 # pokličemo istega igralca za nov korak
                 if stanje[1] == IGRALEC1:
-                    #print("GUI poklical 1. igralca")
                     self.objekt_igralec1.povleci_korak()
                 if stanje[1] == IGRALEC2:
-                    #print("GUI poklical 2. igralca")
                     self.objekt_igralec2.povleci_korak()
             else:
                 assert False, "Stanje igre je nekaj čudnega- gui.povleci_korak."
@@ -245,9 +241,7 @@ class GUI:
             pass
         else:
             if self.igra.trenutno_stanje()[0] == KONEC_IGRE:
-                pass
-                ###TODO Nina nej prosim zapre zakljucno_okno
-                ###Nina sej ko kličeva povleci korak se potem igra normalno naprej odvija in ni potrebno popravljat stanje, da ni konc igre, ane?
+                self.zakljucek.master.destroy()
             koncni_polozaj_zoge = self.igra.polozaj_zoge
             self.objekt_igralec1.prekini()
             self.objekt_igralec2.prekini()
@@ -280,7 +274,7 @@ class GUI:
             assert False, "Igra se je čudno končala - GUI.koncaj_igro"
         # Za zagon koncnega okna
         koncno_okno = tk.Toplevel()
-        Zakljucek(koncno_okno, izpisi, self.zacetni_meni, self)
+        self.zakljucek = Zakljucek(koncno_okno, izpisi, self.zacetni_meni, self)
 
     def zacni_novo_igro(self):
         """Ponovno odpre začetni meni."""
@@ -292,6 +286,10 @@ class GUI:
         self.master.destroy()
         self.zacetni_meni.zacni_igro()
 
+    def pokazi_navodila(self):
+        """Odpremo okno z navodili za igro."""
+        okno_navodil = tk.Toplevel()
+        self.navodila = navodila.Navodila(okno_navodil)
 
 
         
