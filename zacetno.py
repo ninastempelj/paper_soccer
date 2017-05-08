@@ -34,16 +34,17 @@ class Zacetno:
             file=os.path.join('slike', 'hogwarts1.gif'))
 
         # osnovni izgled menija:
-        self.ozadje_label = tk.Label(master, image=self.slika_ozadje)
-        self.ozadje_label.place(x=0, y=0, anchor='nw')
+        ozadje_label = tk.Label(master, image=self.slika_ozadje)
+        ozadje_label.place(x=0, y=0, anchor='nw')
 
-##        naslov = tk.Label(master, text="Čarovniški nogomet")
-##        naslov.grid(row=0, column=0, columnspan=7)
-##
         gumb_igraj = tk.Button(master, text='Igraj',
-                               command=self.zacni_igro)###mejbi dodava barve?, bg="medium blue")
+                               command=self.zacni_igro)
         gumb_igraj.grid(row=14, column=0, columnspan=10)
         master.bind("<Return>", self.zacni_igro)
+
+        gumb_pomoc = tk.Button(master, text='?',
+                               command=self.pokazi_navodila)
+        gumb_pomoc.grid(row=15, column=7, columnspan=3)
 
 
         # gumbi za tip 1. in 2. igralca:
@@ -63,19 +64,19 @@ class Zacetno:
         barve_1 = tk.Label(master, text="Izberi dom:")
         barve_1.grid(row=3, column=0, columnspan=5,pady=5)
 
-        G1 = tk.Button(master,  ###text = "Gryfondom", #bg = 'red3',
+        G1 = tk.Button(master,
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50, relief='sunken',
                        command=lambda: self.spremeni_barvo('red3', G1))
-        P1 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
+        P1 = tk.Button(master,
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('DarkGoldenrod1', P1))
-        D1 = tk.Button(master,  ###text = "Drznvraan", bg= 'medium blue',
+        D1 = tk.Button(master,
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('medium blue', D1))
-        S1 = tk.Button(master,  ###text = "Spolzgad", bg= 'green4',
+        S1 = tk.Button(master,
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('green4', S1))
@@ -89,19 +90,19 @@ class Zacetno:
         barve_2 = tk.Label(master, text="Izberi dom:")
         barve_2.grid(row=3, column=5, columnspan=5, pady=5)
 
-        G2 = tk.Button(master,  ###text = "Gryfondom", bg = 'red3',
+        G2 = tk.Button(master,
                        image=self.slika_gryffindor, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('red3', G2))
-        P2 = tk.Button(master,  ###text = "Pihpuff", bg = 'yellow',
+        P2 = tk.Button(master,
                        image=self.slika_hufflepuff, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('DarkGoldenrod1', P2))
-        D2 = tk.Button(master,  ###text = "Drznvraan", bg= 'medium blue',
+        D2 = tk.Button(master,
                        image=self.slika_ravenclaw, anchor='n',
                        height=50, width=50,
                        command=lambda: self.spremeni_barvo('medium blue', D2))
-        S2 = tk.Button(master,  ###text = "Spolzgad", bg= 'green4',
+        S2 = tk.Button(master,
                        image=self.slika_slytherin, anchor='n',
                        height=50, width=50, relief='sunken',
                        command=lambda: self.spremeni_barvo('green4', S2))
@@ -144,8 +145,8 @@ class Zacetno:
         # izrišemo vse gumbe za težavnost:
         for (i, gumb) in enumerate(self.gumbi_tezavnost_igralca1 + self.gumbi_tezavnost_igralca2):
             gumb.grid(column=i % 3, row=1)
-        self.nastavi_tez1.lower(self.ozadje_label)  # Ker default igralec 1 človek
-        self.nastavi_tez2.lower(self.ozadje_label)  # Ker default igralec 2 človek
+        self.nastavi_tez1.grid_remove()  # Ker default igralec 1 človek
+        self.nastavi_tez2.grid_remove()  # Ker default igralec 2 človek
 
         # gumbi za velikost polja
         self.nastavi_velikost = tk.Frame()
@@ -192,19 +193,19 @@ class Zacetno:
             tip = self.tip_igralec1
             if tip == CLOVEK:
                 self.tip_igralec1 = RACUNALNIK
-                self.nastavi_tez1.lift(self.ozadje_label)
+                self.nastavi_tez1.grid()
             elif tip == RACUNALNIK:
                 self.tip_igralec1 = CLOVEK
-                self.nastavi_tez1.lower(self.ozadje_label)
+                self.nastavi_tez1.grid_remove()
             self.gumb_tip_1igralec.config(text=self.tip_igralec1)
         if gumb == self.gumb_tip_2igralec:
             tip = self.tip_igralec2
             if tip == CLOVEK:
                 self.tip_igralec2 = RACUNALNIK
-                self.nastavi_tez2.lift(self.ozadje_label)
+                self.nastavi_tez2.grid()
             elif tip == RACUNALNIK:
                 self.tip_igralec2 = CLOVEK
-                self.nastavi_tez2.lower(self.ozadje_label)
+                self.nastavi_tez2.grid_remove()
             self.gumb_tip_2igralec.config(text=self.tip_igralec2)
 
     def spremeni_barvo(self, barva, gumb):
@@ -238,6 +239,13 @@ class Zacetno:
                 gumbek.config(relief='raised')
         trenutni_gumb.config(relief='groove')
 
+    def pokazi_navodila(self):
+        """Odpremo okno z navodili za igro."""
+        okno_navodil = tk.Toplevel()
+        self.navodila = navodila.Navodila(okno_navodil)
+
+
+
     def zacni_igro(self, event=None):
         """Požene novo igro z izbranimi nastavitvami."""
         okno_igrisca = tk.Toplevel()
@@ -251,8 +259,6 @@ class Zacetno:
             (self.sirina + 1) * gui.sirina_kvadratka,
             (self.visina + 1) * gui.sirina_kvadratka))
         gui.zacni_igro()
-
-     
 
 
 app_zacetno_okno = tk.Tk()
