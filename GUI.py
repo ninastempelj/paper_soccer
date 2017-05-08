@@ -50,7 +50,7 @@ class GUI:
 
         pomoc = tk.Menu(glavni_menu, tearoff=0)#ustvari prvi zavihek menija
         glavni_menu.add_cascade(label="Pomoč", menu=pomoc)
-        pomoc.add_command(label="Navodila igre", command=self.pokazi_navodila) ##TODO command=self.pomoc) odpre navodila igre al neki
+        pomoc.add_command(label="Navodila igre", command=self.zacetni_meni.pokazi_navodila) ##TODO command=self.pomoc) odpre navodila igre al neki
 
         # Naredimo polje
         self.sirina_kvadratka = 50
@@ -285,11 +285,6 @@ class GUI:
         """Narišemo čisto polje, igramo še enkrat z istimi nastavitvami."""
         self.master.destroy()
         self.zacetni_meni.zacni_igro()
-
-    def pokazi_navodila(self):
-        """Odpremo okno z navodili za igro."""
-        okno_navodil = tk.Toplevel()
-        self.navodila = navodila.Navodila(okno_navodil)
 
 
         
