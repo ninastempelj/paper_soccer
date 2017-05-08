@@ -11,13 +11,13 @@ class Navodila:
         self.polje.pack(fill='both', expand='yes')
 
         # Vse slike:
-        # self.slika_ozadje_id = tk.PhotoImage(
-        # file=os.path.join('slike', 'pergament.gif'))
-        self.slika_prvic_id = tk.PhotoImage(
-            file=os.path.join('slike', 'prvic_v_polju.gif'))
-        self.slika_ponovno_id = tk.PhotoImage(
+        master.slika_ozadje_id = tk.PhotoImage(
+            file=os.path.join('slike', 'pergament.gif'))
+        master.slika_prvic_id = tk.PhotoImage(
+            file=os.path.join('slike', 'prvic_v_polju.GIF'))
+        master.slika_ponovno_id = tk.PhotoImage(
             file=os.path.join('slike', 'ponovno_v_polju.gif'))
-        self.slika_rob_id = tk.PhotoImage(
+        master.slika_rob_id = tk.PhotoImage(
             file=os.path.join('slike', 'na_robu.gif'))
 
         # Vsi napisi
@@ -32,7 +32,7 @@ class Navodila:
                  "  - Če igralec brcne žogo v točko, kjer je žoga že kdaj " \
                  "prej bila, jo lahko brcne še enkrat. "
 
-        napis2 = "Posebna pravila na robu:\n" \
+        napis2 = "Posebna pravila na robu:\n\n" \
                  "  - Žoga se od roba odbije, isti igralec je na vrsti " \
                  "še enkrat.\n" \
                  "  - Pot po robu ni mogoča."
@@ -42,21 +42,18 @@ class Navodila:
                  "Igra se konča, če pride do izenačenja, ali eden izmed " \
                  "igralcev zadane gol."
 
-        # slika_ozadje = self.polje.create_image(0, 0, anchor="nw", image=self.slika_ozadje_id)
-        self.polje.create_text(20, 15, anchor="nw", text=naslov)
-        self.polje.create_text(20, 30, anchor="nw", text=napis1, width=350)
-        self.polje.create_image(20, 190, anchor="nw",
-                                image=self.slika_prvic_id)
-        self.polje.create_image(200, 190, anchor="nw",
-                                image=self.slika_ponovno_id)
-        self.polje.create_text(20, 380, anchor="nw", text=napis2, width=350)
-        self.polje.create_image(80, 430, anchor="nw", image=self.slika_rob_id)
-        self.polje.create_text(20, 600, anchor="nw", text=napis3, width=350)
-        
+        self.polje.create_image(0, 5, anchor="nw", image=master.slika_ozadje_id)
+        self.polje.create_text(160, 25, anchor="nw", text=naslov, font="Helvetica 12 bold")
+        self.polje.create_text(55, 50, anchor="nw", text=napis1, width=345)
+        self.polje.create_image(60,190, anchor="nw", image=master.slika_prvic_id)
+        self.polje.create_image(230, 190, anchor="nw",image=master.slika_ponovno_id)
+        self.polje.create_text(55, 313, anchor="nw", text=napis2, width=345)
+        self.polje.create_image(160, 380, anchor="nw", image=master.slika_rob_id)
+        self.polje.create_text(55, 486, anchor="nw", text=napis3, width=345)
         gumb_nazaj = tk.Button(master, text='Nazaj',
                                command=self.master.destroy)
-        gumb_nazaj.pack()
+        self.polje.create_window(230,580, window=gumb_nazaj)
 
         self.master.attributes("-topmost", True)
 
-        self.master.geometry("390x700")
+        self.master.geometry("450x650")
