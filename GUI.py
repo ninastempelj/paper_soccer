@@ -45,20 +45,20 @@ class GUI:
         
         # Meni
         glavni_menu = tk.Menu(master)
-        master.config(menu=glavni_menu)  # ustvari glavni meni
+        master.config(menu=glavni_menu)
         
-        moznosti = tk.Menu(glavni_menu, tearoff=0)  # prvi zavihek menija
+        moznosti = tk.Menu(glavni_menu, tearoff=0)
         glavni_menu.add_cascade(label="Možnosti", menu=moznosti)
-        moznosti.add_command(label="Začni znova",
+        moznosti.add_command(label="Začni znova                       (F2)",
                              command=self.ponovi_igro)
-        moznosti.add_command(label="Spremeni nastavitve",
+        moznosti.add_command(label="Spremeni nastavitve         (Esc)",
                              command=self.zacni_novo_igro)
-        moznosti.add_command(label="Razveljavi zadnji korak",
+        moznosti.add_command(label="Razveljavi zadnji korak     (Ctrl+Z)",
                              command=self.razveljavi_uporabnik)
 
-        pomoc = tk.Menu(glavni_menu, tearoff=0)  # drugi zavihek menija
+        pomoc = tk.Menu(glavni_menu, tearoff=0)
         glavni_menu.add_cascade(label="Pomoč", menu=pomoc)
-        pomoc.add_command(label="Navodila igre",
+        pomoc.add_command(label="Navodila igre     (F1)",
                           command=self.zacetni_meni.pokazi_navodila)
 
         # Naredimo polje
@@ -71,7 +71,9 @@ class GUI:
         self.polje.bind('<Button-1>', self.klik_na_plosci)
         self.polje.focus_force()
         self.polje.bind('<Control-z>', self.razveljavi_uporabnik)
-
+        self.polje.bind('<Escape>', self.zacni_novo_igro)
+        self.polje.bind('<F2>', self.ponovi_igro)
+        
         # Naredi matriko koordinat oglišč
         self.oglisca = [[(self.od_roba + j * self.sirina_kvadratka,
                           self.od_roba + i * self.sirina_kvadratka)
@@ -312,12 +314,12 @@ class GUI:
         self.zakljucek = Zakljucek(koncno_okno, izpisi,
                                    self.zacetni_meni, self)
 
-    def zacni_novo_igro(self):
+    def zacni_novo_igro(self, event=None):
         """Ponovno odpre začetni meni."""
         self.zacetni_meni.master.deiconify()
         self.master.destroy()
 
-    def ponovi_igro(self):
+    def ponovi_igro(self, event=None):
         """Narišemo čisto polje, igramo še enkrat z istimi nastavitvami."""
         self.master.destroy()
         self.zacetni_meni.zacni_igro()

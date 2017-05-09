@@ -10,7 +10,7 @@ class Zacetno:
 
         # privzete vrednosti, ki jih uporabnik lahko poljubno spremeni
         self.tip_igralca1 = CLOVEK
-        self.tip_igralca2 = CLOVEK
+        self.tip_igralca2 = RACUNALNIK
 
         self.dovoljene_barve = [RUMENA, MODRA]
         self.barva_igralca1 = RDECA
@@ -42,7 +42,9 @@ class Zacetno:
                                command=self.zacni_igro)
         gumb_igraj.grid(row=14, column=0, columnspan=10)
         master.bind("<Return>", self.zacni_igro)
-
+        master.bind_all("<F1>", self.pokazi_navodila)
+        master.bind("<Escape>", self.zapri)
+        
         gumb_pomoc = tk.Button(master, text='?',
                                command=self.pokazi_navodila)
         gumb_pomoc.grid(row=15, column=7, columnspan=3)
@@ -113,7 +115,7 @@ class Zacetno:
         tez1 = tk.Label(self.nastavi_tez1, text="Izberi težavnost:")
         tez1.grid(column=1, row=0)
 
-        lahko1 = tk.Button(self.nastavi_tez1, text="Shamer",  relief='groove',
+        lahko1 = tk.Button(self.nastavi_tez1, text="Shamer",  relief='sunken',
                            command=lambda: self.spremeni_tezavnost(-1, lahko1))
         tezje1 = tk.Button(self.nastavi_tez1, text="Smottan",
                            command=lambda: self.spremeni_tezavnost(1, tezje1))
@@ -129,7 +131,7 @@ class Zacetno:
         tez2 = tk.Label(self.nastavi_tez2, text="Izberi težavnost:")
         tez2.grid(column=1, row=0)
 
-        lahko2 = tk.Button(self.nastavi_tez2, text="Shamer",  relief='groove',
+        lahko2 = tk.Button(self.nastavi_tez2, text="Shamer",  relief='sunken',
                            command=lambda: self.spremeni_tezavnost(-1, lahko2))
         tezje2 = tk.Button(self.nastavi_tez2, text="Smottan",
                            command=lambda: self.spremeni_tezavnost(1, tezje2))
@@ -142,24 +144,26 @@ class Zacetno:
                                    + self.gumbi_tezavnost_igralca2):
             gumb.grid(column=i % 3, row=1)
         self.nastavi_tez1.lower(self.ozadje_label)  # Ker default igralec 1 človek
-        self.nastavi_tez2.lower(self.ozadje_label)  # Ker default igralec 2 človek
-
+       
         # gumbi za velikost polja
         self.nastavi_velikost = tk.Frame()
-        self.nastavi_velikost.grid(row=10, column=0, columnspan=10, rowspan=4, pady=5)
+        self.nastavi_velikost.grid(row=10, column=0, columnspan=10, rowspan=4,
+                                   pady=5)
 
-        velikost_napis = tk.Label(self.nastavi_velikost, text="Izberi velikost igrišča:")
+        velikost_napis = tk.Label(self.nastavi_velikost,
+                                  text="Izberi velikost igrišča:")
         velikost_napis.grid(column=1, row=0)
 
         self.malo_igrisce = \
-            tk.Button(self.nastavi_velikost, text="Harry",
-                      command=lambda: self.spremeni_velikost(self.malo_igrisce))
+            tk.Button(self.nastavi_velikost, text="Harry", command=lambda:
+                      self.spremeni_velikost(self.malo_igrisce))
         self.srednje_igrisce = \
-            tk.Button(self.nastavi_velikost, text="Hagrid",  relief='groove',
-                      command=lambda: self.spremeni_velikost(self.srednje_igrisce))
+            tk.Button(self.nastavi_velikost, text="Hagrid", command=lambda:
+                      self.spremeni_velikost(self.srednje_igrisce),
+                      relief='sunken')
         self.veliko_igrisce = \
-            tk.Button(self.nastavi_velikost, text="Grop",
-                      command=lambda: self.spremeni_velikost(self.veliko_igrisce))
+            tk.Button(self.nastavi_velikost, text="Grop", command=lambda:
+                      self.spremeni_velikost(self.veliko_igrisce))
         self.gumbi_velikost = [self.malo_igrisce,
                                self.srednje_igrisce,
                                self.veliko_igrisce]
@@ -175,7 +179,7 @@ class Zacetno:
             gumbek.config(relief='raised')
         self.sirina = 7 + 2*velikost
         self.visina = 11 + 2*velikost
-        gumb.config(relief='groove')
+        gumb.config(relief='sunken')
 
     def spremeni_tip_igralca(self, gumb):
         """Ob kliku uporabnika spremeni tip igralca (človek/računalnik)."""
@@ -227,9 +231,9 @@ class Zacetno:
             self.tezavnost_igralca2 = tezavnost
             for gumbek in self.gumbi_tezavnost_igralca2:
                 gumbek.config(relief='raised')
-        trenutni_gumb.config(relief='groove')
+        trenutni_gumb.config(relief='sunken')
 
-    def pokazi_navodila(self):
+    def pokazi_navodila(self, event=None):
         """Odpremo okno z navodili za igro."""
         okno_navodil = tk.Toplevel()
         navodila.Navodila(okno_navodil)
@@ -247,6 +251,9 @@ class Zacetno:
             self.sirina*gui.sirina_kvadratka + gui.od_roba,
             self.visina*gui.sirina_kvadratka + gui.od_roba))
         gui.zacni_igro()
+
+    def zapri(self, event=None):
+        self.master.destroy()
 
 
 app_zacetno_okno = tk.Tk()

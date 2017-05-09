@@ -9,6 +9,7 @@ class Navodila:
 
         self.polje = tk.Canvas(master)
         self.polje.pack(fill='both', expand='yes')
+        self.polje.config(bg="grey20")
 
         # Vse slike:
         master.slika_ozadje_id = tk.PhotoImage(
@@ -25,14 +26,14 @@ class Navodila:
         napis1 = "Cilj igre je pripeljati žogo v svoj gol. " \
                  "Vsakemu igralcu smer igre kaže puščica v njegovi barvi," \
                  " kadar je na vrsti. Igralca izmenično premikata isto žogo," \
-                 " pri tem veljajo pravila:\n\n" \
+                 " pri tem veljajo pravila:\n" \
                  "  - Žoge ne moremo brcniti dvakrat po isti poti.\n" \
                  "  - Vsak igralec se lahko premakne v vseh 8 različnih smereh" \
                  " (tudi po diagonali), če pot še ni bila igrana.\n" \
                  "  - Če igralec brcne žogo v točko, kjer je žoga že kdaj " \
                  "prej bila, jo lahko brcne še enkrat. "
 
-        napis2 = "Posebna pravila na robu:\n\n" \
+        napis2 = "Posebna pravila na robu:\n" \
                  "  - Žoga se od roba odbije, isti igralec je na vrsti " \
                  "še enkrat.\n" \
                  "  - Pot po robu ni mogoča."
@@ -43,17 +44,28 @@ class Navodila:
                  "igralcev zadane gol."
 
         self.polje.create_image(0, 5, anchor="nw", image=master.slika_ozadje_id)
-        self.polje.create_text(160, 25, anchor="nw", text=naslov, font="Helvetica 12 bold")
-        self.polje.create_text(55, 50, anchor="nw", text=napis1, width=345)
-        self.polje.create_image(60,190, anchor="nw", image=master.slika_prvic_id)
-        self.polje.create_image(230, 190, anchor="nw",image=master.slika_ponovno_id)
-        self.polje.create_text(55, 313, anchor="nw", text=napis2, width=345)
-        self.polje.create_image(160, 380, anchor="nw", image=master.slika_rob_id)
-        self.polje.create_text(55, 486, anchor="nw", text=napis3, width=345)
-        gumb_nazaj = tk.Button(master, text='Nazaj',
-                               command=self.master.destroy)
-        self.polje.create_window(230,580, window=gumb_nazaj)
+        self.polje.create_text(170, 25, anchor="nw", text=naslov,
+                               font="Helvetica 12 bold", fill="white")
+        self.polje.create_text(65, 50, anchor="nw", text=napis1, width=330,
+                               fill="white")
+        self.polje.create_image(70,182, anchor="nw", image=master.slika_prvic_id)
+        self.polje.create_image(235, 182, anchor="nw",
+                                image=master.slika_ponovno_id)
+        self.polje.create_text(65, 308, anchor="nw", text=napis2, width=330,
+                               fill="white")
+        self.polje.create_image(170, 365, anchor="nw", image=master.slika_rob_id)
+        self.polje.create_text(65, 471, anchor="nw", text=napis3, width=330,
+                               fill="white")
+
+        gumb_nazaj = tk.Button(master, text='Nazaj', command=self.zapri)
+        self.polje.create_window(235,580, window=gumb_nazaj)
 
         self.master.attributes("-topmost", True)
+        self.polje.focus_force()
+        master.bind("<Escape>", self.zapri)
+        master.bind("<Return>", self.zapri)
 
         self.master.geometry("450x650")
+
+    def zapri(self, event=None):
+        self.master.destroy()
